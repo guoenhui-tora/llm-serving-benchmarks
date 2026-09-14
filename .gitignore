@@ -1,0 +1,37 @@
+# Experiment outputs (root only; src/serving_bench/results is source code)
+/results/*
+!/results/.gitkeep
+/reports/
+/logs/
+/artifacts/
+/tmp/
+/cache/
+/.cache/
+
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+/build/
+/dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+/htmlcov/
+/coverage.xml
+
+# Local environment files; keep shareable examples
+.env
+.env.*
+!.env.example
+
+# Editor and OS files
+.DS_Store
+._*
+*~
+*.swp
+*.swo

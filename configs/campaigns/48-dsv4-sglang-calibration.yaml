@@ -1,0 +1,12 @@
+schema_version: 1
+kind: campaign
+id: 48-dsv4-sglang-calibration
+target: targets/rtx6000d-48.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/calibration-1024-256.yaml
+cases:
+- id: dsv4-sglang
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/sglang-0.5.19-cu130.yaml
+  recipe: recipes/dsv4/sglang-sm120-performance.yaml
