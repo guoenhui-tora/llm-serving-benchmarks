@@ -15,16 +15,20 @@ target 保留 `SYS_NICE`。SGLang 调度进程的 CPU 允许集合与 GPU 所在
 安装根 README 中的 Python 依赖，提前准备固定模型和镜像。核对 target 的本机地址、模型路径、缓存权限以及 GPU 占用。从新仓库根目录执行：
 
 ```bash
-./bench validate projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
-./bench plan projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+# 首次建立工作区时复制；configs 已存在则续用，不重复覆盖。
+mkdir -p experiments/glm52-rtx6000d/results experiments/glm52-rtx6000d/reports
+cp -a projects/glm52-rtx6000d/configs experiments/glm52-rtx6000d/configs
+
+./bench validate experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+./bench plan experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
 
 # 必需：准备两个 SGLang recipe 的容器可见 INFO 日志文件。
-python3 scripts/prepare_logging.py projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
-python3 scripts/prepare_logging.py projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml --check
+python3 scripts/prepare_logging.py experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+python3 scripts/prepare_logging.py experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml --check
 
-./bench preflight projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
-./bench run projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml \
-  --run-root results/glm52-rtx6000d/reproduction-01
+./bench preflight experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+./bench run experiments/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml \
+  --run-root experiments/glm52-rtx6000d/results/reproduction-01
 ```
 
 `--run-root` 必须是尚不存在的新目录。可用 `--case vllm-autotune-off`、`--case sglang-autotune-off` 或 `--case sglang-autotune-on` 选择单组。runner 顺序启动服务，分别完成 health、models、关闭 thinking 的中文探测、预热及测量。

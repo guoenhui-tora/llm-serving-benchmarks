@@ -1,4 +1,5 @@
-# Experiment outputs (root only; src/serving_bench/results is source code)
+# Local experiment workspace and outputs (root only)
+/experiments/
 /results/
 /reports/
 /logs/

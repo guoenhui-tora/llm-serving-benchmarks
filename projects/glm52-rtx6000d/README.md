@@ -34,6 +34,6 @@ CSV 的 `case` 区分三组配置，`C` 为并发，`R` 为重复序号；延迟
 ./bench plan projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
 ```
 
-该 campaign 顺序执行三套配置，各测 C16 / C32 三次；target 固定为 46 节点。实际运行前按 [基线复现](reports/reproduction.md) 准备日志文件并做 preflight。
+继续实验时先将本项目 configs 复制到 `experiments/glm52-rtx6000d/configs/`，步骤见 [基线复现](reports/reproduction.md)。该 campaign 顺序执行三套配置，各测 C16 / C32 三次；target 固定为 46 节点。实际运行前按 [基线复现](reports/reproduction.md) 准备日志文件并做 preflight。
 
 **历史结果已经实测；迁移后的入口仅做离线验证，未启动新实验。** 推理参数与归档一致，日志路径及编译事件规则按新框架接口适配。完整日志、旧配置快照和 JIT 缓存仍保留在本机旧目录，不随 Git 分发。

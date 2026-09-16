@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,6 +10,7 @@ from unittest.mock import patch
 
 from serving_bench.common import BenchError
 from serving_bench.config import resolve
+from serving_bench.clients.vllm_bench import command as client_command
 from serving_bench.executors.docker import cache_directory, server_command
 from scripts.prepare_logging import prepare
 from scripts.package import source_files
@@ -27,6 +29,40 @@ class ProjectLayoutTests(unittest.TestCase):
                     plan = resolve(path)
                     for case in plan['cases']:
                         self.assertIn('--pull', server_command(case, 'preview', 'preview'))
+
+    def test_workspace_configs_can_be_published_without_changing_execution(self):
+        for project in sorted((ROOT / 'projects').iterdir()):
+            if not (project / 'configs').is_dir():
+                continue
+            with self.subTest(project=project.name), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                working = root / 'experiments' / project.name / 'configs'
+                published = root / 'projects' / project.name / 'configs'
+                shutil.copytree(project / 'configs', working)
+                plans = {p.name: resolve(p) for p in (working / 'campaigns').glob('*.yaml')}
+                published.parent.mkdir(parents=True)
+                shutil.move(str(working), published)
+                # The original workspace is absent: references must be self-contained.
+                for name, before in plans.items():
+                    after = resolve(published / 'campaigns' / name)
+                    self.assertEqual(before, after)
+                    for old, new in zip(before['cases'], after['cases']):
+                        image_id = new['runtime']['image_id']
+                        self.assertEqual(server_command(old, 'preview', 'preview', image_id),
+                                         server_command(new, 'preview', 'preview', image_id))
+                        self.assertEqual(cache_directory(old, image_id), cache_directory(new, image_id))
+                        for workload in new['workloads']:
+                            for concurrency in workload['traffic']['concurrency']:
+                                args = (workload, concurrency, workload['traffic']['requests'],
+                                        root / 'output', 'preview', 'preview')
+                                self.assertEqual(client_command(old, *args), client_command(new, *args))
+                        # Logging files must also work from the published copy.
+                        isolated = copy.deepcopy(new)
+                        isolated['target']['cache_root'] = str(root / 'cache')
+                        destination = prepare(isolated, published)
+                        if destination is not None:
+                            self.assertTrue(destination.is_file())
+                            self.assertEqual(prepare(isolated, published, check=True), destination)
 
     def test_logging_preparation_uses_actual_cache_and_preserves_existing_files(self):
         case = copy.deepcopy(resolve(DS / 'campaigns/48-dsv4-aligned-final-c16-c32.yaml')['cases'][1])
@@ -63,6 +99,8 @@ class ProjectLayoutTests(unittest.TestCase):
                     'projects/demo/reports/final.md', 'projects/demo/data/samples.json',
                     'projects/demo/configs/campaigns/run.yaml']
             drop = ['results/.gitkeep', 'reports/private.md', 'artifacts/backup.tar.gz', 'results/raw.json',
+                    'experiments/demo/configs/campaigns/draft.yaml',
+                    'experiments/demo/results/raw.json', 'experiments/demo/reports/draft.md',
                     'projects/demo/results/raw.json', 'projects/demo/.env',
                     'projects/demo/.env.private', 'src/serving_bench/__pycache__/file.pyc',
                     'projects/demo/cache/kernel.bin', 'unknown/secret.txt']

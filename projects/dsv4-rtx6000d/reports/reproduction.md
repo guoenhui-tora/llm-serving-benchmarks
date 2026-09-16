@@ -15,16 +15,20 @@
 安装根 README 中的 Python 依赖，提前准备固定模型和镜像。核对 target 的本机地址、模型路径、缓存路径与权限；不要改成别的权重格式或镜像后仍称为原基线。
 
 ```bash
-./bench validate projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-./bench plan projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
+# 首次建立工作区时复制；configs 已存在则续用，不重复覆盖。
+mkdir -p experiments/dsv4-rtx6000d/results experiments/dsv4-rtx6000d/reports
+cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-rtx6000d/configs
+
+./bench validate experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
+./bench plan experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
 
 # 必需：将自定义 INFO 日志 JSON 放进两个 SGLang recipe 的缓存挂载目录。
-python3 scripts/prepare_logging.py projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-python3 scripts/prepare_logging.py projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml --check
+python3 scripts/prepare_logging.py experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
+python3 scripts/prepare_logging.py experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml --check
 
-./bench preflight projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-./bench run projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml \
-  --run-root results/dsv4-rtx6000d/reproduction-01
+./bench preflight experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
+./bench run experiments/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml \
+  --run-root experiments/dsv4-rtx6000d/results/reproduction-01
 ```
 
 使用新的结果目录；失败尝试也不覆盖。上述 prepare 只写缺失日志文件，不启动容器、不复制或清空 JIT 缓存；已存在但不同的文件会报错，避免悄悄改变日志口径。只测 vLLM 可选 `--case vllm-autotune-off`，它不需要 SGLang 日志文件。

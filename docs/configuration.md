@@ -1,7 +1,7 @@
 # 配置格式
 
 每类配置独立变化，全部使用 `schema_version: 1` 和对应 `kind`。未知字段、重复键、非有限数值、越界引用直接失败。
-每个项目使用 `projects/<项目>/configs/` 作为配置根。CLI 默认从 campaign 的父目录寻找名为 `configs` 的目录，也可用 `--config-root` 显式指定。路径引用统一相对于配置根目录。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
+实验工作区使用 `experiments/<项目>/configs/`，精选配置使用 `projects/<项目>/configs/`；两者都作为独立配置根。CLI 默认从 campaign 的父目录寻找名为 `configs` 的目录，也可用 `--config-root` 显式指定。路径引用统一相对于配置根目录。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
 
 ## Target
 

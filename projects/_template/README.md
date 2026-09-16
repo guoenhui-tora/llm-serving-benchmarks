@@ -7,11 +7,11 @@
 从仓库根目录复制，例如：
 
 ```bash
-cp -a projects/_template projects/my-study
-mkdir -p results/my-study reports/my-study
+mkdir -p experiments/my-study/results experiments/my-study/reports
+cp -a projects/_template/configs experiments/my-study/configs
 ```
 
-随后更新项目 README 和配置身份。运行前逐项核对：
+只在首次建立工作区时复制，已有 configs 时不要重复覆盖。续接已有项目则复制对应 `projects/<项目>/configs/`，不用重新套模板。实验阶段在工作区修改配置、记录过程，形成结论后再建立或更新精选项目。运行前逐项核对：
 
 - target：本机地址、GPU 列表和型号、模型/缓存路径、端口及容器权限。
 - model/runtime：模型架构、量化、tokenizer、固定镜像 ID 和实际版本支持。
@@ -24,18 +24,18 @@ mkdir -p results/my-study reports/my-study
 ## 验证和执行
 
 ```bash
-./bench validate projects/my-study/configs/campaigns/functional.yaml
-./bench plan projects/my-study/configs/campaigns/functional.yaml
-python3 scripts/prepare_logging.py projects/my-study/configs/campaigns/functional.yaml
-./bench preflight projects/my-study/configs/campaigns/functional.yaml
-./bench run projects/my-study/configs/campaigns/functional.yaml \
-  --run-root results/my-study/functional-01
+./bench validate experiments/my-study/configs/campaigns/functional.yaml
+./bench plan experiments/my-study/configs/campaigns/functional.yaml
+python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functional.yaml
+./bench preflight experiments/my-study/configs/campaigns/functional.yaml
+./bench run experiments/my-study/configs/campaigns/functional.yaml \
+  --run-root experiments/my-study/results/functional-01
 ```
 
 确认功能后再使用 `c32-comparison.yaml`；同样先 prepare_logging、preflight，再 run 到新目录。日志准备只复制 JSON 到 recipe 对应的挂载缓存目录，不启动 Docker，也不清空缓存。仅 vLLM 的 case 无需 SGLang 日志文件。
 
-项目内配置引用均相对于自己的 `configs/`。实验期间，原始日志和指标放 `results/my-study/<run-id>/`，记录、草稿和临时汇总放 `reports/my-study/`；两者仅在本地保存，不进 Git。具体 run 目录由执行器创建，不要预先创建。
+工作区 `configs/` 中的引用均相对于它自身。原始日志和指标放 `experiments/my-study/results/<run-id>/`，草稿放 `experiments/my-study/reports/`；整体不进 Git。具体 run 目录由执行器创建，不要预先创建。
 
-阶段实验完成并核对数据后，手动将精选报告整理到本项目的 `reports/`，小型逐次数据和统计整理到 `data/`，再更新项目 README 并提交。完整原始产物继续在本地保留和备份，不要复制其他项目的性能结论。
+阶段完成后，将选定配置及完整依赖复制到 `projects/my-study/configs/`，精选报告放 `reports/`，小型数据放 `data/`，编写项目 README 后提交。保留 configs 内部结构，归档后再 validate/plan；完整过程见 [目录管理](../../docs/repository-management.md)。原始结果留在工作区，不复制模板或其他项目的性能结论。
 
 通用要求见 [实验方法](../../docs/benchmark-methodology.md)、[引擎对比](../../docs/engine-comparison.md) 和 [仓库管理](../../docs/repository-management.md)。

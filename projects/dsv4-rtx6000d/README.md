@@ -22,7 +22,7 @@ CSV 中 `case` 区分引擎配置，`C` 为并发，`R` 为重复序号；延迟
 
 ## 配置与运行
 
-配置位于 `configs/`，三套 serving 参数直接放在 `configs/recipes/`。从仓库根目录执行：
+这里的 `configs/` 保存精选基线，三套 serving 参数直接放在 `configs/recipes/`。继续实验时先复制到 `experiments/dsv4-rtx6000d/configs/`，步骤见 [基线复现](reports/reproduction.md)。下面只离线检查归档配置，从仓库根目录执行：
 
 ```bash
 ./bench validate projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml

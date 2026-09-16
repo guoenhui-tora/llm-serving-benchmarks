@@ -16,32 +16,89 @@
 | [仓库管理](docs/repository-management.md) | 项目、版本、报告与原始数据怎么保存 |
 | [配置格式](docs/configuration.md) / [实现边界](docs/architecture.md) | 配置字段和代码职责 |
 
-## 安装与检查
+## 安装
 
-需要 Python 3.10+。模型和固定镜像应提前准备；执行器使用 `--pull never`，不会下载或升级镜像。
+需要 Python 3.10+、Docker 和 NVIDIA GPU。模型与固定镜像应提前准备；执行器使用 `--pull never`，不会下载或升级镜像。以下命令都从仓库根目录执行。
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 ./bench --help
-
-./bench validate projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-./bench plan projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
 ```
 
-`validate` 和 `plan` 不访问 Docker、GPU 或网络。程序会从 campaign 路径找到所属 `configs/`；也可显式传入 `--config-root`。配置引用均相对于这个项目的配置根。
+## 先建立本地实验工作区
 
-实际运行前先阅读项目 README，核对 target 地址、模型路径、镜像 ID 和缓存权限。DSV4 的 SGLang recipe 还需要准备自定义日志文件，具体命令见项目入口。
+**拿到项目后，先在 `experiments/<项目>/` 中工作。** 配置尝试、原始结果和分析草稿都放在这里；阶段实验完成后，再将值得保留的配置和成果精选到 `projects/<项目>/`。
+
+```text
+experiments/<项目>/         本地工作区，整体不进 Git、不进源码包
+├── configs/                实验配置，包含候选和失败尝试
+├── results/                各次运行的日志、预热和原始指标
+└── reports/                实验记录、草稿和临时汇总
+
+projects/<项目>/            精选成果，提交 Git
+├── README.md               项目目标、当前结论与后续计划
+├── configs/                可复现结论的配置及完整依赖
+├── reports/                精选报告
+└── data/                   小型逐次数据与统计
+
+projects/_template/         配置模板
+src/、tests/、scripts/      通用实现、测试与辅助工具
+docs/                      通用方法和配置说明
+```
+
+### 新项目：从模板开始
 
 ```bash
-python3 scripts/prepare_logging.py projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-./bench preflight projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
-./bench run projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml \
-  --run-root results/dsv4-rtx6000d/my-new-run
+mkdir -p experiments/my-study/results experiments/my-study/reports
+cp -a projects/_template/configs experiments/my-study/configs
 ```
 
-`preflight` 会启动临时 CLI 检查容器，服务端帮助可见一张 GPU，但不加载模型。`run` 会再次 preflight，再顺序启动各 case，完成 health、models、中文探测、预热和测量。`--case vllm-autotune-off` 可只选一个 case。已有结果目录拒绝覆盖。
+按 [模板说明](projects/_template/README.md) 修改本地配置：核对模型、硬件、镜像、路径、recipe 和 workload。模板是已知平台的参考，不能直接当作新模型的已验证配置。
+
+### 续接项目：从该项目的精选配置开始
+
+例如继续优化 DSV4：
+
+```bash
+mkdir -p experiments/dsv4-rtx6000d/results experiments/dsv4-rtx6000d/reports
+cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-rtx6000d/configs
+```
+
+以上复制步骤只在工作区首次建立时执行；若 `configs/` 已存在，直接续用或另建工作区，不重复覆盖。先阅读该项目 README，再在工作区新增候选 recipe/campaign，保留已验证的基线。此时不必向 `projects/` 添加探索文件。
+
+## 在工作区运行实验
+
+以下以新项目模板的功能验证为例；续接项目时换成工作区里的实际 campaign：
+
+```bash
+./bench validate experiments/my-study/configs/campaigns/functional.yaml
+./bench plan experiments/my-study/configs/campaigns/functional.yaml
+python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functional.yaml
+./bench preflight experiments/my-study/configs/campaigns/functional.yaml
+./bench run experiments/my-study/configs/campaigns/functional.yaml \
+  --run-root experiments/my-study/results/functional-01
+
+./bench report experiments/my-study/results/functional-01 \
+  > experiments/my-study/reports/functional-01.md
+```
+
+`validate`、`plan` 不访问 Docker、GPU 或网络。`prepare_logging.py` 准备 recipe 需要的日志文件；`preflight` 会启动临时 CLI 检查容器，不加载模型。`run` 再次 preflight，并顺序执行 health、models、简短生成、预热和测量；`--case` 可只选择一个 case。
+
+每次运行显式指定新的 `--run-root`，不要提前创建具体运行目录，执行器会自动创建并拒绝覆盖已有目录。省略该参数仍会写入根 `results/`，不会自动跟随 campaign 位置。根目录已有的 `results/`、`reports/` 继续本地保留和忽略，后续实验使用工作区。
+
+## 把精选成果归档到 projects
+
+实验完成并核对数据后，再做以下整理：
+
+1. 将选定 campaign 及其引用的 recipe、workload、target、model、runtime、client 和所需 logging 文件复制到 `projects/<项目>/configs/`，保留它们在 `configs/` 内的相对路径。已有项目只补充本轮选定配置，不整体覆盖旧基线。
+2. 将结论整理到项目 `reports/`，逐次小型数据放 `data/`，更新项目 README。报告链接应指向项目内随 Git 分发的文件；仅本机存在的原始日志路径要明确标注。
+3. 对归档后的 campaign 再运行 `validate`、`plan`，核对参数和报告链接后提交。完整原始结果继续在工作区保留并另行备份，不整个复制进 Git。
+
+**只改变外层目录不会破坏配置引用。** 例如 campaign 中的 `recipe: recipes/tp4.yaml` 始终相对于所属 `configs/`，不是相对于仓库根目录或当前 shell。内部结构和文件内容不变时，从 `experiments/` 复制到 `projects/` 后，解析配置与缓存路径保持一致。
+
+模型目录、target 地址和缓存根路径仍取自配置，换机器需要另行核对；改变内部文件名需同步修改引用，Markdown 链接也需检查。归档时不要依赖指向工作区的软链接。详细边界见 [仓库管理](docs/repository-management.md)。
 
 ## 实验基本原则
 
@@ -54,38 +111,6 @@ python3 scripts/prepare_logging.py projects/dsv4-rtx6000d/configs/campaigns/48-d
 - GPU 被其他任务占用时停止，不终止别人的任务；只清理本次所属容器，保留结果和缓存。
 
 执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。实际 CPU/NUMA 绑定、功耗/频率时间序列及 Git 本地差异需要另行保存。
-
-## 目录与结果
-
-```text
-src/、tests/、scripts/     通用实现、测试与辅助工具
-docs/                     通用方法和配置说明
-projects/_template/       项目模板
-projects/<项目>/configs/  项目独立固定的配置
-projects/<项目>/reports/  精选报告
-projects/<项目>/data/     小型逐次数据与统计
-results/、reports/        本机原始产物与草稿，不进 Git
-artifacts/                本机归档，不进 Git
-```
-
-项目中的报告和数据正常纳入版本管理。根目录的 `results/`、`reports/` 完全忽略，由本地按需创建；缓存、模型和运行环境也不随 Git 分发。
-
-## 开始一个新项目
-
-1. 复制模板，建立项目配置和本地工作目录：
-
-   ```bash
-   cp -a projects/_template projects/my-study
-   mkdir -p results/my-study reports/my-study
-   ```
-
-2. 按 [模板说明](projects/_template/README.md) 修改配置和项目 README，核对硬件、模型、镜像与负载，再做 validate、plan 和功能验证。
-3. 实验期间，日志、预热和原始指标放 `results/my-study/<run-id>/`；实验记录、分析草稿和临时汇总放 `reports/my-study/`。每次运行使用新的 run-id，不覆盖已有结果。
-4. 阶段实验完成并核对数据后，手动将有价值的报告整理到 `projects/my-study/reports/`，小型逐次结果和统计整理到 `projects/my-study/data/`，更新项目 README 后提交。完整日志仍在本地保存并另行备份。
-
-配置从一开始就放在项目的 `configs/` 中；实验产物先留在根目录的本地工作区，确认后再精选进项目。程序不会自动发布这些成果。临时汇总可用 `./bench report results/my-study/<run-id> > reports/my-study/summary.md` 生成；整理后再选入项目报告。
-
-`mkdir` 只创建项目级父目录；不要提前创建传给 `--run-root` 的具体运行目录，执行器会自动创建，并拒绝覆盖已有目录。
 
 ## 验证与打包
 
