@@ -1,0 +1,80 @@
+schema_version: 1
+kind: recipe
+id: glm52-vllm-sm120-tp8-ep1-aligned-cap32-jit-observed
+description: Aligned TP8 EP1 autotune OFF, decode-only Graph; JIT logging and persistent
+  TileLang cache. Three-repetition comparison.
+provenance: 'Accessed 2026-09-14: https://recipes.vllm.ai/zai-org/GLM-5.2 (v0.23.0+);
+  https://huggingface.co/nvidia/GLM-5.2-NVFP4 (local model card, online connection
+  reset). Fixed v0.29.0 CLI and SM120 support checked independently.'
+compatible:
+  engine: vllm
+  models:
+  - glm52-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.29.0
+mode: performance
+flags:
+- trust-remote-code
+- enable-auto-tool-choice
+- no-enable-prefix-caching
+- no-enable-expert-parallel
+- enable-chunked-prefill
+- jit-monitor-verbose
+options:
+  tensor-parallel-size: 8
+  reasoning-parser: glm45
+  tool-call-parser: glm47
+  kv-cache-dtype: fp8_e4m3
+  max-model-len: 16384
+  max-num-seqs: 32
+  max-num-batched-tokens: 8192
+  gpu-memory-utilization: 0.9
+  pipeline-parallel-size: 1
+  data-parallel-size: 1
+  kernel-config:
+    enable_flashinfer_autotune: false
+  seed: 0
+  compilation-config:
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_capture_sizes:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 12
+    - 16
+    - 24
+    - 32
+    max_cudagraph_capture_size: 32
+checks:
+  compilation:
+  - '\bTileLang begins to compile kernel\b'
+  required:
+  - GlmMoeDsaForCausalLM
+  - FLASHINFER_MLA_SPARSE_SM120
+  - FLASHINFER_CUTLASS
+  - Skipping FlashInfer autotune because it is disabled
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+probe:
+  prompt: "\u8BF7\u6309\u987A\u5E8F\u56DE\u7B54\u4E24\u4E2A\u95EE\u9898\uFF0C\u6BCF\
+    \u884C\u53EA\u5199\u7B54\u6848\uFF0C\u4E0D\u8981\u89E3\u91CA\uFF1A\n1. 17\u52A0\
+    25\u7B49\u4E8E\u591A\u5C11\uFF1F\n2. \u4E2D\u56FD\u7684\u9996\u90FD\u662F\u54EA\
+    \u5EA7\u57CE\u5E02\uFF1F"
+  max_tokens: 64
+  request:
+    chat_template_kwargs:
+      enable_thinking: false
+    seed: 0
+  expect_regex: "42[\\s\\S]*\u5317\u4EAC"
+environment:
+  TILELANG_CACHE_DIR: /root/.cache/tilelang
+  TILELANG_PRINT_ON_COMPILATION: '1'
+  FLASHINFER_JIT_VERBOSE: '1'
+  FLASHINFER_JIT_DEBUG: '0'
+  FLASHINFER_LOGGING_LEVEL: INFO

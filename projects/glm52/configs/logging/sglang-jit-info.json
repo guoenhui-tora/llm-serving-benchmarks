@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "serving": {
+      "format": "[%(asctime)s.%(msecs)03d %(processName)s pid=%(process)d] %(levelname)s %(name)s: %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "stderr": {
+      "class": "logging.StreamHandler",
+      "stream": "ext://sys.stderr",
+      "formatter": "serving",
+      "level": "INFO"
+    }
+  },
+  "root": {
+    "level": "INFO",
+    "handlers": [
+      "stderr"
+    ]
+  },
+  "loggers": {
+    "httpx": {
+      "level": "WARNING",
+      "handlers": [],
+      "propagate": true
+    },
+    "httpcore": {
+      "level": "WARNING",
+      "handlers": [],
+      "propagate": true
+    },
+    "flashinfer": {
+      "level": "INFO",
+      "handlers": [],
+      "propagate": true
+    },
+    "tilelang": {
+      "level": "INFO",
+      "handlers": [],
+      "propagate": true
+    }
+  }
+}

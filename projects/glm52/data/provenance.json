@@ -1,0 +1,253 @@
+{
+  "schema_version": 1,
+  "scope": "Historical measurements; migrated configurations validated offline only. No new GPU experiment.",
+  "host": "gpu-6000d-46",
+  "raw_artifacts_local_only": true,
+  "historical_repository": "/home/enhui/llm-serving-benchmarks",
+  "historical_git_commit": "94475c74def011d4dd6d03ffc1812118950d6163",
+  "historical_runner_source_fingerprint": "9d48bab586a4b45254e1ad10756766ccbe4b4e4a90b1f863a431db3fec643495",
+  "historical_local_changes": "Compilation event regex fixes and tests; complete git diff and source/config archive remain under each original results directory.",
+  "config_file_mapping": {
+    "targets/rtx6000d-46-glm-baseline.yaml": "targets/rtx6000d-46-glm-baseline.yaml",
+    "models/glm52-nvfp4.yaml": "models/glm52-nvfp4.yaml",
+    "runtimes/vllm-0.29.0.yaml": "runtimes/vllm-0.29.0.yaml",
+    "runtimes/sglang-0.5.19-cu130.yaml": "runtimes/sglang-0.5.19-cu130.yaml",
+    "clients/vllm-bench-0.29.0.yaml": "clients/vllm-bench-0.29.0.yaml",
+    "logging/sglang-jit-info.json": "logging/sglang-jit-info.json",
+    "workloads/glm-baseline/long-c16-repeat3.yaml": "workloads/glm52-8192-1024-c16-n64-repeat3.yaml",
+    "workloads/glm-baseline/long-c32-repeat3.yaml": "workloads/glm52-8192-1024-c32-n128-repeat3.yaml",
+    "recipes/glm52/vllm-sm120-tp8-ep1-aligned-cap32-jit-observed.yaml": "recipes/vllm-sm120-aligned-final-cap32.yaml",
+    "recipes/glm52/sglang-sm120-tp8-ep1-aligned-cap32-jit-observed.yaml": "recipes/sglang-sm120-aligned-final-cap32-noautotune.yaml",
+    "recipes/glm52/sglang-sm120-tp8-ep1-aligned-cap32-jit-autotune-on.yaml": "recipes/sglang-sm120-aligned-final-cap32-autotune.yaml"
+  },
+  "migration_changes": [
+    "Flatten recipe/workload paths; combine two historical campaigns into one three-case entry; rename case IDs.",
+    "/root/.cache/bench-logging/sglang-jit-info.json -> /root/.cache/logging/sglang-jit-info.json (same file content).",
+    "Move the historical TileLang event pattern from engine defaults into recipe checks.compilation; effective pattern sets unchanged.",
+    "Recipe changes create new cache fingerprints. Original caches are preserved; no cache seeding or GPU retest during migration."
+  ],
+  "cases": [
+    {
+      "case": "vllm-autotune-off",
+      "historical_case": "glm52-vllm",
+      "raw_run_root": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01",
+      "case_status": "PASS",
+      "gate_status": "PASS",
+      "image": "vllm/vllm-openai:v0.29.0",
+      "image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "repo_digests": [
+        "vllm/vllm-openai@sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1"
+      ],
+      "client_image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "model_identity": "b0f97c0a25851a7357f1f8133cbcc7c4399b23873752161fdd2dbc481397a3a0",
+      "historical_recipe_id": "glm52-vllm-sm120-tp8-ep1-aligned-cap32-jit-observed",
+      "historical_cache_directory": "/home/enhui/.cache/serving-bench/vllm/821b014f47af82f13210",
+      "migrated_cache_directory": "/home/enhui/.cache/serving-bench/vllm/33b62e3f5a2b8c6aa778",
+      "historical_evidence_sha256": {
+        "resolved.json": "e68467386edbad10caaa410518a1d2c3ba78d0e64419a3c308181230bba4dce7",
+        "argv.json": "e19f215e7be7ca51c42e9d6e367cb262c57fcd04318509b6590c9e5655dba32c",
+        "environment.json": "cd71db28b1bfe3d7c6814c7db49ff3e3133ee508cdd92b3fd434d73c377f83ce",
+        "host.json": "c604b17d58f1a9cad34cbd0fc7431ec3f1714cec62674736610f7ea0c3ebbd4c",
+        "server.log": "1824c9c9468085c818c89f9e1a151b7d4daafd65885ed42a8ce02706c4ef0e4d",
+        "case.json": "9e8a0756c20f514f7ed28a21df673cac627347e2a6dbd193c0314fafdcdbb02a"
+      }
+    },
+    {
+      "case": "sglang-autotune-off",
+      "historical_case": "glm52-sglang",
+      "raw_run_root": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01",
+      "case_status": "PASS",
+      "gate_status": "PASS",
+      "image": "lmsysorg/sglang:v0.5.19-cu130",
+      "image_id": "sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9",
+      "repo_digests": [
+        "lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9"
+      ],
+      "client_image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "model_identity": "b0f97c0a25851a7357f1f8133cbcc7c4399b23873752161fdd2dbc481397a3a0",
+      "historical_recipe_id": "glm52-sglang-sm120-tp8-ep1-aligned-cap32-jit-observed",
+      "historical_cache_directory": "/home/enhui/.cache/serving-bench/sglang/0370631b43248da5aede",
+      "migrated_cache_directory": "/home/enhui/.cache/serving-bench/sglang/9edaddb7f089e7f458c2",
+      "historical_evidence_sha256": {
+        "resolved.json": "19bb5e6d1d3a696bf7457a2b3f7afc5ea700f4cb122111bb851b149994139463",
+        "argv.json": "7415d96459b801fcf9ce870a51bb9a59e507a6f3cea3cb51d160df09731b2b1d",
+        "environment.json": "db526030fa902e1d2ef1904ed727350aa09eac3d6fa3e9e53b26df44072df696",
+        "host.json": "c5f797bf35258af1c92889044fc66bfbea298e810ed84bb64514e43cc41efa2c",
+        "server.log": "f0ff46734cae357f49a86d61d2c7d4704b67c0a59ee594eefa05379a4d91c55f",
+        "case.json": "182764ef37ae8825b1be344ca22367344ffc76f6bcc407ee3ee7fe77955ad0a8"
+      }
+    },
+    {
+      "case": "sglang-autotune-on",
+      "historical_case": "glm52-sglang",
+      "raw_run_root": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01",
+      "case_status": "PASS",
+      "gate_status": "PASS",
+      "image": "lmsysorg/sglang:v0.5.19-cu130",
+      "image_id": "sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9",
+      "repo_digests": [
+        "lmsysorg/sglang@sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda9"
+      ],
+      "client_image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+      "model_identity": "b0f97c0a25851a7357f1f8133cbcc7c4399b23873752161fdd2dbc481397a3a0",
+      "historical_recipe_id": "glm52-sglang-sm120-tp8-ep1-aligned-cap32-jit-autotune-on",
+      "historical_cache_directory": "/home/enhui/.cache/serving-bench/sglang/8efcac450c4f7628038f",
+      "migrated_cache_directory": "/home/enhui/.cache/serving-bench/sglang/db79d3a3ed2cd5e30add",
+      "historical_evidence_sha256": {
+        "resolved.json": "4d6e0ccc5f86d6152f1d6b4a981af6cd9ddce5c39e19a25589defb71e29fac5e",
+        "argv.json": "cef5fa2230e0842b934e43c4bc7691acf6278fcc1623392c229042b20c9c30bc",
+        "environment.json": "e23bfa1b545a6c93a0b1f0de2e4e6cac8e88f5e41f0fb0ef45127640d6af5d5c",
+        "host.json": "c100147a39a710da6ee726515b4209320af99c4c134844511eb8dfd8c898d7ee",
+        "server.log": "c631d470246991adfc1fc9f9d3d51c5c3e324c0980fa91623f7c291b3640f48c",
+        "case.json": "c3b5af2dab57a7477be81cf70603f80b162772f7a30b853e8609dcb1a842ac3a"
+      }
+    }
+  ],
+  "samples": [
+    {
+      "case": "vllm-autotune-off",
+      "C": 16,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c16-repeat3/c0016/r01/measurement-01",
+      "raw_sha256": "be94b4d3b75f2d9ad78c226d0f3d9a39fb5769d53b0c1ed631b77eab26a11c3f",
+      "metrics_sha256": "8f035277013f87ff8a4fbbbd09869cc8432f021b5fa8a9c0dc36964b193f3a35"
+    },
+    {
+      "case": "vllm-autotune-off",
+      "C": 16,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c16-repeat3/c0016/r02/measurement-01",
+      "raw_sha256": "8763b980345b35eb013ea2526b9ae4d7e32982533e5ff3deb7b2e71d47336d47",
+      "metrics_sha256": "2aec58278ee46496a5d68f6188ab5eb6d932801fb9081ab17694010d2e0ed3b4"
+    },
+    {
+      "case": "vllm-autotune-off",
+      "C": 16,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c16-repeat3/c0016/r03/measurement-01",
+      "raw_sha256": "a85cb83ff20c7571662719ac7165248ef56db149f76fbc7e29f987de6fd76c4e",
+      "metrics_sha256": "83760ae85fd2676a0acaa0abd78de98c42412ab75e96cbe0760643a7621797e3"
+    },
+    {
+      "case": "vllm-autotune-off",
+      "C": 32,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c32-repeat3/c0032/r01/measurement-01",
+      "raw_sha256": "176e5324494686abcc239b8a869d8ed7b8d2a81b9ef341715508e6af291b3cd1",
+      "metrics_sha256": "6b124ce6f94e10210dd271037626bbf528a654903d9295d7780384e55492ef39"
+    },
+    {
+      "case": "vllm-autotune-off",
+      "C": 32,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c32-repeat3/c0032/r02/measurement-01",
+      "raw_sha256": "162b0ada83e0a3f0dc1ba598e81ce57e138791c3f121a8a12d5412a1b1a0c829",
+      "metrics_sha256": "1f3665bd1fb6207286289cf4fdb367d133f1bc60f6d2383369ea158406fae883"
+    },
+    {
+      "case": "vllm-autotune-off",
+      "C": 32,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-vllm/trials/glm-baseline-long-c32-repeat3/c0032/r03/measurement-01",
+      "raw_sha256": "7900b572de42aec982aafc746ae4c0edaad49e9176f6f00c021e5d0403b16e40",
+      "metrics_sha256": "79683637389c0da0005c9416682d05f711d60eb47f811539c3c9dee89e94c49d"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 16,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r01/measurement-01",
+      "raw_sha256": "0e69116962f08a18dbe1be9c7b1359b8e686342f918edc5e0b17049cab34e3bf",
+      "metrics_sha256": "3245bcbda7901ad27919f3fcadd624b89696afd939d20d3f612b2db060fa4ba3"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 16,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r02/measurement-01",
+      "raw_sha256": "24cc37055d9441701cea0a4f32cec65c44e0a68d9132e570b09a891fc33c447c",
+      "metrics_sha256": "a5b2a36130c95c129dca5d3589b778335fd7fd96064e52188c01c6e3975f24b6"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 16,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r03/measurement-01",
+      "raw_sha256": "a8f177815017c4f676ae71f57445ca760611bf4712260a4e92e41011fa424e00",
+      "metrics_sha256": "8a4a0b521552acacfc8c4d9dc7f120c73660168a3b95aa80854f1c2abf5b63d3"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 32,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r01/measurement-01",
+      "raw_sha256": "aaf247b4cfab5efc25c0885ee66cd525fa604ca6d8f37faebb1370015ace6d20",
+      "metrics_sha256": "0318154d198e0a4266b41c9fc85b04ae77472f328cc76d9d7e1cdc4531ba4e10"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 32,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r02/measurement-01",
+      "raw_sha256": "6014865e070d53a5fc4687ea6377daa0b4edddd2b28b6936b3f54edcd4519e06",
+      "metrics_sha256": "2a3df85eabcc3680a0cdd733c981adbbacff28a344e049257253c1dadb363a7e"
+    },
+    {
+      "case": "sglang-autotune-off",
+      "C": 32,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-jit-fair-repeat-20260915/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r03/measurement-01",
+      "raw_sha256": "a8b67219f9f6d1375b96d816ea09a34588a3e3bc7ee4cbb5a4a461084a118fe8",
+      "metrics_sha256": "a73c574f7b6dd0bb499cef4b36c02d8c357e8865634ab12eecef9e6ab2167f69"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 16,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r01/measurement-01",
+      "raw_sha256": "767caee911c3dddec8bc2d22235a9560e46d16d7b7d3cf207b5efd1c2a62d2ca",
+      "metrics_sha256": "d1ee818c84b5c5a843f0c96e510c3642ecaa24b3d369b468a9cb15b018da057f"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 16,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r02/measurement-01",
+      "raw_sha256": "59fef3b08d21e2b38d6b80893b774c2b802053af605a4d47f81621588959f831",
+      "metrics_sha256": "f12f0347b680ed2110271cd4fe3f30200cf94b0a16c45993e76b48596b07db98"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 16,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c16-repeat3/c0016/r03/measurement-01",
+      "raw_sha256": "e535f44b02b4301b3e85dec1a99b079b6d4fc832bbae0677e85a9e35696162f1",
+      "metrics_sha256": "53a2a51082175fa60143f0f2c9b4324832f865e3274e39499a8bd889117e8a6a"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 32,
+      "R": 1,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r01/measurement-01",
+      "raw_sha256": "b91818f93770b0260fa9c1569912f90663136781a5988151b7941d8823e28fa5",
+      "metrics_sha256": "eec8faee188234d11f7880f6314ec60b4d571629d82ec36055adbe0659bdc5d7"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 32,
+      "R": 2,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r02/measurement-01",
+      "raw_sha256": "0ef911f2920b2828f6a5dcaba6ab44fa7a7d4f62269ca948afab9809b90127a2",
+      "metrics_sha256": "cce75c597cea78e927db7a51aedeb3fe4de7314d85b752288bbe4a466217b967"
+    },
+    {
+      "case": "sglang-autotune-on",
+      "C": 32,
+      "R": 3,
+      "historical_measurement_directory": "/home/enhui/llm-serving-benchmarks/results/glm52-sglang-jit-autotune-on-20260916/run-01/cases/glm52-sglang/trials/glm-baseline-long-c32-repeat3/c0032/r03/measurement-01",
+      "raw_sha256": "e0cc1bda523afb05023ac64db30228828778b1bc20ba1d9bf4e630f92b27ab53",
+      "metrics_sha256": "f3803c869b6e2ee72e7708f6ef86227a8b79ee957b29ac3433f8c2fda3818355"
+    }
+  ],
+  "baseline_samples_sha256": "b5318455e0114a1ea0d52ca5881d22e92e9f80101823c0247df63bf0cea1ae54"
+}

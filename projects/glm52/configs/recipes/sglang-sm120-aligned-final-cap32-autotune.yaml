@@ -1,0 +1,88 @@
+schema_version: 1
+kind: recipe
+id: glm52-sglang-sm120-tp8-ep1-aligned-cap32-jit-autotune-on
+description: Autotune ON only versus the JIT-observed OFF baseline; C16/C32 8192/1024,
+  three repeats each.
+provenance: 'Accessed 2026-09-14: https://docs.sglang.io/cookbook/autoregressive/GLM/GLM-5.2
+  (rolling); https://huggingface.co/nvidia/GLM-5.2-NVFP4 (local card: latest/dev-glm52-nvfp4,
+  transformers>=5.3). Fixed image has transformers 5.12.1; native GLM DSA SM120 FP8
+  path. Local adaptation: short-01 loader failed with packed/unpacked dimension 128
+  versus 256 after shared expert was mapped into quantized routed experts. Explicitly
+  disable this fusion.'
+compatible:
+  engine: sglang
+  models:
+  - glm52-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.5.19
+mode: performance
+flags:
+- trust-remote-code
+- disable-radix-cache
+- disable-shared-experts-fusion
+- enable-mixed-chunk
+options:
+  tp-size: 8
+  pp-size: 1
+  dp-size: 1
+  ep-size: 1
+  context-length: 16384
+  max-running-requests: 32
+  quantization: modelopt_fp4
+  kv-cache-dtype: fp8_e4m3
+  moe-runner-backend: flashinfer_cutlass
+  chunked-prefill-size: 8192
+  mem-fraction-static: 0.86
+  tool-call-parser: glm47
+  reasoning-parser: glm45
+  random-seed: 0
+  cuda-graph-backend-decode: full
+  cuda-graph-backend-prefill: disabled
+  cuda-graph-bs-decode:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 12
+  - 16
+  - 24
+  - 32
+  cuda-graph-max-bs-decode: 32
+checks:
+  compilation:
+  - '\bTileLang begins to compile kernel\b'
+  required:
+  - GlmMoeDsaForCausalLM
+  - ModelOptNvFp4FusedMoEMethod
+  - flashinfer_sparse_mla
+  - moe_runner_backend=flashinfer_cutlass
+  - 'disable_flashinfer_autotune'': False'
+  - Running FlashInfer autotune
+  - FlashInfer autotune completed
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+  - scaling factors
+probe:
+  prompt: '请按顺序回答两个问题，每行只写答案，不要解释：
+
+    1. 17加25等于多少？
+
+    2. 中国的首都是哪座城市？'
+  max_tokens: 64
+  request:
+    chat_template_kwargs:
+      enable_thinking: false
+    seed: 0
+  expect_regex: 42[\s\S]*北京
+environment:
+  TILELANG_CACHE_DIR: /root/.cache/tilelang
+  TILELANG_PRINT_ON_COMPILATION: '1'
+  FLASHINFER_JIT_VERBOSE: '1'
+  FLASHINFER_JIT_DEBUG: '0'
+  FLASHINFER_LOGGING_LEVEL: INFO
+  SGLANG_LOGGING_CONFIG_PATH: /root/.cache/logging/sglang-jit-info.json
