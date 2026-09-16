@@ -1,7 +1,7 @@
 # 配置格式
 
 每类配置独立变化，全部使用 `schema_version: 1` 和对应 `kind`。未知字段、重复键、非有限数值、越界引用直接失败。
-路径引用统一相对于配置根目录。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
+每个项目使用 `projects/<项目>/configs/` 作为配置根。CLI 默认从 campaign 的父目录寻找名为 `configs` 的目录，也可用 `--config-root` 显式指定。路径引用统一相对于配置根目录。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
 
 ## Target
 
@@ -110,3 +110,7 @@ case 不必都使用相同模型，但报表不将不同模型数据聚合，也
 
 失败 case 保留证据后通常继续下一 case；如果清理/取证失败，停止 campaign，避免在不确定的资源状态下继续。
 任何 case 失败，campaign 最终为 FAIL。使用 `--case` 可单独重跑到新的 run 目录。
+
+## 自定义日志文件
+
+recipe 中的日志路径是容器路径，声明环境变量不会自动复制宿主文件。当前 SGLang 项目通过 `python3 scripts/prepare_logging.py CAMPAIGN` 将项目 `configs/logging/` 的 JSON 放入对应缓存挂载目录；`--check` 只检查，`--case` 可选择 case。此步骤不改 recipe、启动容器或清空缓存。

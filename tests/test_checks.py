@@ -22,7 +22,7 @@ class CheckTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        self.case = resolve(ROOT / "configs/campaigns/46-glm52-vllm-smoke.yaml")["cases"][0]
+        self.case = resolve(ROOT / "tests/fixtures/configs/campaigns/46-glm52-vllm-smoke.yaml")["cases"][0]
 
     def test_kernel_gate_and_warning_visibility(self):
         case = self.case
@@ -38,7 +38,7 @@ class CheckTests(unittest.TestCase):
         self.assertEqual(kernel_checks(case, "")['status'], "UNVERIFIED")
 
     def test_sglang_autotune_detected(self):
-        case = resolve(ROOT / "configs/campaigns/48-dsv4-sglang-smoke.yaml")["cases"][0]
+        case = resolve(ROOT / "tests/fixtures/configs/campaigns/48-dsv4-sglang-smoke.yaml")["cases"][0]
         self.assertTrue(compilation_events(case, "[AutoTuner]: Tuning sparse_mla_sm120_decode_dsv4"))
         self.assertTrue(compilation_events(case, "Running FlashInfer autotune with cache"))
         self.assertFalse(compilation_events(case, "Server is ready. FlashInfer autotune completed."))

@@ -23,7 +23,7 @@ class ConfigTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name) / "configs"
-        shutil.copytree(ROOT / "configs", self.root)
+        shutil.copytree(ROOT / "tests/fixtures/configs", self.root)
         self.campaign = self.root / "campaigns/46-glm52-vllm-smoke.yaml"
 
     def edit(self, relative, update):
@@ -32,7 +32,7 @@ class ConfigTests(unittest.TestCase):
         update(value)
         path.write_text(yaml.safe_dump(value))
 
-    def test_all_shipped_campaigns_resolve_without_docker(self):
+    def test_fixture_campaigns_resolve_without_docker(self):
         with patch("subprocess.run", side_effect=AssertionError("Offline resolution executed a command")):
             for path in self.root.joinpath("campaigns").glob("*.yaml"):
                 with self.subTest(path=path.name):

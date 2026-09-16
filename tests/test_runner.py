@@ -56,7 +56,7 @@ class RunnerTests(unittest.TestCase):
         self.thread.start()
         self.addCleanup(self.api.server_close)
         self.addCleanup(self.api.shutdown)
-        self.plan = resolve(ROOT / "configs/campaigns/46-glm52-vllm-smoke.yaml")
+        self.plan = resolve(ROOT / "tests/fixtures/configs/campaigns/46-glm52-vllm-smoke.yaml")
         self.case = self.plan["cases"][0]
         self.case["target"]["port"] = self.api.server_port
         self.case["target"]["cache_root"] = str(self.root / "cache")
@@ -204,7 +204,7 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(len(report([self.root / "run"])["groups"]), 2)
 
     def test_sglang_full_flow_uses_sglang_server_and_vllm_client(self):
-        self.plan = resolve(ROOT / "configs/campaigns/48-dsv4-sglang-smoke.yaml")
+        self.plan = resolve(ROOT / "tests/fixtures/configs/campaigns/48-dsv4-sglang-smoke.yaml")
         self.case = self.plan["cases"][0]
         self.case["target"]["port"] = self.api.server_port
         self.case["target"]["cache_root"] = str(self.root / "cache")

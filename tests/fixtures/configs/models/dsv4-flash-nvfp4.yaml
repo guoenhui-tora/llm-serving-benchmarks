@@ -1,0 +1,8 @@
+schema_version: 1
+kind: model
+id: dsv4-flash-nvfp4
+directory: DeepSeek-V4-Flash-0731-NVFP4
+served_name: deepseek-v4-flash
+architecture: DeepseekV4ForCausalLM
+quantization: mixed-precision checkpoint with NVFP4 routed experts
+required_files: [config.json, tokenizer_config.json, model.safetensors.index.json]

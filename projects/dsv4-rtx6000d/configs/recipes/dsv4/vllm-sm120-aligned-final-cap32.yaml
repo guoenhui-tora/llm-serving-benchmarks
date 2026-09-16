@@ -1,0 +1,94 @@
+schema_version: 1
+kind: recipe
+id: dsv4-vllm-sm120-aligned-final-cap32
+description: 'Formal C16/C32 repeated baseline: aligned controls, verbose JIT observation,
+  persistent TileLang cache, autotune disabled.'
+provenance: 'Accessed 2026-09-14: https://recipes.vllm.ai/deepseek-ai/DeepSeek-V4-Flash
+  ; local NVIDIA model card https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4
+  . Pinned vLLM 0.29.0 includes DeepseekV4FP8Config NVFP4 dispatch and FlashInfer
+  SM120 attention. FP4 indexer disabled per official SM120 restriction. Local no-autotune
+  C1 diagnosis: reports/dsv4-no-autotune-20260914/README.md. Explicit backend follows
+  fixed-image _select_dsv4_attn_cls; original gates retained. User-provided GLM control
+  design adapted independently for DSV4 on 2026-09-15; fixed CLI/source reviewed.
+  See reports/dsv4-aligned-preparation-20260915/README.md. Memory 0.90 is a DSV4 historical
+  starting point, not calibrated equivalence. 2026-09-15 live stack diagnosis: silent
+  TileLang compilation in quiet warmup; see reports/dsv4-stall-diagnosis-20260915/README.md.
+  Formal 2026-09-15: previous actual aligned KV51.75GiB/card; verbose validated in
+  reports/dsv4-jit-verbose-validation-20260915/README.md. TileLang cache persisted;
+  same performance controls, not an official optimum.'
+compatible:
+  engine: vllm
+  models:
+  - dsv4-flash-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.29.0
+mode: performance
+flags:
+- trust-remote-code
+- enable-auto-tool-choice
+- no-enable-prefix-caching
+- no-enable-expert-parallel
+- enable-chunked-prefill
+- jit-monitor-verbose
+options:
+  tensor-parallel-size: 8
+  pipeline-parallel-size: 1
+  data-parallel-size: 1
+  max-model-len: 16384
+  max-num-seqs: 32
+  max-num-batched-tokens: 8192
+  gpu-memory-utilization: 0.9
+  kv-cache-dtype: fp8_e4m3
+  block-size: 256
+  attention-config:
+    use_fp4_indexer_cache: false
+    backend: FLASHINFER_MLA_SPARSE_DSV4
+  moe-backend: auto
+  tokenizer-mode: deepseek_v4
+  tool-call-parser: deepseek_v4
+  reasoning-parser: deepseek_v4
+  reasoning-config:
+    reasoning_parser: deepseek_v4
+    reasoning_start_str: ''
+    reasoning_end_str: ''
+  kernel-config:
+    enable_flashinfer_autotune: false
+  compilation-config:
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_capture_sizes:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 12
+    - 16
+    - 24
+    - 32
+    max_cudagraph_capture_size: 32
+  seed: 0
+checks:
+  required:
+  - DeepseekV4ForCausalLM
+  - FLASHINFER_MLA_SPARSE_DSV4
+  - FLASHINFER_CUTLASS
+  - DeepSeek V4 expert_dtype resolved to 'fp4'
+  - fp8_ds_mla
+  - Skipping FlashInfer autotune because it is disabled
+  - Warming up DeepSeek V4 sparse MLA attention for mixed tokens=16\.
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+  - scaling factors
+probe:
+  prompt: 请用一句简短中文回答：1加1等于几？
+  max_tokens: 64
+  request:
+    chat_template_kwargs:
+      thinking: false
+  expect_regex: 2|二|两
+environment:
+  TILELANG_CACHE_DIR: /root/.cache/tilelang

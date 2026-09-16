@@ -45,7 +45,7 @@ runner 不判断模型名称，也不转换 vLLM/SGLang 参数。首次实现只
 - 新 GPU 厂商/执行方式：拆出对应设备检测、透传和环境取证实现，增加 executor 分派；
   不把 NVIDIA 命令换成空操作后继续运行。
 - 新数据集/协议：增加请求生成/模板/tokenizer 身份记录及客户端支持，明确长度和采样语义后开放 schema。
-- Profiling：在已验证的普通 serving 流程之外新增独立命令；旧 MiniMax instrumentation 不直接搬入。
+- Profiling：在已验证的普通 serving 流程之外新增独立命令；不把带 profiler 开销的结果混入正常 serving 基线。
 
 ## 已知测量边界
 
@@ -63,4 +63,4 @@ kernel warnings 保留在结果中；不能把未触发 forbidden 自动解释�
 本地测试覆盖配置错配、路径逃逸、重复键、原生开关、GPU 校验、模型缺失分片、所有权清理、GPU 锁、
 两引擎顺序运行、真实回环 HTTP、请求校验、编译重试、失败/中断、相对路径迁移和汇总分组。
 Docker 和负载生成进程在集成测试中模拟，不能替代真实镜像与模型验证。
-实机验证先 smoke，再小规模 calibration，通过后才使用 performance 候选配置。
+测试配置位于 `tests/fixtures/configs/`，与不断演进的项目配置分开。项目 campaign 另做离线解析和命令检查。实机验证先功能探测，再按约定预算筛选性能候选。

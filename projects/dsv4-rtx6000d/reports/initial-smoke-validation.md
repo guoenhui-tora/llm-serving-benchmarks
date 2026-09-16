@@ -1,4 +1,6 @@
-# RTX 6000D 实机验证记录
+# RTX 6000D 初始 smoke 验证记录
+
+历史记录，以下“尚未验证”指 2026-09-14 当时的状态。后续 DSV4 正式结果见 [镜像选型](image-selection.md)；GLM 配置见 [GLM 项目](../../glm52-rtx6000d/README.md)。
 
 日期：2026-09-14。两组均使用本工程完整的 `bench run` 流程，结果为 PASS。
 

@@ -1,0 +1,38 @@
+schema_version: 1
+kind: recipe
+id: glm52-vllm-sm120-smoke
+description: Validated with this runner on 2026-09-14 for smoke only; see docs/validation.md. Performance has not been assessed.
+provenance: https://recipes.vllm.ai/zai-org/GLM-5.2 ; adapted to SM120 PCIe using prior local smoke logs.
+compatible:
+  engine: vllm
+  models: [glm52-nvfp4]
+  compute_capabilities: ['12.0']
+  runtime_versions: ['0.29.0']
+mode: smoke
+flags:
+  - enable-expert-parallel
+  - trust-remote-code
+  - enable-auto-tool-choice
+  - enforce-eager
+  - no-enable-prefix-caching
+options:
+  tensor-parallel-size: 8
+  reasoning-parser: glm45
+  tool-call-parser: glm47
+  kv-cache-dtype: fp8_e4m3
+  max-model-len: 2048
+  max-num-seqs: 1
+  max-num-batched-tokens: 2048
+  gpu-memory-utilization: 0.90
+  kernel-config: {enable_flashinfer_autotune: false}
+environment:
+  VLLM_DEEP_GEMM_WARMUP: skip
+checks:
+  required: [GlmMoeDsaForCausalLM, FLASHINFER_MLA_SPARSE_SM120, FLASHINFER_CUTLASS]
+  warnings: ['(?i)warning', 'not supported', 'not available', 'disabled']
+probe:
+  prompt: 请用一句简短中文回答：1加1等于几？
+  max_tokens: 64
+  request:
+    chat_template_kwargs: {enable_thinking: false}
+  expect_regex: '2|二|两'

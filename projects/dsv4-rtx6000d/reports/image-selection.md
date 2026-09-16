@@ -73,4 +73,4 @@ vLLM 从 C16 到 C32 吞吐提高 22.30%，平均请求耗时也从 30.74 秒增
 
 本轮可作为该固定负载的性能基线；未做模型质量评测，也未验证长期线上稳定性。SGLang autotune 日志仍有部分形状未覆盖的 fallback，开启 autotune 不等于所有 kernel 都获得优化。
 
-完整的逐次结果、其他延迟指标与统计见 [正式报告](../reports/dsv4-aligned-final-20260915/README.md) 和 [测量明细](../reports/dsv4-aligned-final-20260915/measurements.md)；复现使用 [campaign](../configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml)，启动命令见 [配置与复现说明](../reports/dsv4-aligned-final-20260915/configuration.md)。[原始结果](../results/dsv4-aligned-final-20260915/) 保留完整日志与解析配置；`reports/`、`results/` 为本机产物，不随 Git 分发。
+完整逐次指标见 [CSV](../data/baseline-samples.csv) / [JSON](../data/baseline-samples.json)，六组统计见 [statistics](../data/baseline-statistics.json)。复现步骤见 [复现说明](reproduction.md)，已知异常见 [排查记录](lessons.md)。完整日志和原始尝试的本机位置见 [数据说明](../data/README.md)。

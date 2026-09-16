@@ -1,0 +1,16 @@
+schema_version: 1
+kind: campaign
+id: template-functional
+target: targets/rtx6000d-48-baseline.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/functional-128-32-c1.yaml
+cases:
+- id: vllm-autotune-off
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/dsv4/vllm-sm120-aligned-final-cap32.yaml
+- id: sglang-autotune-off
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/sglang-0.5.19-cu130.yaml
+  recipe: recipes/dsv4/sglang-sm120-aligned-final-cap32-noautotune.yaml
