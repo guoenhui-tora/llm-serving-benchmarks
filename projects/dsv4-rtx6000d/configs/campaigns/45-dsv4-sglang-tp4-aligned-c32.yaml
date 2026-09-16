@@ -1,0 +1,12 @@
+schema_version: 1
+kind: campaign
+id: 45-dsv4-sglang-tp4-aligned-c32
+target: targets/rtx6000d-45-sglang-tp4.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/dsv4-8192-1024-c32-n128-repeat3.yaml
+cases:
+- id: sglang-tp4
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/sglang-0.5.19-cu130.yaml
+  recipe: recipes/dsv4-sglang-tp4-cap32-noautotune-kv-aligned.yaml

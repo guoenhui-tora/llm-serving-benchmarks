@@ -1,0 +1,28 @@
+schema_version: 1
+kind: target
+id: rtx6000d-45-vllm-tp4
+description: Local four-GPU half; CPU binding and paired measurement supplied by workspace
+  coordinator.
+executor: docker
+address: 10.90.1.45
+gpus:
+- 0
+- 1
+- 2
+- 3
+gpu:
+  vendor: nvidia
+  name_regex: RTX 6000D
+  compute_capability: '12.0'
+  min_memory_mib: 80000
+model_root: /data/models
+cache_root: /home/enhui/llm-serving-benchmarks/experiments/dsv4-rtx6000d/cache
+port: 31045
+environment:
+  HF_HUB_OFFLINE: '1'
+  TRANSFORMERS_OFFLINE: '1'
+ulimits:
+  memlock: -1:-1
+  stack: 67108864:67108864
+cap_add:
+- SYS_NICE
