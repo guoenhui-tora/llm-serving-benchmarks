@@ -8,7 +8,7 @@
 
 | 入口 | 用途 |
 | --- | --- |
-| [DSV4 / RTX6000D](projects/dsv4-rtx6000d/README.md) | 已验证的三套基线、镜像选型和互联报告 |
+| [DSV4 / RTX6000D](projects/dsv4-rtx6000d/README.md) | TP8基线、四节点TP4对照与互联报告 |
 | [GLM-5.2 / RTX6000D](projects/glm52-rtx6000d/README.md) | 三套最终配置、C16/C32 重复结果与镜像选型 |
 | [项目模板](projects/_template/README.md) | 基于真实配置创建新项目 |
 | [实验方法](docs/benchmark-methodology.md) | 预热、JIT、稳定性诊断及结果验收 |
