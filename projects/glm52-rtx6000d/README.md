@@ -30,8 +30,8 @@ CSV 的 `case` 区分三组配置，`C` 为并发，`R` 为重复序号；延迟
 只保留 **3 份 recipe、2 个 workload、1 个 campaign** 及其完整依赖，不迁入早期探索配置。从新仓库根目录执行：
 
 ```bash
-./bench validate projects/glm52/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
-./bench plan projects/glm52/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+./bench validate projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
+./bench plan projects/glm52-rtx6000d/configs/campaigns/46-glm52-aligned-final-c16-c32.yaml
 ```
 
 该 campaign 顺序执行三套配置，各测 C16 / C32 三次；target 固定为 46 节点。实际运行前按 [基线复现](reports/reproduction.md) 准备日志文件并做 preflight。
