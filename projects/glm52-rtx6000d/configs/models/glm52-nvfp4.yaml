@@ -1,8 +1,0 @@
-schema_version: 1
-kind: model
-id: glm52-nvfp4
-directory: GLM-5.2-NVFP4
-served_name: GLM-5.2-NVFP4
-architecture: GlmMoeDsaForCausalLM
-quantization: mixed-precision checkpoint with NVFP4 routed experts
-required_files: [config.json, tokenizer_config.json, model.safetensors.index.json]

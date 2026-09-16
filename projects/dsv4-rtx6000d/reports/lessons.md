@@ -17,4 +17,4 @@
 
 SGLang autotune on 的 8 个 worker 完成调优，每个保存 30 条配置；全日志保留 80 条形状未覆盖 warning，归为 10 种操作/形状。开启 autotune 不意味着所有 shape 被优化。
 
-旧诊断、短负载、未对齐比较和容量 64 实验保留在本机历史 results/reports 与迁移归档中，不作为当前基线。原始目录与证据边界见 [数据说明](../data/README.md)。
+早期诊断、短负载、未对齐比较和容量 64 实验保留在本机 results/reports 中，不计入当前基线。

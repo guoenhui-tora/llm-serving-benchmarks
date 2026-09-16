@@ -9,4 +9,4 @@ cases:
 - id: vllm-autotune-off
   model: models/dsv4-flash-nvfp4.yaml
   runtime: runtimes/vllm-0.29.0.yaml
-  recipe: recipes/dsv4/vllm-sm120-aligned-final-cap32.yaml
+  recipe: recipes/vllm-sm120-aligned-final-cap32.yaml

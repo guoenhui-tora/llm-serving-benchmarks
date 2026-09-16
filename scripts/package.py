@@ -7,8 +7,8 @@ import hashlib
 import tarfile
 from pathlib import Path
 
-SOURCE_DIRS = ('src', 'tests', 'scripts', 'docs', 'projects')
-SOURCE_FILES = ('README.md', 'AGENTS.md', '.gitignore', 'bench', 'pyproject.toml', 'requirements.txt', 'results/.gitkeep')
+SOURCE_DIRS = ('.github', 'src', 'tests', 'scripts', 'docs', 'projects')
+SOURCE_FILES = ('README.md', 'AGENTS.md', '.gitignore', 'bench', 'pyproject.toml', 'requirements.txt')
 EXCLUDED_DIRS = {'.git', '.venv', 'venv', '__pycache__', 'dist', 'build', '.pytest_cache',
                  '.mypy_cache', '.ruff_cache', 'cache', '.cache', 'results', 'artifacts', 'tmp', 'logs'}
 

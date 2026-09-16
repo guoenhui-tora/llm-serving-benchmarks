@@ -9,12 +9,12 @@ cases:
 - id: vllm-autotune-off
   model: models/dsv4-flash-nvfp4.yaml
   runtime: runtimes/vllm-0.29.0.yaml
-  recipe: recipes/dsv4/vllm-sm120-aligned-final-cap32.yaml
+  recipe: recipes/vllm-sm120-aligned-final-cap32.yaml
 - id: sglang-autotune-off
   model: models/dsv4-flash-nvfp4.yaml
   runtime: runtimes/sglang-0.5.19-cu130.yaml
-  recipe: recipes/dsv4/sglang-sm120-aligned-final-cap32-noautotune.yaml
+  recipe: recipes/sglang-sm120-aligned-final-cap32-noautotune.yaml
 - id: sglang-autotune-on
   model: models/dsv4-flash-nvfp4.yaml
   runtime: runtimes/sglang-0.5.19-cu130.yaml
-  recipe: recipes/dsv4/sglang-sm120-aligned-final-cap32-autotune.yaml
+  recipe: recipes/sglang-sm120-aligned-final-cap32-autotune.yaml

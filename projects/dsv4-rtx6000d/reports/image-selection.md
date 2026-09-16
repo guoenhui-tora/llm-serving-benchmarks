@@ -37,7 +37,7 @@ vLLM 的 Graph 配置通过 `--compilation-config` 传入，字段为 `cudagraph
 
 **显存按实际 KV 字节预算对齐，相差约 0.7%。** 两个比例参数的语义不同，KV / 滑窗布局和调度实现也不同，因此不要求比例或逻辑 token 池计数相同。两边使用同一 PCIe 拓扑、GPU0–7 和容器 `SYS_NICE` 权限；SGLang 日志未再出现旧的 NUMA 亲和性权限警告。
 
-完整参数以 [vLLM recipe](../configs/recipes/dsv4/vllm-sm120-aligned-final-cap32.yaml)、[SGLang autotune off recipe](../configs/recipes/dsv4/sglang-sm120-aligned-final-cap32-noautotune.yaml)、[SGLang autotune on recipe](../configs/recipes/dsv4/sglang-sm120-aligned-final-cap32-autotune.yaml) 为准。SGLang 两组仅 autotune 服务开关不同。它们是已实测的对照配置，不是官方最优配置。
+完整参数以 [vLLM recipe](../configs/recipes/vllm-sm120-aligned-final-cap32.yaml)、[SGLang autotune off recipe](../configs/recipes/sglang-sm120-aligned-final-cap32-noautotune.yaml)、[SGLang autotune on recipe](../configs/recipes/sglang-sm120-aligned-final-cap32-autotune.yaml) 为准。SGLang 两组仅 autotune 服务开关不同。它们是已实测的对照配置，不是官方最优配置。
 
 ## 测试负载
 
@@ -73,4 +73,4 @@ vLLM 从 C16 到 C32 吞吐提高 22.30%，平均请求耗时也从 30.74 秒增
 
 本轮可作为该固定负载的性能基线；未做模型质量评测，也未验证长期线上稳定性。SGLang autotune 日志仍有部分形状未覆盖的 fallback，开启 autotune 不等于所有 kernel 都获得优化。
 
-完整逐次指标见 [CSV](../data/baseline-samples.csv) / [JSON](../data/baseline-samples.json)，六组统计见 [statistics](../data/baseline-statistics.json)。复现步骤见 [复现说明](reproduction.md)，已知异常见 [排查记录](lessons.md)。完整日志和原始尝试的本机位置见 [数据说明](../data/README.md)。
+完整逐次指标见 [CSV](../data/baseline-samples.csv)，复现步骤见 [复现说明](reproduction.md)，已知异常见 [排查记录](lessons.md)。

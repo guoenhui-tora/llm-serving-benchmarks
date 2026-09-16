@@ -58,10 +58,11 @@ class ProjectLayoutTests(unittest.TestCase):
     def test_package_keeps_curated_reports_but_excludes_local_artifacts(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            keep = ['README.md', 'AGENTS.md', 'results/.gitkeep', 'src/serving_bench/results/report.py',
+            keep = ['README.md', 'AGENTS.md', '.github/workflows/tests.yml',
+                    'src/serving_bench/results/report.py',
                     'projects/demo/reports/final.md', 'projects/demo/data/samples.json',
                     'projects/demo/configs/campaigns/run.yaml']
-            drop = ['reports/private.md', 'artifacts/backup.tar.gz', 'results/raw.json',
+            drop = ['results/.gitkeep', 'reports/private.md', 'artifacts/backup.tar.gz', 'results/raw.json',
                     'projects/demo/results/raw.json', 'projects/demo/.env',
                     'projects/demo/.env.private', 'src/serving_bench/__pycache__/file.pyc',
                     'projects/demo/cache/kernel.bin', 'unknown/secret.txt']

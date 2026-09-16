@@ -1,42 +1,79 @@
-# DeepSeek V4 / RTX6000D
+# DeepSeek V4 Flash NVFP4 在 RTX6000D 上的推理优化
 
-**当前推荐 vLLM 0.29.0、FlashInfer autotune 关闭，作为后续调优起点。** 2026-09-15 的对齐实验使用本机八卡、8192/1024 负载：vLLM 在 C16/C32 的输出吞吐为 532.57 / 651.35 tok/s，均优于同轮 SGLang off/on。该结果不代表硬件性能上限。
+本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟。先完成 vLLM / SGLang 镜像选型和参数对齐，建立性能基线，再测试并行拓扑与调度配置；当前以单机 8 卡为主。
 
-## 已确认的结果
+模型本地路径为 `/data/models/DeepSeek-V4-Flash-0731-NVFP4`。权重使用 NVFP4 routed experts，其余部分保留高精度；优化期间保持同一权重与 tokenizer。
+
+## 当前基线
+
+**选用 vLLM 0.29.0，关闭 FlashInfer autotune，作为后续调优起点。** 2026-09-15 的对齐实验中，输入 8192、输出 1024 tokens，vLLM 在 C16 / C32 的平均输出吞吐为 **532.57 / 651.35 tok/s**，均优于同轮 SGLang autotune off/on。具体延迟、波动与适用边界见选型报告。
+
+保留三套已实测配置：vLLM autotune off、SGLang autotune off、SGLang autotune on。每套在 C16 / C32 各有三次有效重复，共 18 次测量、1728 成功请求、0 失败。
 
 | 内容 | 入口 |
 | --- | --- |
-| 镜像 digest、recipe 对齐和性能表 | [镜像选型](reports/image-selection.md) |
-| 18 次有效测量及全部指标 | [CSV](data/baseline-samples.csv) / [JSON](data/baseline-samples.json) / [重复统计](data/baseline-statistics.json) |
-| 环境、来源与复现步骤 | [复现说明](reports/reproduction.md) |
-| 已知问题和取证边界 | [排查记录](reports/lessons.md) |
-| RTX6000D 互联测量 | [交互 HTML](reports/interconnect.html) / [阅读摘要](reports/interconnect.md) |
-| 原始产物与版本身份 | [数据说明](data/README.md) / [来源记录](data/provenance.json) |
+| 镜像、参数对齐与性能比较 | [镜像选型](reports/image-selection.md) |
+| 18 次测量的逐次指标 | [baseline-samples.csv](data/baseline-samples.csv) |
+| 环境准备与运行命令 | [基线复现](reports/reproduction.md) |
+| 已遇到的问题和处理方法 | [排查记录](reports/lessons.md) |
+| RTX6000D 通信拓扑与带宽 | [互联报告](reports/interconnect.html) |
 
-正式配置只有三套：vLLM off、SGLang off、SGLang on。它们各有 C16/C32 三次有效重复，合计 1728 成功、0 失败。历史 smoke 和未对齐的探索数据不混入基线。
+CSV 中 `case` 区分引擎配置，`C` 为并发，`R` 为重复序号；延迟字段单位为 ms，输出吞吐单位为 tokens/s。
 
-## 配置入口
+## 配置与运行
 
-以下命令从仓库根目录执行：
+配置位于 `configs/`，三套 serving 参数直接放在 `configs/recipes/`。从仓库根目录执行：
 
 ```bash
-# 原三配置、C16/C32、各三次的完整基线
 ./bench validate projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
 ./bench plan projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml
 ```
 
-| Campaign | 用途与验证状态 |
+| Campaign | 用途 |
 | --- | --- |
-| `48-dsv4-aligned-final-c16-c32.yaml` | 已实测的完整矩阵，迁移前后解析配置和命令等价 |
-| `48-dsv4-vllm-baseline-c32.yaml` | 从原矩阵选出 vLLM C32；新增组合入口已离线校验，本次未重跑 |
-| `48-dsv4-functional.yaml` | 两引擎性能 recipe 的短功能验证；新增 workload 已离线校验，本次未实机运行 |
+| `48-dsv4-aligned-final-c16-c32.yaml` | 三套配置 × C16/C32 × 三次重复，对应已完成的基线实验 |
+| `48-dsv4-vllm-baseline-c32.yaml` | 单独选取 vLLM C32，作为优化对照入口；已离线校验 |
+| `48-dsv4-functional.yaml` | 两引擎的短功能验证入口；已离线校验，尚未实机运行该 workload |
 
-复现前先按 [复现说明](reports/reproduction.md) 准备 SGLang 日志文件，再 preflight/run。target 固定 48 节点；在其他机器使用时新建或修改明确的 target，不能跳过本机身份检查。日志准备与短负载都不会免除模型加载和编译时间。
+实际运行按 [基线复现](reports/reproduction.md) 准备日志配置，再做 preflight/run。当前 target 对应 48 节点，在其他机器运行前需修改本机身份和路径。
 
-## 后续研究
+## 下一步优化计划（待执行）
 
-暂定以 8192/1024、全局 C32 为单机拓扑筛选负载。讨论中的候选是 TP4×PP2、TP8+EP8、TP4×DP2（EP off/on），尚未形成性能结论。四台机器可先各自校准 baseline，再分配候选并同机复核优胜方案。本次仓库整理没有启动这些实验。
+四台机器都测试 **vLLM TP4 与 SGLang TP4，autotune 均关闭**。每台八卡分为两个四卡组，各部署一个模型实例，同时压测，比较节点差异和 TP4 下的引擎表现。完成校准后再决定基线及拓扑分工；首轮不重跑 TP8，不测试 PP/EP 或跨节点推理。
 
-后续 PD 还需明确 P/D 实例与卡数分配。3P1D 是实例比例，不直接等于 24 卡；当前执行器没有跨节点 PD 编排能力。
+### 节点分工
 
-[外部阶段报告](references/pro6000d-deepseek-v4-flash-stage-report-2026-08-23.pdf) 仅作参考。其第 3 页说明表格由实测锚点和参考曲线归一化形成，且未给出完整量化/镜像/测量窗口；不能直接当作与本基线同口径的逐点实测。
+| 节点 | GPU0–3 | GPU4–7 |
+| --- | --- | --- |
+| gpu-6000d-45 | vLLM TP4 | SGLang TP4 |
+| gpu-6000d-46 | SGLang TP4 | vLLM TP4 |
+| gpu-6000d-47 | vLLM TP4 | SGLang TP4 |
+| gpu-6000d-48 | SGLang TP4 | vLLM TP4 |
+
+交错分配避免一个引擎始终占用同一侧 GPU。逐机核对实际 GPU/NUMA 映射，为服务和客户端分配近端 CPU 资源，使用独立端口、容器名、日志和结果目录。
+
+### 配置与测量
+
+每个实例均为 TP4 / PP1 / DP1 / EP off，上下文 16384、活动容量 32、FP8 E4M3 KV、关闭前缀缓存与 autotune。对齐 prefill 预算 8192、decode Graph 模式和捕获尺寸；固定同一模型、镜像、客户端、采样参数，保留各引擎可用的 backend 和 JIT 日志。
+
+**每实例输入 8192、输出 1024 tokens，C32、128 请求、三次有效重复**。因此整机合计 C64，不能与原 TP8 C32 直接比较整机吞吐。沿用 gate：每轮预热 64 请求，至少连续两轮无已知编译事件，最多五轮预热、两次测量尝试。
+
+先检查四卡能否承载正式负载。根据日志估算显存比例，启动后核对实际 KV 分配、缓存策略、余量及抢占，不能直接照搬 TP8 的比例。两引擎各自的配置在四节点保持一致，正式测量前冻结；遇到 OOM 或不支持时留证停止，不单方降低精度或缩短负载。
+
+每台依次完成两个服务的加载、功能探测与预热，再成对开始正式测量。记录双方起止时间和重叠区间，避免一方测量时另一方仍在编译。若一方先结束，注明另一方测量尾段的资源状态。
+
+- [ ] **gpu-6000d-45**：两引擎各三次有效测量，检查日志并填写结果路径。
+- [ ] **gpu-6000d-46**：两引擎各三次有效测量，检查日志并填写结果路径。
+- [ ] **gpu-6000d-47**：两引擎各三次有效测量，检查日志并填写结果路径。
+- [ ] **gpu-6000d-48**：两引擎各三次有效测量，检查日志并填写结果路径。
+- [ ] 汇总逐次结果、均值和标准差，确定引擎选择与后续拓扑任务。
+
+共 **24 次正式测量**，每节点三对，不含预热及失败尝试。现有 GPU 锁和占用检查按选中 GPU 生效，可使用不重叠的卡组；但 runner 尚无双服务的测量同步机制，target 也未提供 CPU 绑定字段。执行前需准备对应配置与协调方式，不能直接并发启动原八卡 campaign。这些工作尚未实施，本页只记录计划。
+
+### 结果如何使用
+
+先按同一引擎比较四台，再比较各台两引擎的吞吐、TTFT、TPOT 和 P95。保留每次结果，核对请求/token 总量、JIT、抢占、CPU 负载和 GPU 功耗/频率；三次重复只能反映短期波动。
+
+本轮结论适用于**两个引擎各占四卡、同机同时运行**。若四台排序一致且差距超过波动，可作为引擎选择依据；若排序随 GPU 组变化、差距接近波动或有资源争用，再小范围交换 GPU 组或独占复核。后续拓扑对照也需保持相同资源占用条件，不能直接把双服务结果当作独占基线。
+
+TP4 优先测试，但不预设其比 TP8 快：它减少跨 NUMA 通信，也减少单实例计算、显存带宽和 KV 资源。两个同引擎 TP4 副本的整机性能需单独测量，不能从本轮混合引擎结果推算。

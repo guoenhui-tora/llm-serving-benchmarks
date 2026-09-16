@@ -1,6 +1,5 @@
 # Experiment outputs (root only; src/serving_bench/results is source code)
-/results/*
-!/results/.gitkeep
+/results/
 /reports/
 /logs/
 /artifacts/

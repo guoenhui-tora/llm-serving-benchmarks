@@ -25,8 +25,7 @@ CLI → config.resolve → resolved plan
 | `locks.py` | 当前宿主 GPU 索引的非阻塞建议锁 |
 | `results/` | 相对路径解析、保守分组、汇总；不需要 GPU 或原始模型路径 |
 
-runner 不判断模型名称，也不转换 vLLM/SGLang 参数。首次实现只有一个 executor 和一个 client，
-因此直接使用它们，没有为了未来可能的实现提前堆叠抽象基类和插件框架。
+runner 不判断模型名称，也不转换 vLLM/SGLang 参数。当前直接使用 Docker executor 和固定 vLLM 压测客户端。
 
 ## 新增配置通常不改代码
 
