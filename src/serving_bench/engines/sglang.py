@@ -6,7 +6,7 @@ ENTRYPOINT = "sglang"
 PREFIX = ["serve"]
 HELP_FLAG = "--help"
 COMPILATION_PATTERNS = [r"JIT compilation during inference", r"\bAutotuning kernel\b",
-                        r"\[AutoTuner\].*(?:Tuning|process starts)",
+                        r"\[AutoTuner\]\s*:?\s*(?:Tuning\b|(?:Autotuning\s+)?process starts\b)",
                         r"Running FlashInfer autotune", r"(?:nvcc|ninja).*compil"]
 
 

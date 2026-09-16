@@ -6,7 +6,7 @@ ENTRYPOINT = "vllm"
 PREFIX = ["serve"]
 HELP_FLAG = "--help=all"
 COMPILATION_PATTERNS = [r"JIT compilation during inference", r"Triton autotun(?:ing|e)",
-                        r"\bAutotuning kernel\b", r"\[AutoTuner\].*(?:Tuning|process starts)",
+                        r"\bAutotuning kernel\b", r"\[AutoTuner\]\s*:?\s*(?:Tuning\b|(?:Autotuning\s+)?process starts\b)",
                         r"torch\.compile.*(?:compiling|compilation took)"]
 
 

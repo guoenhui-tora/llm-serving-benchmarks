@@ -43,6 +43,36 @@ class CheckTests(unittest.TestCase):
         self.assertTrue(compilation_events(case, "Running FlashInfer autotune with cache"))
         self.assertFalse(compilation_events(case, "Server is ready. FlashInfer autotune completed."))
 
+    def test_autotuner_event_start_not_fallback_advice(self):
+        positive = [
+            "INFO flashinfer.jit: [Autotuner]: Autotuning process starts ...",
+            "[AutoTuner]: Tuning sparse_mla_sm120_decode_dsv4",
+            "[AutoTuner] process starts",
+        ]
+        fallback = (
+            "WARNING flashinfer.jit: [AutoTuner]: No tuned config covers "
+            "sparse_mla_sm120_decode_dsv4 input_shapes=((6, 64, 512),); "
+            "falling back to runner=SparseMlaDecodeV3Runner tactic=-1. "
+            "This shape is outside the tuning bucket range -- expand "
+            "tuning_buckets / max_num_tokens during the next tuning pass "
+            "to avoid this perf cliff."
+        )
+        negative = [fallback, "[AutoTuner]: Skipping autotuning for 'example_op'",
+                    "[Autotuner]: Autotuning process ends",
+                    "[Autotuner]: Loading configs for example from file."]
+        for engine in ("sglang", "vllm"):
+            case = {"runtime": {"engine": engine}, "recipe": {"checks": {
+                "compilation": [], "required": [], "forbidden": [],
+                "warnings": [r"(?i)warning"],
+            }}}
+            for line in positive:
+                with self.subTest(engine=engine, line=line):
+                    self.assertEqual(compilation_events(case, line), [line])
+            for line in negative:
+                with self.subTest(engine=engine, line=line):
+                    self.assertEqual(compilation_events(case, line), [])
+            self.assertEqual(kernel_checks(case, fallback)["warnings"], [fallback])
+
     def test_result_validation_and_missing_metrics(self):
         path = self.root / "raw.json"
         value = {"completed": 2, "output_throughput": 10.0, "mean_ttft_ms": 20, "mean_tpot_ms": 5}
