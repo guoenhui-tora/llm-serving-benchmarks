@@ -1,0 +1,89 @@
+schema_version: 1
+kind: recipe
+id: dsv4-vllm-tp4-aligned-cap32
+description: Paired TP4 C32; approximately 32.21 GiB KV per GPU; autotune off; full
+  decode graphs; verbose JIT gate.
+provenance: 'Derived from archived TP8 baseline. gpu-6000d-48 startup calibration
+  2026-09-17: SGLang 0.89 gives KV budget 32.21 GiB/card; vLLM 0.90 gives 32.73 GiB/card.
+  vLLM final fixes KV bytes to 32.21 GiB. Warmed paired measurements required; not
+  an official optimum.'
+compatible:
+  engine: vllm
+  models:
+  - dsv4-flash-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.29.0
+mode: performance
+flags:
+- trust-remote-code
+- enable-auto-tool-choice
+- no-enable-prefix-caching
+- no-enable-expert-parallel
+- enable-chunked-prefill
+- jit-monitor-verbose
+options:
+  tensor-parallel-size: 4
+  pipeline-parallel-size: 1
+  data-parallel-size: 1
+  max-model-len: 16384
+  max-num-seqs: 32
+  max-num-batched-tokens: 8192
+  gpu-memory-utilization: 0.9
+  kv-cache-dtype: fp8_e4m3
+  block-size: 256
+  attention-config:
+    use_fp4_indexer_cache: false
+    backend: FLASHINFER_MLA_SPARSE_DSV4
+  moe-backend: auto
+  tokenizer-mode: deepseek_v4
+  tool-call-parser: deepseek_v4
+  reasoning-parser: deepseek_v4
+  reasoning-config:
+    reasoning_parser: deepseek_v4
+    reasoning_start_str: ''
+    reasoning_end_str: ''
+  kernel-config:
+    enable_flashinfer_autotune: false
+  compilation-config:
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_capture_sizes:
+    - 1
+    - 2
+    - 4
+    - 8
+    - 12
+    - 16
+    - 24
+    - 32
+    max_cudagraph_capture_size: 32
+  seed: 0
+  kv-cache-memory-bytes: 34585224151
+checks:
+  required:
+  - DeepseekV4ForCausalLM
+  - FLASHINFER_MLA_SPARSE_DSV4
+  - FLASHINFER_CUTLASS
+  - DeepSeek V4 expert_dtype resolved to 'fp4'
+  - fp8_ds_mla
+  - Skipping FlashInfer autotune because it is disabled
+  - Warming up DeepSeek V4 sparse MLA attention for mixed tokens=16\.
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+  - scaling factors
+  compilation:
+  - TileLang (?:begins|completes) to compile kernel
+  - (?:^|\s)(?:\S*/)?nvcc\s.*(?:\s-c\s|\s--compile\s)
+probe:
+  prompt: 请用一句简短中文回答：1加1等于几？
+  max_tokens: 64
+  request:
+    chat_template_kwargs:
+      thinking: false
+  expect_regex: 2|二|两
+environment:
+  TILELANG_CACHE_DIR: /root/.cache/tilelang

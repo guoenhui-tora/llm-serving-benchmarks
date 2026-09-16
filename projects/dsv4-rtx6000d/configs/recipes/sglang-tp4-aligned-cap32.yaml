@@ -1,0 +1,83 @@
+schema_version: 1
+kind: recipe
+id: dsv4-sglang-tp4-aligned-cap32
+description: Paired TP4 C32; approximately 32.21 GiB KV per GPU; autotune off; full
+  decode graphs; verbose JIT gate.
+provenance: 'Derived from archived TP8 baseline. gpu-6000d-48 startup calibration
+  2026-09-17: SGLang 0.89 gives KV budget 32.21 GiB/card; vLLM 0.90 gives 32.73 GiB/card.
+  vLLM final fixes KV bytes to 32.21 GiB. Warmed paired measurements required; not
+  an official optimum.'
+compatible:
+  engine: sglang
+  models:
+  - dsv4-flash-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.5.19
+mode: performance
+flags:
+- trust-remote-code
+- disable-shared-experts-fusion
+- disable-radix-cache
+- enable-mixed-chunk
+- disable-flashinfer-autotune
+options:
+  tp-size: 4
+  context-length: 16384
+  max-running-requests: 32
+  mem-fraction-static: 0.89
+  kv-cache-dtype: fp8_e4m3
+  moe-runner-backend: flashinfer_cutlass
+  chunked-prefill-size: 8192
+  swa-full-tokens-ratio: 0.1
+  tool-call-parser: deepseekv4
+  reasoning-parser: deepseek-v4
+  pp-size: 1
+  dp-size: 1
+  ep-size: 1
+  max-prefill-tokens: 8192
+  cuda-graph-backend-decode: full
+  cuda-graph-backend-prefill: disabled
+  cuda-graph-bs-decode:
+  - 1
+  - 2
+  - 4
+  - 8
+  - 12
+  - 16
+  - 24
+  - 32
+  cuda-graph-max-bs-decode: 32
+  random-seed: 0
+checks:
+  required:
+  - DeepseekV4ForCausalLM
+  - DeepseekV4AttnBackend
+  - ModelOptNvFp4FusedMoEMethod
+  - moe_runner_backend=flashinfer_cutlass
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+  - scaling factors
+  compilation:
+  - TileLang (?:begins|completes) to compile kernel
+  - (?:^|\s)(?:\S*/)?nvcc\s.*(?:\s-c\s|\s--compile\s)
+  forbidden:
+  - Running FlashInfer autotune
+  - '\[Autotuner\]: Autotuning process starts'
+probe:
+  prompt: 请用一句简短中文回答：1加1等于几？
+  max_tokens: 64
+  request:
+    chat_template_kwargs:
+      thinking: false
+  expect_regex: 2|二|两
+environment:
+  FLASHINFER_JIT_VERBOSE: '1'
+  TILELANG_CACHE_DIR: /root/.cache/tilelang
+  FLASHINFER_LOGGING_LEVEL: INFO
+  TILELANG_PRINT_ON_COMPILATION: '1'
+  SGLANG_LOGGING_CONFIG_PATH: /root/.cache/logging/sglang-jit-info.json
