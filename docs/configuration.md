@@ -9,10 +9,30 @@
 `gpu` 必填 `vendor: nvidia`、`name_regex`、字符串 `compute_capability` 和 `min_memory_mib`。
 `address` 用于防止在错误机器启动，执行器不会自动 SSH。
 
-可选：`model_paths: {model-id: /absolute/path}`、`environment`、`ulimits`、`cap_add`。
+可选：`model_paths: {model-id: /absolute/path}`、`environment`、`ulimits`、`cap_add`、`binding`。
 环境变量值必须是字符串。模型根目录下使用 `model.directory` 找权重；`model_paths` 可替换某个模型的路径。
 目标固定使用 host network、host IPC，HTTP 绑定 `127.0.0.1`。未实现其他网络模式。
 硬件参数只用于校验，不会自动猜测 NUMA、TP/EP 或 kernel 最优值。
+
+### CPU / NUMA 绑定
+
+`binding` 分别控制服务和压测客户端，编号均为宿主编号。每个指定的角色必须同时填写字符串 `cpus`、`mems`；支持 Linux 列表格式，如 `"0-3,8"`。未指定的角色保持原来的不绑定行为。
+
+```yaml
+binding:
+  server:
+    cpus: "32-47"
+    mems: "2"
+  client:
+    cpus: "48-51"
+    mems: "3"
+```
+
+执行器将它们转换为各容器的 `--cpuset-cpus`、`--cpuset-mems`。`validate/plan` 检查语法、角色和逻辑 CPU 重叠；本机 `preflight` 再检查 CPU 在线、内存节点存在，以及服务/客户端是否通过 SMT 共享物理核。它不会自动选择最优核数或保证后台任务不干扰；选取方法见[绑定规则](engine-comparison.md#cpugpu-绑定与同机多服务)。
+
+服务就绪后及每轮客户端结束后，保存服务的 Docker inspect 和容器内线程亲和性；客户端在压测入口前后保存亲和性，结束后保存 inspect，再按所属运行清理容器。文件为 `server-binding-inspect.json`、`server-affinity.json`、`client-binding-inspect.json`、`client-affinity-start.json`、`client-affinity-end.json`。检查在客户端内部计时窗口外执行，不持续轮询。客户端已失败或被用户停止时，额外取证失败写入 `client-binding-error.json`，保留原始失败或中断状态。
+
+Docker 配置必须与请求集合一致，进程/线程允许集合可以在其中进一步缩小。越界或无法核验会使运行失败，保留证据；这些快照不能证明整个测量期间的亲和性不变，也不代表所有内存页都在本地。绑定改变会进入 target 指纹，结果不会与其他绑定配置自动合并。
 
 ## Model
 

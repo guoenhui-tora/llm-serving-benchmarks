@@ -5,6 +5,7 @@ from pathlib import Path
 
 from ..common import BenchError, read_json
 from ..executors.docker import OWNER_LABEL
+from ..executors import affinity
 
 ENTRYPOINT = "python3"
 # vLLM 0.29's top-level CLI constructs server parsers even for `bench`, which
@@ -41,9 +42,15 @@ def command(case: dict, workload: dict, concurrency: int, requests: int, directo
             name: str, owner: str, image_id: str | None = None) -> list[str]:
     argv = ["docker", "run", "--rm", "--pull", "never", "--name", name, "--label", f"{OWNER_LABEL}={owner}",
             "--network", "host", "-v", f"{case['model_path']}:/model:ro", "-v", f"{directory}:/results:rw"]
+    binding = case["target"].get("binding", {}).get("client")
+    prefix = PREFIX
+    if binding:
+        argv.remove("--rm")  # Retain inspect evidence until runner-owned cleanup.
+        argv += affinity.docker_args(case["target"], "client")
+        prefix = affinity.client_prefix(PREFIX, binding)
     for key, value in case["client"].get("environment", {}).items():
         argv += ["-e", f"{key}={value}"]
-    return argv + ["--entrypoint", ENTRYPOINT, image_id or case["client"]["image"], *PREFIX,
+    return argv + ["--entrypoint", ENTRYPOINT, image_id or case["client"]["image"], *prefix,
                    *arguments(case, workload, concurrency, requests)]
 
 

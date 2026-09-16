@@ -78,6 +78,14 @@ class RunnerTests(unittest.TestCase):
             name = argv[argv.index("--name") + 1]
             owner = argv[argv.index("--label") + 1].split("=", 1)[1]
             self.containers[name] = {"State": {"Running": True}, "Config": {"Labels": {docker.OWNER_LABEL: owner}}}
+            if "--cpuset-cpus" in argv:
+                self.containers[name]["HostConfig"] = {
+                    "CpusetCpus": argv[argv.index("--cpuset-cpus") + 1],
+                    "CpusetMems": argv[argv.index("--cpuset-mems") + 1]}
+        elif argv[:2] == ["docker", "exec"]:
+            binding = self.case["target"]["binding"]["server"]
+            observed = {"threads": [{"tid": 1, "cpus": binding["cpus"], "mems": binding["mems"]}], "unreadable": []}
+            return subprocess.CompletedProcess(argv, 0, json.dumps(observed), "")
         elif argv[:3] == ["docker", "rm", "-f"]:
             self.containers.pop(argv[-1], None)
         else:
@@ -89,6 +97,10 @@ class RunnerTests(unittest.TestCase):
         owner = argv[argv.index("--label") + 1].split("=", 1)[1]
         name = argv[argv.index("--name") + 1]
         self.containers[name] = {"Config": {"Labels": {docker.OWNER_LABEL: owner}}, "State": {"Running": True}}
+        if "--cpuset-cpus" in argv:
+            self.containers[name]["HostConfig"] = {
+                "CpusetCpus": argv[argv.index("--cpuset-cpus") + 1],
+                "CpusetMems": argv[argv.index("--cpuset-mems") + 1]}
         self.last_phase = log_path.parent.name
         if self.interrupt_client:
             raise KeyboardInterrupt
@@ -141,6 +153,57 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(len(result["groups"]), 1)
         self.assertEqual(result["groups"][0]["n"], 1)
         self.assertIsNone(result["groups"][0]["statistics"]["output_throughput"]["sd"])
+
+    def test_bound_run_records_actual_container_and_server_affinity(self):
+        self.case["target"]["binding"] = {"server": {"cpus": "0-1", "mems": "0"},
+                                          "client": {"cpus": "2-3", "mems": "1"}}
+        self.assertEqual(self.execute()["status"], "PASS")
+        self.assertFalse(self.containers)
+        directory = self.root / "run/cases/glm52-vllm"
+        self.assertTrue((directory / "server-affinity.json").is_file())
+        trial = directory / "trials/smoke-128-32/c0001/r01/measurement-01"
+        self.assertTrue((trial / "client-binding-inspect.json").is_file())
+        self.assertTrue((trial / "server-affinity.json").is_file())
+
+    def test_binding_mismatch_fails_case_and_still_cleans_containers(self):
+        self.case["target"]["binding"] = {"server": {"cpus": "0-1", "mems": "0"},
+                                          "client": {"cpus": "2-3", "mems": "1"}}
+        real_client = self.fake_client
+        def mismatch(argv, log_path, timeout):
+            real_client(argv, log_path, timeout)
+            name = argv[argv.index("--name") + 1]
+            self.containers[name]["HostConfig"]["CpusetCpus"] = "2-4"
+        self.fake_client = mismatch
+        self.assertEqual(self.execute()["status"], "FAIL")
+        self.assertFalse(self.containers)
+        self.assertEqual(self.measurements, 0)
+        self.assertFalse(report([self.root / "run"])["groups"])
+        state = read_json(self.root / "run/cases/glm52-vllm/case.json")
+        self.assertIn("CpusetCpus", state["error"])
+
+    def test_bound_client_removed_during_stop_preserves_interrupted_state(self):
+        self.case["target"]["binding"] = {"client": {"cpus": "2-3", "mems": "1"}}
+        def stopped(argv, log_path, timeout):
+            log_path.write_text("Client removed by stop")
+            raise KeyboardInterrupt
+        self.fake_client = stopped
+        self.assertEqual(self.execute()["status"], "INTERRUPTED")
+        self.assertFalse(self.containers)
+        case_dir = self.root / "run/cases/glm52-vllm"
+        self.assertEqual(read_json(case_dir / "case.json")["status"], "INTERRUPTED")
+        self.assertTrue(list(case_dir.rglob("client-binding-error.json")))
+
+    def test_bound_client_launch_failure_keeps_original_error(self):
+        self.case["target"]["binding"] = {"client": {"cpus": "2-3", "mems": "1"}}
+        def failed(argv, log_path, timeout):
+            log_path.write_text("Client container could not start")
+            raise BenchError("original client launch error")
+        self.fake_client = failed
+        self.assertEqual(self.execute()["status"], "FAIL")
+        self.assertFalse(self.containers)
+        case_dir = self.root / "run/cases/glm52-vllm"
+        self.assertIn("original client launch error", read_json(case_dir / "case.json")["error"])
+        self.assertTrue(list(case_dir.rglob("client-binding-error.json")))
 
     def test_compilation_discards_measurement_and_rewarms(self):
         self.compile_once = True

@@ -11,10 +11,11 @@ import yaml
 from .common import BenchError, fingerprint
 from .engines import get_engine
 from .engines.base import check_native
+from .executors.affinity import id_set
 
 FIELDS = {
     "target": ({"executor", "address", "gpus", "gpu", "model_root", "cache_root", "port"},
-               {"model_paths", "environment", "ulimits", "cap_add"}),
+               {"model_paths", "environment", "ulimits", "cap_add", "binding"}),
     "model": ({"directory", "served_name", "architecture", "required_files"}, {"quantization"}),
     "runtime": ({"engine", "image", "version"}, {"image_id", "environment", "ready_timeout_s"}),
     "recipe": ({"compatible", "mode", "options", "flags"}, {"environment", "checks", "probe", "provenance"}),
@@ -158,6 +159,20 @@ def validate_document(v: dict, kind: str) -> None:
             absolute(val, "model_paths value")
         environment(v.get("ulimits", {}), "ulimits")
         strings(v.get("cap_add", []), "cap_add")
+        if "binding" in v:
+            bindings = mapping(v["binding"], "target.binding", (), {"server", "client"})
+            if not bindings:
+                raise BenchError("target.binding must specify server and/or client")
+            for role, binding in bindings.items():
+                mapping(binding, "target.binding." + role, {"cpus", "mems"})
+                try:
+                    for value in binding.values():
+                        id_set(value)
+                except ValueError as exc:
+                    raise BenchError(f"target.binding.{role}: {exc}") from exc
+            if "server" in bindings and "client" in bindings:
+                if id_set(bindings["server"]["cpus"]) & id_set(bindings["client"]["cpus"]):
+                    raise BenchError("Server/client CPU bindings overlap")
     elif kind == "model":
         relative(v["directory"], "model.directory")
         string(v["served_name"], "model.served_name")

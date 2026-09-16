@@ -29,10 +29,25 @@ def phase(case, workload, concurrency, count, directory, server, owner, facts):
     argv = vllm_bench.command(case, workload, concurrency, count, directory, name, owner, facts["client_image"]["Id"])
     save_command(directory, argv)
     started = utcnow()
+    phase_error = None
     try:
         docker.run_client(argv, directory / "client.log", workload["measurement"]["timeout_s"])
+    except BaseException as exc:
+        phase_error = exc
+        raise
     finally:
-        docker.remove_owned(name, owner)
+        try:
+            docker.binding_evidence(case["target"], "client", name, owner, directory)
+        except Exception as exc:
+            # Stop may already have removed the client. Preserve interruption or
+            # the original load-generator error instead of replacing it.
+            write_json(directory / "client-binding-error.json", {"error": str(exc)})
+            if phase_error is None:
+                raise
+        finally:
+            docker.remove_owned(name, owner)
+    # These observations are outside the load generator's benchmark timer.
+    docker.binding_evidence(case["target"], "server", server, owner, directory, live=True)
     normalized = vllm_bench.normalize(directory / "raw.json", count, workload)
     time.sleep(1)  # Allow asynchronous server logs to flush before reading this phase's window.
     window = docker.server_logs(server, since=started)
@@ -100,6 +115,7 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
         capture(argv, timeout=120)
         started_server = True
         state["startup_seconds"] = http.wait_ready(case, server, log)
+        docker.binding_evidence(case["target"], "server", server, owner, directory, live=True)
         state["probes"] = http.probes(case, directory / "probes")
         state["status"] = "MEASURING"
         write_json(directory / "case.json", state)

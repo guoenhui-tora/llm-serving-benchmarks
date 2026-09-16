@@ -110,7 +110,7 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 - gate 未通过的尝试不进入性能结论；保留 fallback 和 warning，不为通过验收而隐藏问题。
 - GPU 被其他任务占用时停止，不终止别人的任务；只清理本次所属容器，保留结果和缓存。
 
-执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。实际 CPU/NUMA 绑定、功耗/频率时间序列及 Git 本地差异需要另行保存。
+执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。设置 target 的 `binding` 后，还会检查并保存对应容器和线程的 CPU/内存允许集合，见[绑定配置](docs/configuration.md#cpu--numa-绑定)。实际内存页分布、功耗/频率时间序列及 Git 本地差异需要另行保存。
 
 ## 验证与打包
 

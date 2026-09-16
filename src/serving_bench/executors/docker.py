@@ -11,6 +11,7 @@ from pathlib import Path
 
 from ..common import BenchError, capture, fingerprint, option_names, read_json
 from ..engines import get_engine
+from . import affinity
 
 OWNER_LABEL = "io.serving-bench.run"
 
@@ -117,6 +118,7 @@ def preflight(case: dict) -> dict:
     capture(["docker", "info"])
     if target["address"] not in local_addresses():
         raise BenchError(f"Run this target locally on {target['address']}; this runner does not SSH automatically")
+    binding_facts = affinity.host_check(target)
     selected = validate_gpus(target, gpu_inventory())
     check_idle(selected)
     with socket.socket() as sock:
@@ -141,7 +143,7 @@ def preflight(case: dict) -> dict:
     if missing:
         raise BenchError(f"Client CLI lacks required options: {sorted(missing)}")
     return {"hostname": socket.gethostname(), "gpus": selected, "server_image": server_image,
-            "client_image": client_image, "model": model_info(case),
+            "client_image": client_image, "model": model_info(case), "binding": binding_facts,
             "server_help": server_help, "client_help": client_help}
 
 
@@ -158,6 +160,7 @@ def server_command(case: dict, name: str, owner: str, image_id: str | None = Non
     argv = ["docker", "run", "-d", "--pull", "never", "--name", name, "--label", f"{OWNER_LABEL}={owner}",
             "--network", "host", "--ipc", "host", "--gpus", '"device=' + ",".join(map(str, target["gpus"])) + '"',
             "-v", f"{case['model_path']}:/model:ro", "-v", f"{cache_directory(case, image)}:/root/.cache:rw"]
+    argv += affinity.docker_args(target, "server")
     for name_, value in target.get("ulimits", {}).items():
         argv += ["--ulimit", f"{name_}={value}"]
     for capability in target.get("cap_add", []):
@@ -176,6 +179,28 @@ def container_info(name: str) -> dict | None:
             return None
         raise BenchError(f"Cannot inspect {name}: {result.stderr}")
     return json.loads(result.stdout)[0]
+
+
+def binding_evidence(target: dict, role: str, name: str, owner: str, directory: Path,
+                     *, live: bool = False) -> None:
+    binding = target.get("binding", {}).get(role)
+    if not binding:
+        return
+    from ..common import write_json
+    info = container_info(name)
+    if info is None or (info.get("Config", {}).get("Labels") or {}).get(OWNER_LABEL) != owner:
+        raise BenchError(f"Cannot inspect owned {role} container binding")
+    write_json(directory / f"{role}-binding-inspect.json", info)
+    affinity.verify_inspect(binding, info)
+    if live:
+        result = capture(["docker", "exec", name, "python3", "-c",
+                          affinity.probe_source() + "\nprint(json.dumps(snapshot()))"], timeout=30)
+        observed = json.loads(result.stdout)
+        write_json(directory / f"{role}-affinity.json", observed)
+        try:
+            affinity.verify_snapshot(binding, observed)
+        except ValueError as exc:
+            raise BenchError(str(exc)) from exc
 
 
 def remove_owned(name: str, owner: str) -> None:
