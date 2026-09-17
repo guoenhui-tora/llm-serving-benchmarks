@@ -20,7 +20,7 @@
 | 48 | 单套八卡部署的TP/PP切分 | `tp8` → `tp4-pp2` → `tp2-pp4` | 4 / 24 |
 
 - [x] **45**：18次正式测量完成；双TP2×PP2吞吐均值领先，PP候选波动需保留。见[本节点报告](reports/node8-node45.md)、[逐次CSV](data/node8-node45.csv)。
-- [x] **46**：4个配置完成24次正式测量；DP4 EP off因预热上限停止。见[节点报告](reports/node8-node46.md)、[逐次CSV](data/node8-node46.csv)。
+- [x] **46**：5个配置共30次正式测量完成；DP4 EP off经独立诊断预热批次补齐，C32/C64波动均需保留。见[节点报告](reports/node8-node46.md)、[逐次CSV](data/node8-node46.csv)。
 - [x] **47**：双TP4及两个EP on配置完成18次正式测量；两个EP off候选因C64预热上限阻塞，部分结果保留。见[本节点报告](reports/node8-node47.md)、[逐次CSV](data/node8-node47.csv)。
 - [x] **48**：TP8、TP4×PP2各六次完成；双TP4、TP2×PP4的C64因JIT达到重试上限。见[本节点报告](reports/node8-node48.md)、[逐次CSV](data/node8-node48.csv)。
 
