@@ -22,6 +22,8 @@ CLI → config.resolve → resolved plan
 | `clients/vllm_bench.py` | 独立客户端命令和结果解析；输入输出协议不跟服务端镜像变化 |
 | `checks/` | HTTP 协议检查及配置驱动的日志证据 |
 | `runner.py` | 顺序执行、预热、测量重试、运行状态、异常/中断恢复 |
+| `deployment.py` / `clients/synchronized.py` | 本机一或两副本的同步阶段、官方客户端计时点检查、请求分片及整机指标；不实现负载均衡代理 |
+| `telemetry.py` | 同步部署的只读CPU/GPU/cgroup时间序列；不自动处理外部任务 |
 | `locks.py` | 当前宿主 GPU 索引的非阻塞建议锁 |
 | `results/` | 相对路径解析、保守分组、汇总；不需要 GPU 或原始模型路径 |
 
@@ -48,8 +50,8 @@ runner 不判断模型名称，也不转换 vLLM/SGLang 参数。当前直接使
 
 ## 已知测量边界
 
-当前随机负载由固定客户端根据 seed 和 tokenizer 生成；保存完整参数，不保存每条流式 token 事件。
-汇总不能计算合并请求后的分位数。日志编译检查是启发式证据，不能代替 profiler 或稳定性统计。
+旧单服务模式的随机负载由固定客户端根据 seed 和 tokenizer 生成；保存完整参数，不保存每条流式 token 事件，因此不能恢复合并请求后的分位数。
+显式replica_targets模式增加同步屏障、同一全局请求集的等分分片和逐请求/流式事件记录，可在一次整机测量内合并分位数；不合并不同重复。日志编译检查是启发式证据，不能代替 profiler 或稳定性统计。
 warmup 不清空 JIT 缓存；prefix/radix cache 则显式关闭。
 kernel warnings 保留在结果中；不能把未触发 forbidden 自动解释成所有优化均有效。
 

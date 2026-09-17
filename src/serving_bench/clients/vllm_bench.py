@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import json
 from pathlib import Path
 
 from ..common import BenchError, read_json
@@ -26,7 +27,7 @@ def arguments(case: dict, workload: dict, concurrency: int, requests: int) -> li
             "--endpoint", "/v1/completions", "--model", "/model", "--tokenizer", "/model",
             "--served-model-name", case["model"]["served_name"], "--dataset-name", "random",
             "--random-input-len", str(d["input_tokens"]), "--random-output-len", str(d["output_tokens"]),
-            "--random-range-ratio", str(d["range_ratio"]), "--num-prompts", str(requests),
+            "--random-range-ratio", str(d["range_ratio"]), "--num-prompts", str(case.get("_client_sync", {}).get("global_requests", requests)),
             "--max-concurrency", str(concurrency), "--request-rate", str(t["request_rate"]),
             "--num-warmups", "0", "--seed", str(s["seed"]), "--temperature", str(s["temperature"]),
             "--percentile-metrics", "ttft,tpot,itl,e2el", "--metric-percentiles", "50,90,95,99",
@@ -44,10 +45,17 @@ def command(case: dict, workload: dict, concurrency: int, requests: int, directo
             "--network", "host", "-v", f"{case['model_path']}:/model:ro", "-v", f"{directory}:/results:rw"]
     binding = case["target"].get("binding", {}).get("client")
     prefix = PREFIX
+    if "_client_sync" in case:
+        sync = case["_client_sync"]
+        hook = Path(__file__).with_name("synchronized.py").resolve()
+        argv += ["-v", f"{hook}:/synchronized.py:ro", "-v", f"{sync['directory']}:/coordination:rw"]
+        setup = ("import runpy\nfrom pathlib import Path\nimport vllm.benchmarks.serve as serve\n"
+                 f"runpy.run_path('/synchronized.py')['install'](serve, Path('/coordination'), Path('/results'), {sync['index']}, {sync['replicas']}, {sync['timeout_s']})\n")
+        prefix = ["-c", setup + PREFIX[1]]
     if binding:
         argv.remove("--rm")  # Retain inspect evidence until runner-owned cleanup.
         argv += affinity.docker_args(case["target"], "client")
-        prefix = affinity.client_prefix(PREFIX, binding)
+        prefix = affinity.client_prefix(prefix, binding)
     for key, value in case["client"].get("environment", {}).items():
         argv += ["-e", f"{key}={value}"]
     return argv + ["--entrypoint", ENTRYPOINT, image_id or case["client"]["image"], *prefix,
@@ -75,6 +83,9 @@ def normalize(path: Path, expected: int, workload: dict | None = None) -> dict:
         if metrics[key] is None:
             raise BenchError(f"Client result lacks required metric: {key}")
     if workload and workload["sampling"]["ignore_eos"] and workload["dataset"]["range_ratio"] == 0:
+        requested_input = expected * workload["dataset"]["input_tokens"]
+        if metrics["total_input_tokens"] != requested_input:
+            raise BenchError(f"Fixed-length input mismatch: got {metrics['total_input_tokens']}, expected {requested_input}")
         requested_tokens = expected * workload["dataset"]["output_tokens"]
         if metrics["total_output_tokens"] != requested_tokens:
             raise BenchError(f"Fixed-length output mismatch: got {metrics['total_output_tokens']}, expected {requested_tokens}; verify ignore_eos compatibility")

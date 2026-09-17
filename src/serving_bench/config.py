@@ -260,7 +260,11 @@ def validate_document(v: dict, kind: str) -> None:
             raise BenchError("campaign.cases must be a nonempty list")
         seen = set()
         for case in v["cases"]:
-            mapping(case, "campaign.case", {"id", "model", "runtime", "recipe"})
+            mapping(case, "campaign.case", {"id", "model", "runtime", "recipe"}, {"replica_targets"})
+            if "replica_targets" in case:
+                strings(case["replica_targets"], "case.replica_targets", True)
+                if len(case["replica_targets"]) > 2:
+                    raise BenchError("Synchronized deployments currently support one or two replicas")
             slug(case["id"], "case.id")
             if case["id"] in seen:
                 raise BenchError("Duplicate case ID")
@@ -315,7 +319,30 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
             raise BenchError(f"{case['id']}: recipe/hardware mismatch")
         if compatible.get("runtime_versions") and case["runtime"]["version"] not in compatible["runtime_versions"]:
             raise BenchError(f"{case['id']}: runtime version outside recipe compatibility list")
-        max_len = get_engine(case["runtime"]["engine"]).validate(case)
+        members = [case]
+        if "replica_targets" in spec:
+            if client["version"] != "0.29.0":
+                raise BenchError("Synchronized client requires the verified vLLM benchmark version 0.29.0")
+            members = []
+            for index, ref in enumerate(spec["replica_targets"]):
+                member = copy.deepcopy(case)
+                member["id"] = f"replica-{index}"
+                member["target"] = load(ref, "target")
+                mt = member["target"]
+                for field in ("address", "gpu", "model_root", "model_paths", "cache_root"):
+                    if mt.get(field) != target.get(field):
+                        raise BenchError(f"Replica target {field} differs from campaign target")
+                members.append(member)
+            validate_replica_targets(target, [m["target"] for m in members])
+            n = len(members)
+            for w in workloads:
+                if w["traffic"]["request_rate"] != "inf":
+                    raise BenchError("Synchronized deployments require request_rate=inf")
+                for value in [*w["traffic"]["concurrency"], w["traffic"]["requests"], w["measurement"]["warmup_requests"]]:
+                    if value % n:
+                        raise BenchError("Global concurrency/request/warmup counts must divide evenly across replicas")
+            case["replicas"] = members
+        max_len = min(get_engine(m["runtime"]["engine"]).validate(m) for m in members)
         for w in workloads:
             if w["dataset"]["input_tokens"] + w["dataset"]["output_tokens"] > max_len:
                 raise BenchError(f"{case['id']}/{w['id']}: input+output exceeds context length")
@@ -323,7 +350,39 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
                 raise BenchError("A smoke recipe cannot run calibration/performance workloads")
         model = case["model"]
         case["model_path"] = str(Path(target.get("model_paths", {}).get(model["id"], str(Path(target["model_root"]) / model["directory"]))).expanduser())
+        if "replicas" in case:
+            for member in case["replicas"]:
+                member["model_path"] = case["model_path"]
         cases.append(case)
     plan = {"schema_version": 1, "campaign": campaign["id"], "cases": cases, "documents": documents}
     plan["fingerprint"] = fingerprint(plan)
     return plan
+
+
+def validate_replica_targets(target: dict, members: list[dict]) -> None:
+    """Require an exact partition of the campaign GPU and CPU allocations."""
+    ports, gpus = set(), set()
+    used_cpus = set()
+    role_cpus = {"server": set(), "client": set()}
+    role_mems = {"server": set(), "client": set()}
+    for member in members:
+        if member["port"] in ports or gpus & set(member["gpus"]):
+            raise BenchError("Replica ports and GPU allocations must be disjoint")
+        ports.add(member["port"])
+        gpus.update(member["gpus"])
+        if set(member.get("binding", {})) != {"server", "client"}:
+            raise BenchError("Each replica requires explicit server and client CPU/memory binding")
+        for role, binding in member["binding"].items():
+            cpus = id_set(binding["cpus"])
+            if used_cpus & cpus:
+                raise BenchError("Replica CPU allocations overlap")
+            used_cpus.update(cpus)
+            role_cpus[role].update(cpus)
+            role_mems[role].update(id_set(binding["mems"]))
+    if gpus != set(target["gpus"]):
+        raise BenchError("Replica GPUs must exactly partition campaign target GPUs")
+    if set(target.get("binding", {})) != {"server", "client"}:
+        raise BenchError("Campaign target requires the complete CPU/memory budget")
+    for role in role_cpus:
+        if role_cpus[role] != id_set(target["binding"][role]["cpus"]) or role_mems[role] != id_set(target["binding"][role]["mems"]):
+            raise BenchError("Replica CPU/memory unions must match campaign budget")

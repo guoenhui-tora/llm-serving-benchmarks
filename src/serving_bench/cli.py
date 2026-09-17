@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 
 from .common import BenchError
+from . import deployment
 from .clients import vllm_bench
 from .config import resolve
 from .executors import docker
@@ -43,14 +44,27 @@ def main(argv=None) -> int:
                 plan["commands"] = {}
                 for case in plan["cases"]:
                     workload = case["workloads"][0]
-                    plan["commands"][case["id"]] = {
-                        "server": docker.server_command(case, "sb-preview-server", "preview"),
-                        "client_first_workload": vllm_bench.command(case, workload, workload["traffic"]["concurrency"][0],
-                            workload["traffic"]["requests"], Path("/RESULT_DIRECTORY"), "sb-preview-client", "preview")}
+                    if "replicas" in case:
+                        previews = []
+                        n = len(case["replicas"])
+                        for i, member in enumerate(case["replicas"]):
+                            from copy import deepcopy
+                            preview = deepcopy(member)
+                            preview["_client_sync"] = {"directory": "/COORDINATION_DIRECTORY", "index": i,
+                                "replicas": n, "global_requests": workload["traffic"]["requests"], "timeout_s": 300}
+                            previews.append({"server": docker.server_command(member, f"sb-preview-r{i}-server", f"preview-r{i}"),
+                                "client_first_workload": vllm_bench.command(preview, workload, workload["traffic"]["concurrency"][0]//n,
+                                    workload["traffic"]["requests"]//n, Path(f"/RESULT_DIRECTORY/replica-{i}"), f"sb-preview-r{i}-client", f"preview-r{i}")})
+                        plan["commands"][case["id"]] = {"replicas": previews, "dispatch": "equal-share, interleaved global dataset"}
+                    else:
+                        plan["commands"][case["id"]] = {
+                            "server": docker.server_command(case, "sb-preview-server", "preview"),
+                            "client_first_workload": vllm_bench.command(case, workload, workload["traffic"]["concurrency"][0],
+                                workload["traffic"]["requests"], Path("/RESULT_DIRECTORY"), "sb-preview-client", "preview")}
                 print(json.dumps(plan, indent=2, ensure_ascii=False))
             elif args.command == "preflight":
                 for case in plan["cases"]:
-                    facts = docker.preflight(case)
+                    facts = deployment.preflight(case)
                     print(f"Preflight passed: {case['id']}; server={facts['server_image']['Id']}; client={facts['client_image']['Id']}")
             else:
                 root = args.run_root or Path("results") / plan["campaign"] / datetime.now().strftime("%Y%m%d-%H%M%S-%f")

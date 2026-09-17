@@ -55,6 +55,10 @@ def report(run_roots: list[Path]) -> dict:
                        "concurrency": trial["concurrency"], "purpose": trial["purpose"],
                        "execution_target": fingerprint(case["target"]),
                        "runtime_config": fingerprint(case["runtime"])}
+                if "replicas" in case:
+                    key["replica_targets"] = fingerprint([m["target"] for m in case["replicas"]])
+                    key["replica_count"] = len(case["replicas"])
+                    key["measurement_protocol"] = "synchronized-equal-share-v1"
                 key["runner_source"] = run["runner_source_fingerprint"]
                 token = fingerprint(key)
                 group = groups.setdefault(token, {**key, "samples": [], "sources": []})

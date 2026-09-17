@@ -100,10 +100,17 @@ class CheckTests(unittest.TestCase):
 
     def test_ignored_ignore_eos_fails_length_check(self):
         path = self.root / "short.json"
-        value = {"completed": 2, "output_throughput": 10, "mean_ttft_ms": 20, "mean_tpot_ms": 5, "total_output_tokens": 30}
+        value = {"completed": 2, "output_throughput": 10, "mean_ttft_ms": 20, "mean_tpot_ms": 5, "total_input_tokens": 256, "total_output_tokens": 30}
         path.write_text(json.dumps(value))
         with self.assertRaisesRegex(BenchError, "Fixed-length output mismatch"):
             normalize(path, 2, self.case["workloads"][0])
+
+    def test_wrong_fixed_input_tokens_rejected(self):
+        path=self.root/'input.json'
+        path.write_text(json.dumps({'completed':2,'output_throughput':10,'mean_ttft_ms':20,'mean_tpot_ms':5,
+                                    'total_input_tokens':255,'total_output_tokens':64}))
+        with self.assertRaisesRegex(BenchError,'Fixed-length input mismatch'):
+            normalize(path,2,self.case['workloads'][0])
 
     def test_gpu_validation(self):
         rows = [{"index": str(i), "uuid": f"GPU-{i}", "name": "NVIDIA RTX 6000D", "memory_mib": "85651", "driver": "580", "compute_capability": "12.0"} for i in range(8)]

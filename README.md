@@ -2,7 +2,7 @@
 
 用同一套脚本在不同模型、镜像和硬件上运行可追溯的 serving 实验。框架负责启动、检查、压测和保存证据；每个项目独立固定配置与结论。
 
-当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。多台机器可以分别运行同一版本；尚未实现跨节点 SSH 编排和 PD 部署。
+当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。多台机器可以分别运行同一版本；尚未实现跨节点 SSH 编排和 PD 部署。
 
 ## 从哪里开始
 
@@ -110,7 +110,7 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 - gate 未通过的尝试不进入性能结论；保留 fallback 和 warning，不为通过验收而隐藏问题。
 - GPU 被其他任务占用时停止，不终止别人的任务；只清理本次所属容器，保留结果和缓存。
 
-执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。设置 target 的 `binding` 后，还会检查并保存对应容器和线程的 CPU/内存允许集合，见[绑定配置](docs/configuration.md#cpu--numa-绑定)。实际内存页分布、功耗/频率时间序列及 Git 本地差异需要另行保存。
+执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。设置 target 的 `binding` 后，还会检查并保存对应容器和线程的 CPU/内存允许集合，见[绑定配置](docs/configuration.md#cpu--numa-绑定)。显式多副本模式还保存 CPU/GPU/cgroup 资源时间序列；普通单服务模式的时间序列、实际内存页分布及 Git 本地差异需另行保存。
 
 ## 验证与打包
 

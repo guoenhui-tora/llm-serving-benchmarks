@@ -131,6 +131,33 @@ case 不必都使用相同模型，但报表不将不同模型数据聚合，也
 失败 case 保留证据后通常继续下一 case；如果清理/取证失败，停止 campaign，避免在不确定的资源状态下继续。
 任何 case 失败，campaign 最终为 FAIL。使用 `--case` 可单独重跑到新的 run 目录。
 
+## 同步多副本部署
+
+可选的case字段 `replica_targets` 指向一或两份target，使用同一model/runtime/recipe。campaign.target声明整机GPU与CPU/内存总预算；副本target明确划分资源，不能隐式继承或覆盖字段。
+
+```yaml
+cases:
+- id: dual-tp4
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/node8-dual-tp4.yaml
+  replica_targets:
+  - targets/rtx6000d-48-node8-front.yaml
+  - targets/rtx6000d-48-node8-rear.yaml
+```
+
+GPU必须不重叠且并集等于整机target；服务和客户端各自的CPU、内存集合并集也必须等于整机预算。副本间CPU及API端口不得重叠，preflight另查跨副本SMT物理核重叠。每副本TP×PP×DP与其GPU数匹配；model路径、硬件声明、缓存根及本机地址必须一致。
+
+workload中的并发、请求数、预热请求数均为整机总量，须能被副本数整除。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
+
+每个case将全部副本启动一次，顺序执行所有workload及重复。预热轮次同步，只有所有服务均安静才累积连续安静轮数；任一侧编译导致整组测量拒绝。原日志gate、预热和重试上限不变。
+
+各客户端在官方benchmark计时点同步起跑，保存同宿主monotonic时钟的 `benchmark-window.json`，同步就绪等待最多300秒（不超过客户端阶段超时），起跑偏差不得超过0.5秒。整机窗口为最早开始到最晚结束，不是客户端容器生命周期；吞吐按窗口总量计算。`requests.json`保存成功状态、输入输出tokens、TTFT、延迟和ITL，不保存生成文本。整机分位数由请求/事件合并计算；每次重复之间仍分别统计。
+
+阶段目录包含 `replica-0/`、`replica-1/` 的官方raw/metrics、日志、亲和性及逐请求记录，根层保存整机metrics与窗口。服务证据在case的 `replicas/` 下。`bench report`按部署target、源码和协议指纹分组，不混入旧单服务协议。单副本也可显式使用此模式，作为同协议八卡参照。
+
+当前采用固定等分负载，不包含HTTP负载均衡代理、跨节点编排或PD传输。新模式额外保存资源遥测；CPU高占用提示仅用于观察，资源背景是否可比需要验收。旧campaign不含此字段时保持原单服务路径。
+
 ## 自定义日志文件
 
 recipe 中的日志路径是容器路径，声明环境变量不会自动复制宿主文件。当前 SGLang 项目通过 `python3 scripts/prepare_logging.py CAMPAIGN` 将项目 `configs/logging/` 的 JSON 放入对应缓存挂载目录；`--check` 只检查，`--case` 可选择 case。此步骤不改 recipe、启动容器或清空缓存。

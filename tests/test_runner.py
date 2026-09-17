@@ -111,7 +111,7 @@ class RunnerTests(unittest.TestCase):
         count = int(argv[argv.index("--num-prompts") + 1])
         write_json(log_path.parent / "raw.json", {"completed": count, "output_throughput": 123,
                                                   "mean_ttft_ms": 20, "mean_tpot_ms": 3,
-                                                  "p95_ttft_ms": 30, "total_output_tokens": count * 32})
+                                                  "p95_ttft_ms": 30, "total_input_tokens": count * 128, "total_output_tokens": count * 32})
 
     def fake_logs(self, name, since=None):
         if since:

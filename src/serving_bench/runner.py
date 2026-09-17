@@ -23,6 +23,9 @@ def check_stop(directory: Path) -> None:
 
 
 def phase(case, workload, concurrency, count, directory, server, owner, facts):
+    if "replicas" in case:
+        from .deployment import phase as replica_phase
+        return replica_phase(case, workload, concurrency, count, directory, server, owner, facts)
     check_stop(directory)
     directory.mkdir(parents=True, exist_ok=False)
     name = f"sb-{owner}-client"
@@ -93,37 +96,59 @@ def trial(case, workload, concurrency, repetition, directory, server, owner, fac
 
 
 def run_case(case: dict, directory: Path, owner: str, log) -> dict:
+    from . import deployment
     directory.mkdir(parents=True, exist_ok=False)
     state = {"id": case["id"], "status": "STARTING", "started_at": utcnow(), "trials": []}
     write_json(directory / "case.json", state)
     write_json(directory / "resolved.json", case)
-    server = f"sb-{owner}-server"
+    grouped = "replicas" in case
+    members = case.get("replicas", [case])
+    sessions = [(member, f"sb-{owner}-r{i}-server" if grouped else f"sb-{owner}-server",
+                 directory / "replicas" / f"replica-{i}" if grouped else directory)
+                for i, member in enumerate(members)]
     cleanup_errors = []
-    started_server = False
+    started = set()
+    recorder = None
+    if grouped:
+        from .telemetry import Recorder
+        recorder = Recorder(directory, log)
+        recorder.start()
     try:
         check_stop(directory)
         log(f"Preflight {case['id']}")
-        facts = docker.preflight(case)
+        facts = deployment.preflight(case)
         write_json(directory / "environment.json", facts)
         write_json(directory / "host.json", docker.environment_snapshot())
-        docker.cache_directory(case, facts["server_image"]["Id"]).mkdir(parents=True, exist_ok=True)
-        argv = docker.server_command(case, server, owner, facts["server_image"]["Id"])
-        save_command(directory, argv)
         from .common import capture
-        check_stop(directory)
-        log(f"Starting {case['id']}: {case['runtime']['image']}")
-        capture(argv, timeout=120)
-        started_server = True
-        state["startup_seconds"] = http.wait_ready(case, server, log)
-        docker.binding_evidence(case["target"], "server", server, owner, directory, live=True)
-        state["probes"] = http.probes(case, directory / "probes")
+        state["replicas"] = []
+        for i, (member, server, where) in enumerate(sessions):
+            member_owner = f"{owner}-r{i}" if grouped else owner
+            member_facts = facts["replicas"][i] if grouped else facts
+            where.mkdir(parents=True, exist_ok=True)
+            if grouped:
+                write_json(where / "resolved.json", member)
+                write_json(where / "environment.json", member_facts)
+            docker.cache_directory(member, member_facts["server_image"]["Id"]).mkdir(parents=True, exist_ok=True)
+            argv = docker.server_command(member, server, member_owner, member_facts["server_image"]["Id"])
+            save_command(where, argv)
+            check_stop(directory)
+            log(f"Starting {case['id']}/{member['id']}: {member['runtime']['image']}")
+            capture(argv, timeout=120)
+            started.add(server)
+            startup = http.wait_ready(member, server, log)
+            docker.binding_evidence(member["target"], "server", server, member_owner, where, live=True)
+            probes = http.probes(member, where / "probes")
+            state["replicas"].append({"id": member["id"], "startup_seconds": startup, "probes": probes})
+            if not grouped:
+                state.update(startup_seconds=startup, probes=probes)
         state["status"] = "MEASURING"
         write_json(directory / "case.json", state)
         for workload in case["workloads"]:
             for concurrency in workload["traffic"]["concurrency"]:
                 for repetition in range(1, workload["measurement"]["repetitions"] + 1):
                     trial_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}" / f"r{repetition:02d}"
-                    result = trial(case, workload, concurrency, repetition, trial_dir, server, owner, facts, log)
+                    result = trial(case, workload, concurrency, repetition, trial_dir,
+                                   sessions if grouped else sessions[0][1], owner, facts, log)
                     result["path"] = str(trial_dir.relative_to(directory))
                     state["trials"].append(result)
                     write_json(directory / "case.json", state)
@@ -136,30 +161,41 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
         state.update(status="FAIL", error=f"{type(exc).__name__}: {exc}")
         log(f"Failed {case['id']}: {exc}")
     finally:
-        # Capture evidence before removing the server, including failed-start cases.
-        try:
-            info = docker.container_info(server)
-            if info is not None:
-                if (info.get("Config", {}).get("Labels") or {}).get(docker.OWNER_LABEL) != owner:
-                    raise BenchError("Server ownership mismatch during evidence capture")
-                write_json(directory / "server-inspect.json", info)
-                text = docker.server_logs(server)
-                (directory / "server.log").write_text(text)
-                checks = logs.kernel_checks(case, text)
-                write_json(directory / "kernel-checks.json", checks)
-                state["kernel_checks"] = checks["status"]
-                state["warning_count"] = len(checks["warnings"])
-                if checks["status"] == "FAIL" and state["status"] == "PASS":
-                    state.update(status="FAIL", error="Kernel log checks failed")
-            elif started_server:
-                raise BenchError("Server disappeared before evidence collection")
-        except Exception as exc:
-            cleanup_errors.append(f"Evidence capture: {exc}")
-        for container in (f"sb-{owner}-client", server):
+        if recorder:
             try:
-                docker.remove_owned(container, owner)
+                recorder.close()
             except Exception as exc:
                 cleanup_errors.append(str(exc))
+        checks_status, warnings = [], 0
+        for i, (member, server, where) in enumerate(sessions):
+            member_owner = f"{owner}-r{i}" if grouped else owner
+            where.mkdir(parents=True, exist_ok=True)
+            try:
+                info = docker.container_info(server)
+                if info is not None:
+                    if (info.get("Config", {}).get("Labels") or {}).get(docker.OWNER_LABEL) != member_owner:
+                        raise BenchError("Server ownership mismatch during evidence capture")
+                    write_json(where / "server-inspect.json", info)
+                    text = docker.server_logs(server)
+                    (where / "server.log").write_text(text)
+                    checks = logs.kernel_checks(member, text)
+                    write_json(where / "kernel-checks.json", checks)
+                    checks_status.append(checks["status"])
+                    warnings += len(checks["warnings"])
+                elif server in started:
+                    raise BenchError("Server disappeared before evidence collection")
+            except Exception as exc:
+                cleanup_errors.append(f"{member['id']} evidence capture: {exc}")
+            for container in (f"sb-{member_owner}-client", server):
+                try:
+                    docker.remove_owned(container, member_owner)
+                except Exception as exc:
+                    cleanup_errors.append(str(exc))
+        if checks_status:
+            state["kernel_checks"] = "FAIL" if "FAIL" in checks_status else ("UNVERIFIED" if "UNVERIFIED" in checks_status else "PASS")
+            state["warning_count"] = warnings
+            if state["kernel_checks"] == "FAIL" and state["status"] == "PASS":
+                state.update(status="FAIL", error="Kernel log checks failed")
         if cleanup_errors:
             state["cleanup_errors"] = cleanup_errors
             if state["status"] != "INTERRUPTED":
@@ -189,7 +225,7 @@ def run(plan: dict, run_root: Path) -> dict:
 
     signal.signal(signal.SIGTERM, interrupt)
     try:
-        with gpu_locks(plan["cases"][0]["target"]["gpus"]):
+        with gpu_locks(sorted({gpu for case in plan["cases"] for gpu in case["target"]["gpus"]})):
             for case in plan["cases"]:
                 check_stop(run_root)
                 path = run_root / "cases" / case["id"]
@@ -229,5 +265,11 @@ def stop(run_root: Path) -> None:
     if state["status"] not in {"RUNNING"}:
         raise BenchError(f"Run is already terminal: {state['status']}")
     write_json(run_root / "stop-requested.json", {"at": utcnow()})
-    for role in ("client", "server"):
-        docker.remove_owned(f"sb-{state['owner']}-{role}", state["owner"])
+    plan = read_json(run_root / "plan.json")
+    owners = {state["owner"]}
+    for case in plan["cases"]:
+        for i in range(len(case.get("replicas", []))):
+            owners.add(f"{state['owner']}-r{i}")
+    for owner in owners:
+        for role in ("client", "server"):
+            docker.remove_owned(f"sb-{owner}-{role}", owner)
