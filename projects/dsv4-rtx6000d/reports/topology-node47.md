@@ -92,4 +92,4 @@ GPU每2秒采样，下面覆盖有效测量所属客户端阶段（含客户端�
 
 保留的重要warning包括：SM120不支持SymmMemCommunicator、FlashInfer All Reduce不支持当前world size、PCIe-only超过两卡时custom allreduce禁用、TileLang部分向量化循环降为串行、NVFP4格式experimental、旧indexer字段deprecated。客户端无GPU容器中的CUDA/vllm._C导入warning、服务generation_config默认值提示也保留；实际压测显式发送temperature=0等采样设置，且请求/token验收通过。没有通过隐藏warning或关闭正常优化消除这些记录。
 
-原始运行目录、完整JSON/日志、预热、拒绝尝试、解析配置、命令、镜像inspect和遥测仅本机可用，具体位置见本地续接记录；仓库报告不将本机绝对路径作为复现入口。按[项目执行步骤](../README.md#3-准备本机配置)从公共配置重建表中差异、validate/plan/preflight后，在新的工作区run-root运行即可。源码无修复，临时脚本仅做顺序调度、观测和离线汇总，不改变runner语义。本次所属容器按每次运行自动清理，模型、镜像、历史结果和JIT缓存保留。
+原始运行目录、完整JSON/日志、预热、拒绝尝试、解析配置、命令、镜像inspect和遥测仅本机可用，具体位置见本地续接记录；仓库报告不将本机绝对路径作为复现入口。按[项目执行步骤](../README.md#准备本机配置)从公共配置重建表中差异、validate/plan/preflight后，在新的工作区run-root运行即可。源码无修复，临时脚本仅做顺序调度、观测和离线汇总，不改变runner语义。本次所属容器按每次运行自动清理，模型、镜像、历史结果和JIT缓存保留。
