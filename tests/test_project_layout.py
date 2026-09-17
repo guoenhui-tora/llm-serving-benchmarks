@@ -20,6 +20,16 @@ DS = ROOT / 'projects/dsv4-rtx6000d/configs'
 
 
 class ProjectLayoutTests(unittest.TestCase):
+    def test_all_node_budgets_and_capacity(self):
+        for node,expected in [(45,3),(46,5),(47,5),(48,4)]:
+            plan=resolve(ROOT/f'projects/dsv4-rtx6000d/configs/campaigns/{node}-dsv4-node8.yaml')
+            self.assertEqual(len(plan['cases']),expected)
+            for case in plan['cases']:
+                members=case['replicas'];o=case['recipe']['options']
+                self.assertEqual(len(members)*o['data-parallel-size']*o['max-num-seqs'],64)
+                self.assertEqual(sum(len(m['target']['gpus']) for m in members),8)
+                self.assertEqual(o['kernel-config']['enable_flashinfer_autotune'],False)
+
     def test_all_project_campaigns_resolve_offline(self):
         with patch('subprocess.run', side_effect=AssertionError('Offline resolution ran a command')):
             paths = list((ROOT / 'projects').glob('*/configs/campaigns/*.yaml'))
