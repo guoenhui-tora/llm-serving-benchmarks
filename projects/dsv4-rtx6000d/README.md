@@ -21,7 +21,7 @@
 
 - [x] **45**：18次正式测量完成；双TP2×PP2吞吐均值领先，PP候选波动需保留。见[本节点报告](reports/node8-node45.md)、[逐次CSV](data/node8-node45.csv)。
 - [x] **46**：4个配置完成24次正式测量；DP4 EP off因预热上限停止。见[节点报告](reports/node8-node46.md)、[逐次CSV](data/node8-node46.csv)。
-- [ ] **47**：完成或记录阻塞后，添加本节点报告链接。
+- [x] **47**：双TP4及两个EP on配置完成18次正式测量；两个EP off候选因C64预热上限阻塞，部分结果保留。见[本节点报告](reports/node8-node47.md)、[逐次CSV](data/node8-node47.csv)。
 - [x] **48**：TP8、TP4×PP2各六次完成；双TP4、TP2×PP4的C64因JIT达到重试上限。见[本节点报告](reports/node8-node48.md)、[逐次CSV](data/node8-node48.csv)。
 
 共10种部署形态、14种EP配置变体；包括四节点各自baseline，总计102次正式测量，不含预热和拒绝尝试。新组合启动失败、OOM或不支持时取证停止该候选；不为了凑满次数切换精度、缩短长度、关闭Graph或改成其他拓扑。对性能明显不稳定的组合先诊断、保留全部样本，不增加无限补测。
