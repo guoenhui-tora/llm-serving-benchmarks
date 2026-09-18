@@ -14,7 +14,7 @@
 
 ## 首批运行条件与实际参数
 
-入口为[46-dsv4-node8.yaml](../configs/campaigns/46-dsv4-node8.yaml)，首批执行预算与[项目统一协议](../README.md#下一轮八卡整机部署对照)一致。首批工作区配置从项目configs复制，逐字核对一致；运行期间未修改公共源码、recipe或workload，也未改变日志gate。
+入口为[46-dsv4-node8.yaml](../configs/campaigns/46-dsv4-node8.yaml)，首批执行预算与[项目统一协议](../README.md#2026-09-18八卡整机部署结果)一致。首批工作区配置从项目configs复制，逐字核对一致；运行期间未修改公共源码、recipe或workload，也未改变日志gate。
 
 | 项目 | 本次固定条件 |
 | --- | --- |
