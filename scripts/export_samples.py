@@ -19,7 +19,7 @@ METRICS.update({f'{stat}_{metric}_ms':f'{stat}_{metric}_ms'
 FIELDS = ['sample_id','node','configuration','workload','purpose','scope','gpu_group','deployment_count','tp','pp','dp','ep',
           'global_capacity','prefill_tokens_per_rank','prefill_tokens_service','global_concurrency',
           'concurrency','repetition','successful_requests','failed_requests',*METRICS.values(),
-          'output_tokens_per_s_common_window','start_skew_s','overlap_s','runner_gate','resource_status']
+          'output_tokens_per_s_common_window','start_skew_s','overlap_s','runner_gate','resource_status','acceptance_protocol','protocol_version','compilation_check','event_count','round']
 
 
 def samples(roots, resource_status='review-required'):
@@ -34,7 +34,7 @@ def samples(roots, resource_status='review-required'):
             if not (where/'case.json').exists():
                 continue
             state=read_json(where/'case.json')
-            if state['status']!='PASS':
+            if state['status'] not in {'PASS','PARTIAL'}:
                 continue
             case=read_json(where/'resolved.json');facts=read_json(where/'environment.json')
             if case['runtime']['engine'] != 'vllm':
@@ -42,6 +42,10 @@ def samples(roots, resource_status='review-required'):
             members=case.get('replicas',[case]);n=len(members);options=case['recipe']['options']
             tp=options.get('tensor-parallel-size',1);pp=options.get('pipeline-parallel-size',1);dp=options.get('data-parallel-size',1)
             for trial in state['trials']:
+                if trial.get('protocol_status','PASS') != 'PASS':
+                    continue
+                if state['status']=='PARTIAL' and 'protocol_status' not in trial:
+                    continue
                 path=artifact(where,trial['path']);phase=artifact(path,trial['measurement'])
                 window=read_json(phase/'benchmark-window.json') if 'replicas' in case else {}
                 records=[('node',trial['metrics'],case['target']['gpus'],trial['concurrency'],None)]
@@ -63,7 +67,11 @@ def samples(roots, resource_status='review-required'):
                          'global_concurrency':trial['concurrency'],'concurrency':concurrency,
                          'repetition':trial['repetition'],'successful_requests':result['completed'],
                          'failed_requests':0 if result.get('failure_count_inferred') else result.get('failed'),
-                         'runner_gate':'PASS','resource_status':resource_status,
+                         'runner_gate':'QUICK_COMPLETE' if trial.get('protocol')=='quick' else 'PASS',
+                         'acceptance_protocol':trial.get('protocol','legacy'),'protocol_version':trial.get('protocol_version',1),
+                         'compilation_check':trial.get('compilation_check','NO_KNOWN_EVENTS'),
+                         'event_count':trial.get('event_count',0),'round':trial.get('round',trial['repetition']),
+                         'resource_status':resource_status,
                          'start_skew_s':window.get('start_skew_s'),'overlap_s':window.get('overlap_s')}
                     row.update({column:result['metrics'].get(metric) for metric,column in METRICS.items()})
                     row['output_tokens_per_s_common_window']=part['output_throughput_common_window'] if part else result['metrics']['output_throughput']

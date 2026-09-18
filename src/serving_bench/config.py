@@ -244,14 +244,39 @@ def validate_document(v: dict, kind: str) -> None:
         number(s["temperature"], "temperature")
         if type(s["ignore_eos"]) is not bool:
             raise BenchError("ignore_eos must be boolean")
-        m = mapping(v["measurement"], "measurement", {"warmup_requests", "repetitions"},
-                    {"min_warmup_rounds", "max_warmup_rounds", "max_attempts", "timeout_s"})
-        for key, default in (("min_warmup_rounds", 2), ("max_warmup_rounds", 4), ("max_attempts", 2), ("timeout_s", 1800)):
-            integer(m.setdefault(key, default), "measurement." + key)
-        for key in ("warmup_requests", "repetitions"):
-            integer(m[key], "measurement." + key)
-        if m["min_warmup_rounds"] > m["max_warmup_rounds"]:
-            raise BenchError("min_warmup_rounds exceeds max_warmup_rounds")
+        if isinstance(v["measurement"], dict) and "protocol" in v["measurement"]:
+            m = mapping(v["measurement"], "measurement", {"protocol", "budget_s"},
+                        {"repetitions", "timeout_s", "max_rounds", "warmup_rounds", "stability_threshold"})
+            enum(m["protocol"], ["quick", "jit_clean", "stable"], "measurement.protocol")
+            integer(m["budget_s"], "measurement.budget_s")
+            integer(m.setdefault("repetitions", 3), "measurement.repetitions", 3)
+            integer(m.setdefault("timeout_s", 1800), "measurement.timeout_s")
+            if m["protocol"] == "quick":
+                integer(m.setdefault("warmup_rounds", 1), "measurement.warmup_rounds")
+                if m["warmup_rounds"] not in (1, 2):
+                    raise BenchError("quick warmup_rounds must be 1 or 2")
+                integer(m.setdefault("max_rounds", m["repetitions"]), "measurement.max_rounds")
+                if m["max_rounds"] != m["repetitions"]:
+                    raise BenchError("quick max_rounds must equal repetitions (no automatic retries)")
+            else:
+                if "warmup_rounds" in m:
+                    raise BenchError("Only quick accepts warmup_rounds; other protocols use full rounds")
+                integer(m.setdefault("max_rounds", 12), "measurement.max_rounds", m["repetitions"])
+            if m["protocol"] == "stable":
+                number(m.setdefault("stability_threshold", 0.02), "measurement.stability_threshold")
+                if not 0 < m["stability_threshold"] <= 1:
+                    raise BenchError("stability_threshold is a fraction, e.g. 0.02 for 2%")
+            elif "stability_threshold" in m:
+                raise BenchError("Only stable accepts stability_threshold")
+        else:
+            m = mapping(v["measurement"], "measurement", {"warmup_requests", "repetitions"},
+                        {"min_warmup_rounds", "max_warmup_rounds", "max_attempts", "timeout_s"})
+            for key, default in (("min_warmup_rounds", 2), ("max_warmup_rounds", 4), ("max_attempts", 2), ("timeout_s", 1800)):
+                integer(m.setdefault(key, default), "measurement." + key)
+            for key in ("warmup_requests", "repetitions"):
+                integer(m[key], "measurement." + key)
+            if m["min_warmup_rounds"] > m["max_warmup_rounds"]:
+                raise BenchError("min_warmup_rounds exceeds max_warmup_rounds")
         enum(v["cache"], ["disabled"], "workload.cache")
         enum(v["purpose"], ["smoke", "calibration", "performance"], "workload.purpose")
     elif kind == "campaign":
@@ -338,7 +363,7 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
             for w in workloads:
                 if w["traffic"]["request_rate"] != "inf":
                     raise BenchError("Synchronized deployments require request_rate=inf")
-                for value in [*w["traffic"]["concurrency"], w["traffic"]["requests"], w["measurement"]["warmup_requests"]]:
+                for value in [*w["traffic"]["concurrency"], w["traffic"]["requests"], w["measurement"].get("warmup_requests", 0)]:
                     if value % n:
                         raise BenchError("Global concurrency/request/warmup counts must divide evenly across replicas")
             case["replicas"] = members

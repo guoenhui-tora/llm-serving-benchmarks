@@ -16,6 +16,20 @@
 | [仓库管理](docs/repository-management.md) | 项目、版本、报告与原始数据怎么保存 |
 | [配置格式](docs/configuration.md) / [实现边界](docs/architecture.md) | 配置字段和代码职责 |
 
+## 压测协议
+
+默认研究目标是预热后的持续 serving 性能。新实验建议使用 `jit_clean`；根据目的也可选快速初筛或稳定性确认：
+
+| 协议 | 运行和接纳规则 | 用途 |
+| --- | --- | --- |
+| `quick` | 1轮2C请求预热，再固定3轮正式测量；保留并标注JIT事件 | 快速初筛，不保证无JIT |
+| `jit_clean` | 每轮完整正式负载，累计最先通过检查的3轮 | 默认的配置、拓扑比较 |
+| `stable` | 每轮完整负载，首次连续3轮无已知事件，且吞吐、Mean TTFT、Mean TPOT相对极差均≤2% | 重点候选稳定性确认 |
+
+一次启动完成同配置的所有轮次；JIT事件不触发重启。后两种最多12轮，所有新协议必须显式设置每档负载的时间预算。OOM、请求失败或工作量错误单独按故障处理。三个协议的PASS含义不同，不能混合统计；资源背景仍需人工审阅。
+
+完整规则、统计边界及产物见[压测协议](docs/benchmark-methodology.md)，字段见[配置说明](docs/configuration.md#workload)。模板提供三种C32 workload。既有归档配置未指定 `protocol` 时继续执行旧流程，历史结果不重新解释。
+
 ## 安装
 
 需要 Python 3.10+、Docker 和 NVIDIA GPU。模型与固定镜像应提前准备；执行器使用 `--pull never`，不会下载或升级镜像。以下命令都从仓库根目录执行。
@@ -107,7 +121,7 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 - 保留 JIT 缓存，预热与测量分开保存；日志静默只表示没有识别到已知事件，不证明性能已经收敛。
 - 禁用前缀复用的实验必须显式关闭 prefix/radix cache；检查实际成功数、失败数及输出 token 总量。
 - 跨引擎先对齐语义，再检查实际日志。显存比例相同不等于 KV 容量相同。
-- gate 未通过的尝试不进入性能结论；保留 fallback 和 warning，不为通过验收而隐藏问题。
+- 按所选协议接纳结果；快速初筛中的事件样本须明确标注，不能冒充无JIT基线。保留 fallback 和 warning，不为通过验收而隐藏问题。
 - GPU 被其他任务占用时停止，不终止别人的任务；只清理本次所属容器，保留结果和缓存。
 
 执行器会保存解析配置、命令、镜像/模型信息、源码指纹、GPU/CPU/拓扑静态快照、完整服务日志和原始指标。设置 target 的 `binding` 后，还会检查并保存对应容器和线程的 CPU/内存允许集合，见[绑定配置](docs/configuration.md#cpu--numa-绑定)。显式多副本模式还保存 CPU/GPU/cgroup 资源时间序列；普通单服务模式的时间序列、实际内存页分布及 Git 本地差异需另行保存。

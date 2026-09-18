@@ -38,13 +38,17 @@ def report(run_roots: list[Path]) -> dict:
                 overview["cases"].append({"id": ref["id"], "status": "PENDING"})
                 continue
             state = read_json(directory / "case.json")
-            overview["cases"].append({k: state[k] for k in ("id", "status", "error", "kernel_checks", "warning_count", "cleanup_errors") if k in state})
-            # Partial/failed campaigns may contain successful cases. Only terminal successful cases enter statistics.
-            if state["status"] != "PASS":
+            overview["cases"].append({k: state[k] for k in ("id", "status", "error", "kernel_checks", "warning_count", "cleanup_errors", "protocols") if k in state})
+            # Completed protocol groups in terminal PARTIAL cases remain usable; faults exclude the case.
+            if state["status"] not in {"PASS", "PARTIAL"}:
                 continue
             case = read_json(directory / "resolved.json")
             facts = read_json(directory / "environment.json")
             for trial in state["trials"]:
+                if trial.get("protocol_status", "PASS") != "PASS":
+                    continue
+                if state["status"] == "PARTIAL" and "protocol_status" not in trial:
+                    continue
                 key = {"target": case["target"]["id"], "hostname": facts["hostname"],
                        "hardware": fingerprint(facts["gpus"]), "model": case["model"]["id"],
                        "model_identity": facts["model"]["identity"], "engine": case["runtime"]["engine"],
@@ -59,11 +63,15 @@ def report(run_roots: list[Path]) -> dict:
                     key["replica_targets"] = fingerprint([m["target"] for m in case["replicas"]])
                     key["replica_count"] = len(case["replicas"])
                     key["measurement_protocol"] = "synchronized-equal-share-v1"
+                key["acceptance_protocol"] = trial.get("protocol", "legacy")
+                key["acceptance_protocol_version"] = trial.get("protocol_version", 1)
                 key["runner_source"] = run["runner_source_fingerprint"]
                 token = fingerprint(key)
                 group = groups.setdefault(token, {**key, "samples": [], "sources": []})
                 group["samples"].append(trial["metrics"]["metrics"])
-                group["sources"].append({"run": str(root), "case": case["id"], "trial": trial["path"]})
+                group["sources"].append({"run": str(root), "case": case["id"], "trial": trial["path"], "measurement": trial["measurement"],
+                                          "compilation_check": trial.get("compilation_check"),
+                                          "event_count": trial.get("event_count")})
     rows = []
     for group in groups.values():
         samples = group.pop("samples")
@@ -78,12 +86,18 @@ def report(run_roots: list[Path]) -> dict:
     return {"schema_version": 1, "runs": runs, "groups": rows,
             "notes": ["Latency percentile means are means of per-trial percentiles, not pooled percentiles.",
                       "Smoke/calibration/performance are separate groups. Missing metrics remain null.",
-                      "Model identity uses configuration/tokenizer hashes and shard sizes, not full weight hashes."]}
+                      "Model identity uses configuration/tokenizer hashes and shard sizes, not full weight hashes.",
+                      "quick includes event-bearing samples; PASS means its fixed schedule completed, not JIT-free.",
+                      "stable statistics describe a selected window; inspect all-clean statistics and round history.",
+                      "Resource telemetry requires review; automated checks do not certify absence of interference."]}
 
 
 def markdown(value: dict) -> str:
     def safe(text):
         return str(text).replace("|", "\\|").replace("\n", " ")
+
+    def number(value):
+        return f"{value:.2f}" if type(value) in (int, float) else str(value)
 
     lines = []
     for run in value["runs"]:
@@ -95,9 +109,28 @@ def markdown(value: dict) -> str:
             if case.get("warning_count"):
                 line += f"; {case['warning_count']} warning log lines (see kernel-checks.json)"
             lines.append(line)
+            for protocol in case.get("protocols", []):
+                lines += ["", f"{safe(protocol['workload'])} C{protocol['concurrency']} / "
+                          f"{protocol['protocol']} v{protocol['version']}: **{protocol['status']}**, "
+                          f"{protocol.get('stop_reason', '')}; {protocol['elapsed_s']:.1f}s; "
+                          f"selected rounds={protocol['selected_rounds']}; "
+                          f"event rounds={protocol['event_rounds']}. "
+                          "quick may include JIT; stable is a selected window. Resource review required.", "",
+                          "| Round | Events | Selected | Output tok/s | Mean TTFT ms | Mean TPOT ms |",
+                          "|---|---:|---|---:|---:|---:|"]
+                for i, row in enumerate(protocol["rounds"], 1):
+                    metrics = row.get("metrics", {}).get("metrics", {})
+                    values = [i, row.get("events", "unknown"), i in protocol["selected_rounds"],
+                              *[number(metrics.get(k, "N/A")) for k in ("output_throughput", "mean_ttft_ms", "mean_tpot_ms")]]
+                    lines.append("| " + " | ".join(map(safe, values)) + " |")
+                stats = protocol.get("all_clean_statistics", {}).get("output_throughput", {})
+                lines += ["", f"All clean rounds: n={stats.get('n', 0)}, "
+                          f"output tok/s mean={number(stats.get('mean'))}, SD={number(stats.get('sd'))}. "
+                          "Full per-metric statistics and window decisions: "
+                          f"`{safe(protocol['path'])}/protocol.json`."]
         lines.append("")
-    lines += ["| Target | Model | Runtime | Recipe | Workload | Purpose | C | N | Output tok/s mean ± SD | Mean TTFT ms | Mean TPOT ms |",
-              "|---|---|---|---|---|---|---:|---:|---:|---:|---:|"]
+    lines += ["| Target | Model | Runtime | Recipe | Workload | Purpose | Protocol | C | N | Output tok/s mean ± SD | Mean TTFT ms | Mean TPOT ms |",
+              "|---|---|---|---|---|---|---|---:|---:|---:|---:|---:|"]
     for group in value["groups"]:
         stats = group["statistics"]
 
@@ -105,7 +138,7 @@ def markdown(value: dict) -> str:
             value_ = stats.get(name, {}).get(field)
             return "N/A" if value_ is None else f"{value_:.2f}"
 
-        row = [group[k] for k in ("target", "model", "runtime", "recipe", "workload", "purpose", "concurrency", "n")]
+        row = [group[k] for k in ("target", "model", "runtime", "recipe", "workload", "purpose", "acceptance_protocol", "concurrency", "n")]
         row += [f"{metric('output_throughput')} ± {metric('output_throughput', 'sd')}", metric("mean_ttft_ms"), metric("mean_tpot_ms")]
         lines.append("| " + " | ".join(map(safe, row)) + " |")
     return "\n".join(lines) + "\n"

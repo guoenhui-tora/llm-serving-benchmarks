@@ -117,6 +117,32 @@ class DeploymentTests(unittest.TestCase):
             _,events=deployment.phase(case,workload,32,128,self.root/'phase',sessions,'test',{'replicas':[{},{}]})
         self.assertEqual(events,[{'replica':1,'event':'TileLang begins to compile kernel'}])
 
+    def test_protocol_dual_replica_events_and_equal_share(self):
+        from serving_bench import runner
+        from serving_bench.protocols import collect
+        workload=copy.deepcopy(self.case['workloads'][0])
+        workload['traffic']['requests']=128
+        workload['measurement']=dict(protocol='jit_clean',repetitions=3,max_rounds=5,timeout_s=30,budget_s=100)
+        sessions=[(m,f'server-{i}',self.root) for i,m in enumerate(self.case['replicas'])]
+        calls=[]
+        def fake_phase(member, w, concurrency, count, directory, server, owner, facts):
+            directory.mkdir(parents=True)
+            sync=member['_client_sync'];coord=Path(sync['directory']);i=sync['index']
+            calls.append((concurrency,count,i))
+            write_json(coord/f'ready-{i}.json',{})
+            while not (coord/'release.json').exists():time.sleep(.001)
+            event=i==1 and directory.parent.name=='measurement-01'
+            return {},(['JIT'] if event else [])
+        def measure(count,where,timeout):
+            return deployment.phase(self.case,workload,32,count,where,sessions,'owned',{'replicas':[{},{}]})
+        metric={'completed':128,'metrics':{'output_throughput':100,'mean_ttft_ms':20,'mean_tpot_ms':5}}
+        with patch.object(runner,'phase',side_effect=fake_phase),patch.object(deployment,'aggregate',return_value=(metric,{})):
+            trials,state=collect(workload,32,self.root/'block',measure,lambda _:None,lambda _:None)
+        self.assertEqual(state['selected_rounds'],[2,3,4])
+        self.assertEqual(len(calls),8)
+        self.assertTrue(all(c[:2]==(16,64) for c in calls))
+        self.assertEqual(len(trials),3)
+
     def test_group_phase_failure_aborts_peer_and_cleans_only_owned_clients(self):
         from serving_bench import runner
         sessions=[(m,f'server-{i}',self.root) for i,m in enumerate(self.case['replicas'])]

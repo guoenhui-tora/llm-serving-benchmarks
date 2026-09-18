@@ -154,6 +154,72 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(result["groups"][0]["n"], 1)
         self.assertIsNone(result["groups"][0]["statistics"]["output_throughput"]["sd"])
 
+    def configure_protocol(self, mode="jit_clean", **kwargs):
+        self.case["workloads"][0]["measurement"] = dict(
+            protocol=mode, repetitions=3, max_rounds=12, timeout_s=100,
+            budget_s=1000, **kwargs)
+
+    def test_protocol_collects_without_restarting_server(self):
+        self.configure_protocol()
+        self.compile_once = True
+        starts = []
+        original = self.fake_capture
+        def capture(argv, **kwargs):
+            if argv[:2] == ["docker", "run"]:
+                starts.append(argv)
+            return original(argv, **kwargs)
+        self.fake_capture = capture
+        self.assertEqual(self.execute()["status"], "PASS")
+        self.assertEqual(len(starts), 1)
+        self.assertEqual(self.measurements, 4)
+        self.assertFalse(self.containers)
+        value = report([self.root / "run"])
+        self.assertEqual(value["groups"][0]["n"], 3)
+        self.assertEqual(value["groups"][0]["acceptance_protocol"], "jit_clean")
+        from scripts.export_samples import samples
+        self.assertEqual(len(samples([self.root / "run"])), 3)
+
+    def test_quick_report_and_export_do_not_claim_jit_free(self):
+        self.configure_protocol("quick", warmup_rounds=1)
+        self.case["workloads"][0]["measurement"]["max_rounds"] = 3
+        self.compile_once = True
+        self.assertEqual(self.execute()["status"], "PASS")
+        from scripts.export_samples import samples
+        from serving_bench.results.report import markdown
+        rows = samples([self.root / "run"])
+        self.assertEqual(len(rows), 3)
+        self.assertEqual(rows[0]["compilation_check"], "KNOWN_EVENTS")
+        self.assertEqual(rows[0]["runner_gate"], "QUICK_COMPLETE")
+        text = markdown(report([self.root / "run"]))
+        self.assertIn("quick may include JIT", text)
+        self.assertIn("All clean rounds", text)
+
+    def test_partial_protocol_continues_next_workload_and_only_exports_complete(self):
+        self.configure_protocol()
+        self.case["workloads"][0]["measurement"]["max_rounds"] = 3
+        self.compile_once = True
+        second = copy.deepcopy(self.case["workloads"][0])
+        second["id"] = "second-workload"
+        self.case["workloads"].append(second)
+        self.assertEqual(self.execute()["status"], "PARTIAL")
+        state = read_json(self.root / "run/cases/glm52-vllm/case.json")
+        self.assertEqual([p["status"] for p in state["protocols"]], ["PARTIAL", "PASS"])
+        self.assertEqual(len(state["trials"]), 5)
+        value = report([self.root / "run"])
+        self.assertEqual(len(value["groups"]), 1)
+        self.assertEqual(value["groups"][0]["workload"], "second-workload")
+        from scripts.export_samples import samples
+        self.assertEqual(len(samples([self.root / "run"])), 3)
+        self.assertFalse(self.containers)
+
+    def test_protocol_failure_saves_journal_and_cleans_server(self):
+        self.configure_protocol()
+        self.fail_client = True
+        self.assertEqual(self.execute()["status"], "FAIL")
+        block = self.root / "run/cases/glm52-vllm/trials/smoke-128-32/c0001"
+        self.assertEqual(read_json(block / "protocol.json")["status"], "FAIL")
+        self.assertFalse(self.containers)
+
     def test_bound_run_records_actual_container_and_server_affinity(self):
         self.case["target"]["binding"] = {"server": {"cpus": "0-1", "mems": "0"},
                                           "client": {"cpus": "2-3", "mems": "1"}}

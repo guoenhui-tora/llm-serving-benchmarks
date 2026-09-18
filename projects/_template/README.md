@@ -19,7 +19,9 @@ cp -a projects/_template/configs experiments/my-study/configs
 - workload：长度、全局并发、请求量和预热/重复上限。
 - probe/checks：模型的 thinking 参数、生成预期和实际日志证据。
 
-`functional.yaml` 使用两引擎的正式 serving recipe 做 128/32、C1 短验证，仍会完整加载模型并编译；它不是关闭优化的快速启动 recipe。`c32-comparison.yaml` 使用三套 recipe 测 8192/1024、C32、128 请求、三次重复。
+`functional.yaml` 使用两引擎的正式 serving recipe 做 128/32、C1 短验证，仍会完整加载模型并编译；它不是关闭优化的快速启动 recipe。`c32-comparison.yaml` 使用三套 recipe 测8192/1024、C32、128请求，默认采用 `jit_clean` 累计三轮无已知事件，最多12轮、每档3600秒预算。新协议与模板组合只做离线验证，尚无性能实测。
+
+同目录还提供 `workloads/c32-quick.yaml`（1轮64请求预热＋3轮128请求，预算1800秒）、`workloads/c32-stable.yaml`（连续3轮无事件且三项指标相对极差≤2%，最多12轮、3600秒）。在工作区复制campaign、修改id并替换workloads引用即可选择；不要把三套协议混合求平均。预算需按实际机器核对，C64需新增256请求的workload，不能直接复用C32请求量。
 
 ## 验证和执行
 

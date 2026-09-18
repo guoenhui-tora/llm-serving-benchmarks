@@ -1,6 +1,6 @@
 schema_version: 1
 kind: workload
-id: dsv4-8192-1024-c32-n128-repeat3
+id: dsv4-8192-1024-c32-stable
 purpose: performance
 dataset:
   name: random
@@ -17,9 +17,8 @@ sampling:
   temperature: 0
   ignore_eos: true
 measurement:
-  protocol: jit_clean
+  protocol: stable
   budget_s: 3600
-  repetitions: 3
   max_rounds: 12
-  timeout_s: 1800
+  stability_threshold: 0.02
 cache: disabled

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import signal
 import socket
 import time
@@ -145,6 +146,29 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
         write_json(directory / "case.json", state)
         for workload in case["workloads"]:
             for concurrency in workload["traffic"]["concurrency"]:
+                if "protocol" in workload["measurement"]:
+                    from .protocols import collect
+                    block_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}"
+
+                    def measure(count, where, timeout):
+                        bounded = copy.deepcopy(workload)
+                        bounded["measurement"]["timeout_s"] = timeout
+                        return phase(case, bounded, concurrency, count, where,
+                                     sessions if grouped else sessions[0][1], owner, facts)
+
+                    trials, protocol = collect(workload, concurrency, block_dir, measure, log, check_stop)
+                    for item in trials:
+                        item["path"] = str(block_dir.relative_to(directory))
+                    state["trials"].extend(trials)
+                    state.setdefault("protocols", []).append({
+                        **protocol, "path": str(block_dir.relative_to(directory))})
+                    write_json(directory / "case.json", state)
+                    if protocol.get("aborted_phase"):
+                        # Client cancellation can leave requests draining on the server.
+                        # Close this case instead of contaminating its next workload.
+                        state["status"] = "PARTIAL"
+                        return state
+                    continue
                 for repetition in range(1, workload["measurement"]["repetitions"] + 1):
                     trial_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}" / f"r{repetition:02d}"
                     result = trial(case, workload, concurrency, repetition, trial_dir,
@@ -153,7 +177,7 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
                     state["trials"].append(result)
                     write_json(directory / "case.json", state)
                     log(f"Accepted {case['id']}/{workload['id']} C{concurrency} repeat={repetition}")
-        state["status"] = "PASS"
+        state["status"] = "PARTIAL" if any(p["status"] != "PASS" for p in state.get("protocols", [])) else "PASS"
     except KeyboardInterrupt:
         state.update(status="INTERRUPTED", error="Interrupted by user or signal")
         raise
@@ -194,7 +218,7 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
         if checks_status:
             state["kernel_checks"] = "FAIL" if "FAIL" in checks_status else ("UNVERIFIED" if "UNVERIFIED" in checks_status else "PASS")
             state["warning_count"] = warnings
-            if state["kernel_checks"] == "FAIL" and state["status"] == "PASS":
+            if state["kernel_checks"] == "FAIL" and state["status"] in {"PASS", "PARTIAL"}:
                 state.update(status="FAIL", error="Kernel log checks failed")
         if cleanup_errors:
             state["cleanup_errors"] = cleanup_errors
@@ -238,7 +262,8 @@ def run(plan: dict, run_root: Path) -> dict:
                 write_json(run_root / "run.json", state)
                 if result.get("cleanup_errors"):
                     raise BenchError("Cleanup/evidence failure; stopped campaign before starting another case")
-        state["status"] = "PASS" if all(x["status"] == "PASS" for x in state["cases"]) else "FAIL"
+        state["status"] = ("PASS" if all(x["status"] == "PASS" for x in state["cases"])
+                           else "PARTIAL" if all(x["status"] in {"PASS", "PARTIAL"} for x in state["cases"]) else "FAIL")
     except KeyboardInterrupt:
         state["status"] = "INTERRUPTED"
     except Exception as exc:

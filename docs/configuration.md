@@ -103,20 +103,60 @@ probe 总是验证非空消息；expect_regex 提供简单语义断言。请求/
 
 ## Workload
 
-必填：
+必填：`purpose: smoke|calibration|performance`、`dataset`、`traffic`、`sampling`、`measurement`、`cache: disabled`。
 
-- `purpose: smoke|calibration|performance`。
-- `dataset: {name: random, input_tokens: 128, output_tokens: 32, range_ratio: 0}`，range_ratio 可省略。
-- `traffic: {concurrency: [1, 2, 4], requests: 32, request_rate: inf}`；requests 不小于最大并发。
-- `sampling: {seed: 0, temperature: 0, ignore_eos: true}`。
-- `measurement: {warmup_requests: 8, repetitions: 3}`。
-- `cache: disabled`。
+```yaml
+dataset: {name: random, input_tokens: 8192, output_tokens: 1024, range_ratio: 0}
+traffic: {concurrency: [32], requests: 128, request_rate: inf}
+sampling: {seed: 0, temperature: 0, ignore_eos: true}
+measurement:
+  protocol: jit_clean
+  budget_s: 3600
+  max_rounds: 12
+  repetitions: 3
+  timeout_s: 1800
+```
 
-measurement 可选：`min_warmup_rounds`（连续安静轮数，默认 2）、`max_warmup_rounds`（默认 4）、
-`max_attempts`（默认 2）、`timeout_s`（单次客户端阶段，默认 1800）。
-实际每轮预热请求数取 max(warmup_requests, 当前并发)。输入+输出长度不得超过 recipe 上下文长度。
-固定输出且 ignore_eos 时检查返回的 token 总量，防止协议差异悄悄改变测试负载。
-相同 workload 列表在同一 case 的一次服务启动中顺序运行，不会为每个并发重启模型。
+`requests`不小于最大并发；每轮使用此完整请求量，不自动乘4。输入+输出不得超过上下文。固定长度且ignore_eos时核对实际输入输出token总量。同case只启动一次服务，顺序执行负载、并发和轮次。
+
+### 新协议字段（版本1）
+
+| 字段 | 默认与约束 |
+| --- | --- |
+| `protocol` | 显式选择 `quick`、`jit_clean`、`stable`；新实验建议jit_clean |
+| `budget_s` | 必填正整数；每workload/并发的总秒数，不含服务启动与最终清理 |
+| `repetitions` | 默认3，整数≥3；quick正式轮数、jit_clean累计目标、stable连续窗口长度 |
+| `timeout_s` | 默认1800；单客户端阶段超时，实际还受剩余budget_s限制 |
+| `max_rounds` | jit_clean/stable默认12，必须≥repetitions；quick固定等于repetitions |
+| `warmup_rounds` | 仅quick接受，默认1，只允许1或2；每轮请求数自动为2×当前并发 |
+| `stability_threshold` | 仅stable接受，默认0.02；有限数，0<值≤1，0.01表示1% |
+
+quick保留全部正式样本及事件标记；jit_clean累计最先无已知事件的样本；stable检查连续窗口内output_throughput、mean_ttft_ms、mean_tpot_ms的相对极差均≤阈值。不接受新旧协议字段混写，也不允许把稳定性参数填到其他模式而静默忽略。
+
+选择其他协议只需替换measurement块，例如：
+
+```yaml
+# 快速初筛
+measurement:
+  protocol: quick
+  budget_s: 1800
+  warmup_rounds: 1
+```
+
+```yaml
+# 稳定性确认
+measurement:
+  protocol: stable
+  budget_s: 3600
+  max_rounds: 12
+  stability_threshold: 0.02
+```
+
+模板包含这三种C32 workload。预算是示例，运行前按模型和单轮耗时调整；不会自动重启、恢复或跨启动拼接。预算用尽标记PARTIAL；正常轮次边界可继续同服务的下一负载，预算中止了运行中的客户端时结束本case，避免残留请求干扰。故障按FAIL处理。完整资格与统计边界见[压测协议](benchmark-methodology.md)。
+
+### 旧协议兼容
+
+没有protocol时，`measurement: {warmup_requests: 8, repetitions: 3}`保持原行为。可选min_warmup_rounds（连续安静轮数，默认2）、max_warmup_rounds（默认4）、max_attempts（默认2）、timeout_s（默认1800）。实际预热量取max(warmup_requests,并发)。此路径每次重复或重试前预热，不自动迁移历史配置。
 
 ## Campaign
 
@@ -129,7 +169,7 @@ measurement 可选：`min_warmup_rounds`（连续安静轮数，默认 2）、`m
 case 不必都使用相同模型，但报表不将不同模型数据聚合，也不会自动给出引擎胜负结论。
 
 失败 case 保留证据后通常继续下一 case；如果清理/取证失败，停止 campaign，避免在不确定的资源状态下继续。
-任何 case 失败，campaign 最终为 FAIL。使用 `--case` 可单独重跑到新的 run 目录。
+任何 case 失败，campaign 最终为 FAIL；仅有预算未完成则为 PARTIAL，两者CLI均返回非零。使用 `--case` 可单独重跑到新的 run 目录。
 
 ## 同步多副本部署
 
@@ -150,7 +190,7 @@ GPU必须不重叠且并集等于整机target；服务和客户端各自的CPU�
 
 workload中的并发、请求数、预热请求数均为整机总量，须能被副本数整除。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
 
-每个case将全部副本启动一次，顺序执行所有workload及重复。预热轮次同步，只有所有服务均安静才累积连续安静轮数；任一侧编译导致整组测量拒绝。原日志gate、预热和重试上限不变。
+每个case将全部副本启动一次，顺序执行所有workload及轮次。每轮同步执行，任一侧事件都会计入整机事件。jit_clean/stable据此拒绝整轮；quick保留并标记。stable依据整机聚合指标判断，单副本明细仍保存；旧协议仍按原预热和重试规则执行。
 
 各客户端在官方benchmark计时点同步起跑，保存同宿主monotonic时钟的 `benchmark-window.json`，同步就绪等待最多300秒（不超过客户端阶段超时），起跑偏差不得超过0.5秒。整机窗口为最早开始到最晚结束，不是客户端容器生命周期；吞吐按窗口总量计算。`requests.json`保存成功状态、输入输出tokens、TTFT、延迟和ITL，不保存生成文本。整机分位数由请求/事件合并计算；每次重复之间仍分别统计。
 

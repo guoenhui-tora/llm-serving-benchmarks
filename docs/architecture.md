@@ -21,6 +21,7 @@ CLI → config.resolve → resolved plan
 | `executors/docker.py` | 镜像、设备、挂载、CLI 检查、取证、容器所属运行及清理 |
 | `clients/vllm_bench.py` | 独立客户端命令和结果解析；输入输出协议不跟服务端镜像变化 |
 | `checks/` | HTTP 协议检查及配置驱动的日志证据 |
+| `protocols.py` | 三套新协议的轮次接纳、稳定性窗口、总预算及逐轮记录；不持有服务生命周期 |
 | `runner.py` | 顺序执行、预热、测量重试、运行状态、异常/中断恢复 |
 | `deployment.py` / `clients/synchronized.py` | 本机一或两副本的同步阶段、官方客户端计时点检查、请求分片及整机指标；不实现负载均衡代理 |
 | `telemetry.py` | 同步部署的只读CPU/GPU/cgroup时间序列；不自动处理外部任务 |
@@ -56,7 +57,7 @@ warmup 不清空 JIT 缓存；prefix/radix cache 则显式关闭。
 kernel warnings 保留在结果中；不能把未触发 forbidden 自动解释成所有优化均有效。
 
 长时运行使用 tmux。正常信号会清理容器，SIGKILL/宿主掉电无法保证 finally 执行。
-没有自动重试失败请求；编译事件引起的测量重试会保留全部尝试。
+没有自动重试失败请求；新协议在同次启动内处理JIT轮次并保存全部尝试，旧协议行为保留。协议日志按每轮落盘；没有跨进程自动恢复或跨启动拼接。
 模型配置/tokenizer 哈希及分片大小用于追溯，不等价于完整权重校验和。
 
 ## 测试策略
