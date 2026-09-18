@@ -63,39 +63,6 @@ def phase(case, workload, concurrency, count, directory, server, owner, facts):
     return normalized, events
 
 
-def trial(case, workload, concurrency, repetition, directory, server, owner, facts, log):
-    m = workload["measurement"]
-    attempts = []
-    warmups = []
-
-    def warmup(batch):
-        quiet = 0
-        for index in range(1, m["max_warmup_rounds"] + 1):
-            where = directory / f"warmup-{batch:02d}-{index:02d}"
-            _, events = phase(case, workload, concurrency, max(m["warmup_requests"], concurrency), where, server, owner, facts)
-            warmups.append({"path": where.name, "events": len(events)})
-            quiet = 0 if events else quiet + 1
-            log(f"{case['id']}/{workload['id']} C{concurrency}: warmup {index}, known compile events={len(events)}")
-            if quiet >= m["min_warmup_rounds"]:
-                return
-        raise BenchError("Warmup did not reach the required consecutive quiet rounds")
-
-    write_json(directory / "workload.json", workload)
-    for attempt in range(1, m["max_attempts"] + 1):
-        warmup(attempt)
-        where = directory / f"measurement-{attempt:02d}"
-        metrics, events = phase(case, workload, concurrency, workload["traffic"]["requests"], where, server, owner, facts)
-        attempts.append({"path": where.name, "events": len(events), "accepted": not events})
-        write_json(directory / "measurement-checks.json", {"warmups": warmups, "attempts": attempts})
-        if not events:
-            return {"workload": workload["id"], "workload_fingerprint": fingerprint(workload),
-                    "concurrency": concurrency, "repetition": repetition,
-                    "metrics": metrics, "measurement": str(where.relative_to(directory)),
-                    "compilation_check": "NO_KNOWN_EVENTS", "purpose": workload["purpose"]}
-        log(f"Discarded attempt {attempt}: known compilation events detected")
-    raise BenchError("All measurement attempts contained known compilation events")
-
-
 def run_case(case: dict, directory: Path, owner: str, log) -> dict:
     from . import deployment
     directory.mkdir(parents=True, exist_ok=False)
@@ -146,37 +113,27 @@ def run_case(case: dict, directory: Path, owner: str, log) -> dict:
         write_json(directory / "case.json", state)
         for workload in case["workloads"]:
             for concurrency in workload["traffic"]["concurrency"]:
-                if "protocol" in workload["measurement"]:
-                    from .protocols import collect
-                    block_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}"
+                from .protocols import collect
+                block_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}"
 
-                    def measure(count, where, timeout):
-                        bounded = copy.deepcopy(workload)
-                        bounded["measurement"]["timeout_s"] = timeout
-                        return phase(case, bounded, concurrency, count, where,
-                                     sessions if grouped else sessions[0][1], owner, facts)
+                def measure(count, where, timeout):
+                    bounded = copy.deepcopy(workload)
+                    bounded["measurement"]["timeout_s"] = timeout
+                    return phase(case, bounded, concurrency, count, where,
+                                 sessions if grouped else sessions[0][1], owner, facts)
 
-                    trials, protocol = collect(workload, concurrency, block_dir, measure, log, check_stop)
-                    for item in trials:
-                        item["path"] = str(block_dir.relative_to(directory))
-                    state["trials"].extend(trials)
-                    state.setdefault("protocols", []).append({
-                        **protocol, "path": str(block_dir.relative_to(directory))})
-                    write_json(directory / "case.json", state)
-                    if protocol.get("aborted_phase"):
-                        # Client cancellation can leave requests draining on the server.
-                        # Close this case instead of contaminating its next workload.
-                        state["status"] = "PARTIAL"
-                        return state
-                    continue
-                for repetition in range(1, workload["measurement"]["repetitions"] + 1):
-                    trial_dir = directory / "trials" / workload["id"] / f"c{concurrency:04d}" / f"r{repetition:02d}"
-                    result = trial(case, workload, concurrency, repetition, trial_dir,
-                                   sessions if grouped else sessions[0][1], owner, facts, log)
-                    result["path"] = str(trial_dir.relative_to(directory))
-                    state["trials"].append(result)
-                    write_json(directory / "case.json", state)
-                    log(f"Accepted {case['id']}/{workload['id']} C{concurrency} repeat={repetition}")
+                trials, protocol = collect(workload, concurrency, block_dir, measure, log, check_stop)
+                for item in trials:
+                    item["path"] = str(block_dir.relative_to(directory))
+                state["trials"].extend(trials)
+                state.setdefault("protocols", []).append({
+                    **protocol, "path": str(block_dir.relative_to(directory))})
+                write_json(directory / "case.json", state)
+                if protocol.get("aborted_phase"):
+                    # Client cancellation can leave requests draining on the server.
+                    # Close this case instead of contaminating its next workload.
+                    state["status"] = "PARTIAL"
+                    return state
         state["status"] = "PARTIAL" if any(p["status"] != "PASS" for p in state.get("protocols", [])) else "PASS"
     except KeyboardInterrupt:
         state.update(status="INTERRUPTED", error="Interrupted by user or signal")

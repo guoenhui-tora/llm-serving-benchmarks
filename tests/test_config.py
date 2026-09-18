@@ -107,7 +107,7 @@ class ConfigTests(unittest.TestCase):
                         resolve(self.campaign)
 
     def test_smoke_cannot_masquerade_as_performance(self):
-        self.edit("workloads/smoke-128-32.yaml", lambda v: v.update(purpose="performance"))
+        self.edit("workloads/smoke-128-32.yaml", lambda v: (v.update(purpose="performance"), v["measurement"].update(repetitions=3)))
         with self.assertRaisesRegex(BenchError, "smoke recipe"):
             resolve(self.campaign)
 

@@ -1,0 +1,16 @@
+schema_version: 1
+kind: campaign
+id: dsv4-dual-tp4
+target: targets/node.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/c32.yaml
+- workloads/c64.yaml
+cases:
+- id: dual-tp4
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/tp4.yaml
+  replica_targets:
+  - targets/front.yaml
+  - targets/rear.yaml

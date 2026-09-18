@@ -1,0 +1,23 @@
+schema_version: 1
+kind: campaign
+id: dsv4-dual-candidates
+target: targets/node.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/c32.yaml
+- workloads/c64.yaml
+cases:
+- id: dual-tp2-pp2
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/dual-tp2-pp2.yaml
+  replica_targets:
+  - targets/front.yaml
+  - targets/rear.yaml
+- id: dual-tp2-dp2-epon
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/dual-tp2-dp2-epon.yaml
+  replica_targets:
+  - targets/front.yaml
+  - targets/rear.yaml

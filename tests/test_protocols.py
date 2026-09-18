@@ -148,9 +148,27 @@ class ProtocolTests(unittest.TestCase):
         with self.assertRaisesRegex(BenchError, 'mean_ttft_ms'):
             relative_ranges(rows)
 
+    def test_old_fields_rejected_and_smoke_can_measure_once(self):
+        import yaml
+        source = yaml.safe_load((ROOT/'tests/fixtures/configs/workloads/smoke-128-32.yaml').read_text())
+        dest = Path(self.temp.name)/'workload.yaml'
+        source['measurement'] = {'protocol': 'jit_clean', 'budget_s': 60, 'repetitions': 1}
+        dest.write_text(yaml.safe_dump(source))
+        self.assertEqual(load_document(dest, 'workload')['measurement']['repetitions'], 1)
+        source['purpose'] = 'performance'
+        dest.write_text(yaml.safe_dump(source))
+        with self.assertRaises(BenchError): load_document(dest, 'workload')
+        for old in ({'warmup_requests': 8, 'repetitions': 3},
+                    {'protocol': 'jit_clean', 'budget_s': 60, 'max_attempts': 2}):
+            source['measurement'] = old
+            dest.write_text(yaml.safe_dump(source))
+            with self.assertRaisesRegex(BenchError, 'Replace the entire measurement block'):
+                load_document(dest, 'workload')
+
     def test_config_validation_and_defaults(self):
         import yaml
         source = yaml.safe_load((ROOT/'tests/fixtures/configs/workloads/smoke-128-32.yaml').read_text())
+        source['purpose'] = 'performance'
         dest = Path(self.temp.name)/'workload.yaml'
         for mode in ('quick','jit_clean','stable'):
             source['measurement'] = {'protocol': mode, 'budget_s': 3600}

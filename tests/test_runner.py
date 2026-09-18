@@ -227,7 +227,7 @@ class RunnerTests(unittest.TestCase):
         self.assertFalse(self.containers)
         directory = self.root / "run/cases/glm52-vllm"
         self.assertTrue((directory / "server-affinity.json").is_file())
-        trial = directory / "trials/smoke-128-32/c0001/r01/measurement-01"
+        trial = directory / "trials/smoke-128-32/c0001/measurement-01"
         self.assertTrue((trial / "client-binding-inspect.json").is_file())
         self.assertTrue((trial / "server-affinity.json").is_file())
 
@@ -242,7 +242,7 @@ class RunnerTests(unittest.TestCase):
         self.fake_client = mismatch
         self.assertEqual(self.execute()["status"], "FAIL")
         self.assertFalse(self.containers)
-        self.assertEqual(self.measurements, 0)
+        self.assertEqual(self.measurements, 1)
         self.assertFalse(report([self.root / "run"])["groups"])
         state = read_json(self.root / "run/cases/glm52-vllm/case.json")
         self.assertIn("CpusetCpus", state["error"])
@@ -271,12 +271,13 @@ class RunnerTests(unittest.TestCase):
         self.assertIn("original client launch error", read_json(case_dir / "case.json")["error"])
         self.assertTrue(list(case_dir.rglob("client-binding-error.json")))
 
-    def test_compilation_discards_measurement_and_rewarms(self):
+    def test_smoke_event_retries_full_round_without_extra_warmup(self):
         self.compile_once = True
         self.assertEqual(self.execute()["status"], "PASS")
         self.assertEqual(self.measurements, 2)
-        checks = read_json(self.root / "run/cases/glm52-vllm/trials/smoke-128-32/c0001/r01/measurement-checks.json")
-        self.assertEqual([x["accepted"] for x in checks["attempts"]], [False, True])
+        checks = read_json(self.root / "run/cases/glm52-vllm/trials/smoke-128-32/c0001/protocol.json")
+        self.assertEqual(checks["selected_rounds"], [2])
+        self.assertEqual(checks["warmups"], [])
 
     def test_client_timeout_preserves_logs_and_removes_containers(self):
         self.fail_client = True

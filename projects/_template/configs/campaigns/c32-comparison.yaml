@@ -4,7 +4,7 @@ id: template-c32-comparison
 target: targets/rtx6000d-48-baseline.yaml
 client: clients/vllm-bench-0.29.0.yaml
 workloads:
-- workloads/dsv4-8192-1024-c32-n128-repeat3.yaml
+- workloads/c32-quick.yaml
 cases:
 - id: vllm-autotune-off
   model: models/dsv4-flash-nvfp4.yaml

@@ -17,10 +17,9 @@ sampling:
   temperature: 0
   ignore_eos: true
 measurement:
-  warmup_requests: 8
+  protocol: jit_clean
   repetitions: 1
-  min_warmup_rounds: 2
-  max_warmup_rounds: 5
-  max_attempts: 2
+  max_rounds: 12
+  budget_s: 3600
   timeout_s: 1800
 cache: disabled
