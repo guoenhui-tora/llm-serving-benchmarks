@@ -138,7 +138,7 @@ def preflight(case: dict) -> dict:
         raise BenchError(f"Server CLI lacks configured options: {sorted(missing)}")
     from ..clients.vllm_bench import ENTRYPOINT, PREFIX, arguments
     client_help = inspect_cli(client_image["Id"], ENTRYPOINT, PREFIX, case["client"].get("environment", {}))
-    args = arguments(case, case["workloads"][0], 1, 1)
+    args = [arg for workload in case["workloads"] for arg in arguments(case, workload, 1, 1)]
     missing = {x[2:] for x in args if x.startswith("--")} - option_names(client_help)
     if missing:
         raise BenchError(f"Client CLI lacks required options: {sorted(missing)}")

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from .common import BenchError, read_json, write_json
 from .executors import affinity, docker
+from .clients.jsonl_dataset import validated_manifest
 
 
 def preflight(case):
@@ -64,10 +65,23 @@ def aggregate(directories: list[Path], expected: int, workload: dict) -> tuple[d
     if len(rows) != expected or any(not r["success"] for r in rows):
         raise BenchError("Synchronized request count/failure mismatch")
     d = workload["dataset"]
+    is_jsonl = d.get("name") == "jsonl"
+    if is_jsonl:
+        manifests = []
+        try:
+            for i, (directory, part) in enumerate(zip(directories, parts)):
+                evidence = validated_manifest(directory / "dataset-manifest.json", d, len(part), (i, len(parts), expected))
+                manifests.extend(evidence["requests"])
+                if [r["input_tokens"] for r in part] != [r["input_tokens"] for r in evidence["requests"]]:
+                    raise ValueError("Detailed JSONL input token count mismatch")
+            if len({r["id"] for r in manifests}) != expected:
+                raise ValueError("Duplicate JSONL request IDs across replicas")
+        except (OSError, ValueError) as exc:
+            raise BenchError(f"Invalid JSONL replica evidence: {exc}") from exc
     for row in rows:
-        if d["range_ratio"] == 0 and row["input_tokens"] != d["input_tokens"]:
+        if not is_jsonl and d["range_ratio"] == 0 and row["input_tokens"] != d["input_tokens"]:
             raise BenchError("Detailed input token count mismatch")
-        if workload["sampling"]["ignore_eos"] and d["range_ratio"] == 0 and row["output_tokens"] != d["output_tokens"]:
+        if workload["sampling"]["ignore_eos"] and (is_jsonl or d["range_ratio"] == 0) and row["output_tokens"] != d["output_tokens"]:
             raise BenchError("Detailed output token count mismatch")
         times = [row["ttft_s"], row["latency_s"], *row["itl_s"]]
         if any(type(v) not in (float, int) or not math.isfinite(v) or v < 0 for v in times) or row["latency_s"] < row["ttft_s"]:

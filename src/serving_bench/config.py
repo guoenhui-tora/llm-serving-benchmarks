@@ -8,6 +8,7 @@ from pathlib import Path
 
 import yaml
 
+from .clients.jsonl_dataset import read_records
 from .common import BenchError, fingerprint
 from .engines import get_engine
 from .engines.base import check_native
@@ -222,13 +223,24 @@ def validate_document(v: dict, kind: str) -> None:
             if "expect_regex" in p:
                 regex(p["expect_regex"])
     elif kind == "workload":
-        d = mapping(v["dataset"], "dataset", {"name", "input_tokens", "output_tokens"}, {"range_ratio"})
-        enum(d["name"], ["random"], "dataset.name")
-        for key in ("input_tokens", "output_tokens"):
-            integer(d[key], "dataset." + key)
-        number(d.setdefault("range_ratio", 0), "range_ratio")
-        if d["range_ratio"] > 1:
-            raise BenchError("range_ratio must be <=1")
+        d = v["dataset"]
+        mapping(d, "dataset", {"name"}, {"input_tokens", "output_tokens", "range_ratio", "path", "max_input_tokens", "sha256"})
+        enum(d["name"], ["random", "jsonl"], "dataset.name")
+        if d["name"] == "random":
+            mapping(d, "dataset", {"name", "input_tokens", "output_tokens"}, {"range_ratio"})
+            integer(d["input_tokens"], "dataset.input_tokens")
+            number(d.setdefault("range_ratio", 0), "range_ratio")
+            if d["range_ratio"] > 1:
+                raise BenchError("range_ratio must be <=1")
+        else:
+            mapping(d, "dataset", {"name", "path", "max_input_tokens", "output_tokens"}, {"sha256"})
+            relative(d["path"], "dataset.path (relative to project directory)")
+            if any(c in d["path"] for c in (":", ",", "\n")):
+                raise BenchError("dataset.path contains unsupported mount-path characters")
+            integer(d["max_input_tokens"], "dataset.max_input_tokens")
+            if "sha256" in d and (not isinstance(d["sha256"], str) or not re.fullmatch(r"[a-f0-9]{64}", d["sha256"])):
+                raise BenchError("dataset.sha256 must be 64 lowercase hex digits")
+        integer(d["output_tokens"], "dataset.output_tokens")
         t = mapping(v["traffic"], "traffic", {"concurrency", "requests", "request_rate"})
         if not isinstance(t["concurrency"], list) or not t["concurrency"]:
             raise BenchError("traffic.concurrency must be a nonempty list")
@@ -320,6 +332,28 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
     target = load(campaign["target"], "target")
     client = load(campaign["client"], "client")
     workloads = [load(ref, "workload") for ref in campaign["workloads"]]
+    dataset_paths = {}
+    for w in workloads:
+        d = w["dataset"]
+        if d["name"] != "jsonl":
+            continue
+        if client["version"] != "0.29.0":
+            raise BenchError("JSONL adapter requires the verified vLLM benchmark version 0.29.0")
+        dataset_path = (root.parent / d["path"]).resolve()
+        if not dataset_path.is_relative_to(root.parent):
+            raise BenchError("Dataset path escapes project directory")
+        absolute(str(dataset_path), "dataset resolved path")
+        try:
+            rows, digest = read_records(dataset_path, d["output_tokens"], d["max_input_tokens"], d.get("sha256"))
+        except (OSError, ValueError) as exc:
+            raise BenchError(f"{w['id']}: {exc}") from exc
+        required = w["traffic"]["requests"]
+        if w["measurement"]["protocol"] == "quick":
+            required = max(required, 2 * max(w["traffic"]["concurrency"]))
+        if len(rows) < required:
+            raise BenchError(f"{w['id']}: JSONL needs {required} rows, found {len(rows)}; no oversampling")
+        d["sha256"] = digest
+        dataset_paths[w["id"]] = str(dataset_path)
     if len({w["id"] for w in workloads}) != len(workloads):
         raise BenchError("Duplicate workload IDs")
     selected = set(case_ids or [c["id"] for c in campaign["cases"]])
@@ -332,6 +366,8 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
         case = {"id": spec["id"], "target": copy.deepcopy(target), "client": copy.deepcopy(client), "workloads": copy.deepcopy(workloads)}
         for kind in ("model", "runtime", "recipe"):
             case[kind] = load(spec[kind], kind)
+        if dataset_paths:
+            case["dataset_paths"] = dict(dataset_paths)
         compatible = case["recipe"]["compatible"]
         if compatible["engine"] != case["runtime"]["engine"]:
             raise BenchError(f"{case['id']}: recipe/runtime engine mismatch")
@@ -366,7 +402,7 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
             case["replicas"] = members
         max_len = min(get_engine(m["runtime"]["engine"]).validate(m) for m in members)
         for w in workloads:
-            if w["dataset"]["input_tokens"] + w["dataset"]["output_tokens"] > max_len:
+            if w["dataset"].get("max_input_tokens", w["dataset"].get("input_tokens")) + w["dataset"]["output_tokens"] > max_len:
                 raise BenchError(f"{case['id']}/{w['id']}: input+output exceeds context length")
             if case["recipe"]["mode"] == "smoke" and w["purpose"] != "smoke":
                 raise BenchError("A smoke recipe cannot run calibration/performance workloads")

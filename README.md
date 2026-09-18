@@ -2,7 +2,7 @@
 
 用同一套脚本在不同模型、镜像和硬件上运行可追溯的 serving 实验。框架负责启动、检查、压测和保存证据；每个项目独立固定配置与结论。
 
-当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。多台机器可以分别运行同一版本；尚未实现跨节点 SSH 编排和 PD 部署。
+当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。多台机器可以分别运行同一版本；尚未实现跨节点 SSH 编排和 PD 部署。随机负载和本地 [JSONL 真实文本负载](docs/configuration.md#jsonl-真实文本数据集)共用压测流程，后者支持实际 tokenizer 长度校验和双实例固定分片。
 
 ## 从哪里开始
 
@@ -50,6 +50,7 @@ python -m pip install -r requirements.txt
 ```text
 experiments/<项目>/         本地工作区，整体不进 Git、不进源码包
 ├── configs/                实验配置，包含候选和失败尝试
+├── datasets/               可选的本地JSONL数据集
 ├── results/                各次运行的日志、预热和原始指标
 └── reports/                实验记录、草稿和临时汇总
 
@@ -82,6 +83,8 @@ mkdir -p experiments/dsv4-rtx6000d/results experiments/dsv4-rtx6000d/reports
 cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-rtx6000d/configs
 ```
 
+使用 JSONL 时，将数据放入工作区 `datasets/`，workload 的 `dataset.path` 相对于工作区目录；归档时与 configs 一起复制。
+
 以上复制步骤只在工作区首次建立时执行；若 `configs/` 已存在，直接续用或另建工作区，不重复覆盖。先阅读该项目 README，再在工作区新增候选 recipe/campaign，保留已验证的基线。此时不必向 `projects/` 添加探索文件。
 
 ## 在工作区运行实验
@@ -113,7 +116,7 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 3. 启动命令从 `bench plan` 或实测产物导出，报告保存当次快照，不手工维护bash和YAML两套标准答案。命令示例与实际测量、当前协议与历史协议分别注明。
 4. 归档后执行validate/plan，核对命令、数字和相对链接。更新基线或精简旧配置时保留历史报告/CSV，原始结果另行备份；精确复现历史用报告记录的commit和运行配置。
 
-**只改变外层目录不会破坏配置引用。** 例如 campaign 中的 `recipe: recipes/tp4.yaml` 始终相对于所属 `configs/`，不是相对于仓库根目录或当前 shell。内部结构和文件内容不变时，从 `experiments/` 复制到 `projects/` 后，解析配置与缓存路径保持一致。
+**只改变外层目录不会破坏配置引用。** 例如 campaign 中的 `recipe: recipes/tp4.yaml` 始终相对于所属 `configs/`，不是相对于仓库根目录或当前 shell。内部结构和文件内容不变时，从 `experiments/` 复制到 `projects/` 后，服务参数、负载身份和缓存路径保持一致；本机JSONL挂载路径随项目位置更新。
 
 模型目录、target 地址和缓存根路径仍取自配置，换机器需要另行核对；改变内部文件名需同步修改引用，Markdown 链接也需检查。归档时不要依赖指向工作区的软链接。详细边界见 [仓库管理](docs/repository-management.md)。
 

@@ -1,7 +1,7 @@
 # 配置格式
 
 每类配置独立变化，全部使用 `schema_version: 1` 和对应 `kind`。未知字段、重复键、非有限数值、越界引用直接失败。
-实验工作区使用 `experiments/<项目>/configs/`，精选配置使用 `projects/<项目>/configs/`；两者都作为独立配置根。CLI 默认从 campaign 的父目录寻找名为 `configs` 的目录，也可用 `--config-root` 显式指定。路径引用统一相对于配置根目录。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
+实验工作区使用 `experiments/<项目>/configs/`，精选配置使用 `projects/<项目>/configs/`；两者都作为独立配置根。CLI 默认从 campaign 的父目录寻找名为 `configs` 的目录，也可用 `--config-root` 显式指定。配置文件之间的引用统一相对于配置根目录；JSONL数据路径相对于其上一级项目目录，见下文。可以使用子目录整理文件；程序不从文件名推断引擎、模型或硬件。
 
 ## Target
 
@@ -122,6 +122,34 @@ measurement:
 ```
 
 `requests`不小于最大并发；每轮使用此完整请求量，不自动乘4。输入+输出不得超过上下文。固定长度且ignore_eos时核对实际输入输出token总量。同case只启动一次服务，顺序执行负载、并发和轮次。
+
+### JSONL 真实文本数据集
+
+固定 vLLM 0.29.0 客户端支持 `name: jsonl`，服务端可为 vLLM 或 SGLang。将数据放在项目工作区，例如 `experiments/my-study/datasets/prompts.jsonl`，workload 中替换 dataset：
+
+```yaml
+dataset:
+  name: jsonl
+  path: datasets/prompts.jsonl
+  max_input_tokens: 9216
+  output_tokens: 1024
+```
+
+`path` **相对于 configs 的上一级项目目录**，不允许绝对路径、`..` 或越界软链接。归档时一起复制 `configs/` 和 `datasets/`，内部引用不变；也可在项目 `data/` 保存小数据集并使用 `path: data/prompts.jsonl`。`max_input_tokens` 是输入上限，不是截断目标；它与输出预算之和不得超过服务上下文。JSONL 不接受 random 的 `input_tokens`、`range_ratio`。
+
+每行一个对象，必填唯一字符串 `id` 和最终文本 `prompt`；可选正整数 `input_tokens`、`output_tokens`：
+
+```json
+{"id":"report-001","prompt":"Summarize the following report: ...","input_tokens":8037,"output_tokens":1024}
+```
+
+- prompt 原样用于 `/v1/completions`，不再套 chat 模板。需要角色标记或关闭 thinking 时，在准备数据时完成模型要求的编码。
+- 每轮按文件顺序取前 N 条，不随机打乱、循环补样本或截断。双实例对同一全局前 N 条交错分片：第0侧取0、2、4…，第1侧取1、3、5…。quick 预热取前2C条，正式轮取配置的 requests 条；每次重复使用相同请求集。
+- `validate/plan` 检查格式、数量及声明的长度；计算文件 SHA256 并纳入 workload 指纹。可选 `dataset.sha256` 可固定预期哈希；每轮客户端重新核对，运行中换文件会失败。
+- 客户端在计时前用实际 tokenizer 重新计算所选 prompt 长度（使用 `tokenizer(prompt)` 默认特殊 token 行为）。提供的 input_tokens 必须匹配；实际长度越界也会失败。output_tokens 若写在行内，必须与 workload 一致。
+- 每侧保存 `dataset-manifest.json`：文件哈希、选样顺序、请求 ID、实际输入长度和输出预算。验收核对成功数及输入总量；`ignore_eos: true` 时还要求输出总量恰好为请求数×预算，双实例另核对逐请求及整机总量。`ignore_eos: false` 允许自然结束，应单独比较。
+
+读取采用标准库 JSON，不需要在固定镜像里安装 pandas；保留官方 `CustomDataset.sample`、流式请求和计时实现。输入长度证据来自客户端真实 tokenizer，不是独立的服务端 tokenization 验证；换模型或 tokenizer 时仍需核对特殊 token 行为。日志 gate、三套压测协议和 random 负载保持原有语义。
 
 ### 新协议字段（版本1）
 

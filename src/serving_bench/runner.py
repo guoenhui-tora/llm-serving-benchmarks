@@ -52,7 +52,9 @@ def phase(case, workload, concurrency, count, directory, server, owner, facts):
             docker.remove_owned(name, owner)
     # These observations are outside the load generator's benchmark timer.
     docker.binding_evidence(case["target"], "server", server, owner, directory, live=True)
-    normalized = vllm_bench.normalize(directory / "raw.json", count, workload)
+    sync = case.get("_client_sync", {})
+    partition = (sync.get("index", 0), sync.get("replicas", 1), sync.get("global_requests", count))
+    normalized = vllm_bench.normalize(directory / "raw.json", count, workload, partition)
     time.sleep(1)  # Allow asynchronous server logs to flush before reading this phase's window.
     window = docker.server_logs(server, since=started)
     (directory / "server-window.log").write_text(window)

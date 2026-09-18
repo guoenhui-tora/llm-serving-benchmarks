@@ -20,6 +20,7 @@ CLI → config.resolve → resolved plan
 | `engines/` | 各引擎的命令入口、原生参数、并行资源和缓存语义、编译事件默认模式 |
 | `executors/docker.py` | 镜像、设备、挂载、CLI 检查、取证、容器所属运行及清理 |
 | `clients/vllm_bench.py` | 独立客户端命令和结果解析；输入输出协议不跟服务端镜像变化 |
+| `clients/jsonl_dataset.py` | 标准库JSONL读取、固定选样、实际tokenizer长度检查及请求清单；官方发送和计时不变 |
 | `checks/` | HTTP 协议检查及配置驱动的日志证据 |
 | `protocols.py` | 三套协议的轮次接纳、稳定性窗口、总预算及逐轮记录；不持有服务生命周期 |
 | `runner.py` | 顺序执行、预热、测量重试、运行状态、异常/中断恢复 |
@@ -53,6 +54,7 @@ runner 不判断模型名称，也不转换 vLLM/SGLang 参数。当前直接使
 
 旧单服务模式的随机负载由固定客户端根据 seed 和 tokenizer 生成；保存完整参数，不保存每条流式 token 事件，因此不能恢复合并请求后的分位数。
 显式replica_targets模式增加同步屏障、同一全局请求集的等分分片和逐请求/流式事件记录，可在一次整机测量内合并分位数；不合并不同重复。日志编译检查是启发式证据，不能代替 profiler 或稳定性统计。
+JSONL模式在计时前核对文件SHA256、实际tokenizer长度并保存每侧请求清单；按顺序取前N条，同步副本交错分片。文件哈希进入workload分组，项目整体移动不改变此身份。
 warmup 不清空 JIT 缓存；prefix/radix cache 则显式关闭。
 kernel warnings 保留在结果中；不能把未触发 forbidden 自动解释成所有优化均有效。
 
