@@ -26,7 +26,7 @@ TP4×DP2、EP on 的 C32/C64 吞吐较双 TP4 低21.70%／19.45%；TP2×DP4、EP
 
 ## 运行条件与实际参数
 
-复现入口为[节点47公共 campaign](../configs/campaigns/47-dsv4-node8.yaml)，统一规则见[项目任务说明](../README.md#2026-09-18八卡整机部署结果)。首批先复制公共 `configs/` 到独立工作区，五个配置均通过 validate、plan、固定镜像 CLI preflight；每个配置只启动一次，在同一服务生命周期内顺序处理 C32/C64 和三次重复。没有改公共源码、recipe、workload、gate 或宿主频率／功耗。
+复现入口为[节点47公共 campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/47-dsv4-node8.yaml)，统一规则见[项目任务说明](../README.md#2026-09-18八卡整机部署结果)。首批先复制公共 `configs/` 到独立工作区，五个配置均通过 validate、plan、固定镜像 CLI preflight；每个配置只启动一次，在同一服务生命周期内顺序处理 C32/C64 和三次重复。没有改公共源码、recipe、workload、gate 或宿主频率／功耗。
 
 - 本机：`gpu-6000d-47`，地址 `10.90.1.47`；8张 NVIDIA RTX 6000D，单卡85,651 MiB，驱动580.159.04，功耗上限600 W。启动前八卡无计算进程，Docker 无已有运行容器。
 - 执行 Git commit：`aacdc39f0862b82527753ce3ac5cbf0de94c1c68`，初始工作树干净。五次 run 的源码指纹均为 `edccf507e1246a4525a383ff4c4d3ce45a470378075bf3271922903c10020e34`，结束后重新核对源码及工作区全部配置哈希未变。
@@ -157,7 +157,7 @@ C32/C64吞吐CV分别0.47%/0.93%，均未超过3%的波动诊断门槛；仍保�
 本机原始产物仍位于 `experiments/dsv4-node8-node47/`，不随Git分发：
 
 - 新run-root：`results/jit-tp4-dp2-epoff-01`、`results/jit-tp2-dp4-epoff-01`；旧 `baseline-01`、`candidates-01` 至 `candidates-04` 原样保留。
-- 诊断配置：`configs/campaigns/47-dsv4-node8-jit-followup.yaml` 仅保留两个EP off case，在原workload列表前加入 `workloads/node8-jit-coverage-c64.yaml`。后者由原C64复制，改id为 `dsv4-node8-jit-coverage-c64`、purpose=calibration、warmup_requests=256、repetitions=1、max_warmup_rounds=6、max_attempts=1，其余字段保持原值。可据此从[公共campaign](../configs/campaigns/47-dsv4-node8.yaml)重建本地入口，原正式配置不覆盖。
+- 诊断配置：`configs/campaigns/47-dsv4-node8-jit-followup.yaml` 仅保留两个EP off case，在原workload列表前加入 `workloads/node8-jit-coverage-c64.yaml`。后者由原C64复制，改id为 `dsv4-node8-jit-coverage-c64`、purpose=calibration、warmup_requests=256、repetitions=1、max_warmup_rounds=6、max_attempts=1，其余字段保持原值。可据此从[公共campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/47-dsv4-node8.yaml)重建本地入口，原正式配置不覆盖。
 - `reports/jit-followup-01/` 保存启动前假设与预算、固定镜像源码副本、旧/新日志时间关联、缓存初始/增量/最终快照、完整进程观测、资源与逐请求审查、导出中间文件，以及初始/最终资源快照。
 
 复现时先按同样方法建立本地诊断配置、validate/plan及CLI preflight，核对资源后依次选择两个case，分别使用未存在的新run-root。不要把本机诊断路径当作随Git分发的正式recipe，也不要重用本次run-root。若需要改变服务参数、公共gate或测量协议，先交统一协调。
@@ -242,7 +242,7 @@ C64正式预热首轮还记录DP0四个worker首次使用普通MHC split22。预
 
 - `results/jit-tp4-dp2-epoff-extended-01/` 保存本次完整run、25阶段、拒绝尝试和完整服务日志。
 - `reports/jit-extended-01/` 保存 `budget.md`、本地配置plan/preflight、源码配置固定身份、缓存前后及增量观测、全程进程采样、`log-timeline.json`、`audit-final.json`／`audit-final.txt`、启动前和最终资源快照、旧CSV副本及空的正式导出CSV。
-- 从[公共campaign](../configs/campaigns/47-dsv4-node8.yaml)保留TP4×DP2 EP off一个case，按上文重建三份本地workload，可复现预算；正式service recipe和原workload文件保持原样。再次运行必须另选未存在的run-root。
+- 从[公共campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/47-dsv4-node8.yaml)保留TP4×DP2 EP off一个case，按上文重建三份本地workload，可复现预算；正式service recipe和原workload文件保持原样。再次运行必须另选未存在的run-root。
 
 结束后本次服务、客户端和两个观测任务均已停止，Docker运行容器、GPU计算进程为空，31248/31249端口空闲；只保留原有 `minimax-transfer` 会话。模型、镜像、历史结果及全部缓存保留。数字、逐请求、资源窗口、链接、旧CSV不变和清理结果自审后归档；不push。
 
@@ -297,6 +297,6 @@ CV的原始值为 **3.0145916604%**，略超过3%观察线，不能通过舍入�
 - `results/jit-tp4-dp2-epoff-c64-resume-01/`：同服务的三次C64有效测量、拒绝尝试、全程服务日志和最终清理；`continuation.json`关联旧run及同一容器身份。
 - `reports/jit-c64-quiet12-01/` 与 `reports/jit-c64-resume-01/`：原预算、用户调整、实际本地接续脚本、独立进程/缓存观测、联合 `audit-final.json`、`variance-diagnosis.json`、`residual-events.json`、导出与最终资源快照。原始workload id中的quiet12只记录创建来源，不表示最终完成了12轮安静。
 
-服务参数仍可从[公共campaign](../configs/campaigns/47-dsv4-node8.yaml)重建；本批正式C64负载仅以本地id和30轮预热上限区别于原C64，其他正式字段保持原值。上面的11轮覆盖与用户中途调整属于本次实际预热历程，应显式记录，不能承诺另一次启动复现相同事件序列或轮数。公共源码和已冻结配置没有在运行中修改。
+服务参数仍可从[公共campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/47-dsv4-node8.yaml)重建；本批正式C64负载仅以本地id和30轮预热上限区别于原C64，其他正式字段保持原值。上面的11轮覆盖与用户中途调整属于本次实际预热历程，应显式记录，不能承诺另一次启动复现相同事件序列或轮数。公共源码和已冻结配置没有在运行中修改。
 
 最终服务、客户端与所有本次观测／接续任务均停止，Docker运行容器及GPU计算进程为空，31248/31249端口空闲，仅保留原有 `minimax-transfer`。模型、镜像、缓存及所有历史证据保留。自审核对旧CSV的54行逐字保留、新增6行资格、总量、均值/标准差/CV、报告相对链接和其他节点状态；提交本节点报告、CSV与自己的完成标记，不push。

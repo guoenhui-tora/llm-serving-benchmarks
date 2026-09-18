@@ -37,11 +37,11 @@ vLLM 的 Graph 配置通过 `--compilation-config` 传入，字段为 `cudagraph
 
 **显存按实际 KV 字节预算对齐，相差约 0.7%。** 两个比例参数的语义不同，KV / 滑窗布局和调度实现也不同，因此不要求比例或逻辑 token 池计数相同。两边使用同一 PCIe 拓扑、GPU0–7 和容器 `SYS_NICE` 权限；SGLang 日志未再出现旧的 NUMA 亲和性权限警告。
 
-完整参数以 [vLLM recipe](../configs/recipes/vllm-sm120-aligned-final-cap32.yaml)、[SGLang autotune off recipe](../configs/recipes/sglang-sm120-aligned-final-cap32-noautotune.yaml)、[SGLang autotune on recipe](../configs/recipes/sglang-sm120-aligned-final-cap32-autotune.yaml) 为准。SGLang 两组仅 autotune 服务开关不同。它们是已实测的对照配置，不是官方最优配置。
+完整参数以 [vLLM recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/vllm-sm120-aligned-final-cap32.yaml)、[SGLang autotune off recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/sglang-sm120-aligned-final-cap32-noautotune.yaml)、[SGLang autotune on recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/sglang-sm120-aligned-final-cap32-autotune.yaml) 为准。SGLang 两组仅 autotune 服务开关不同。它们是已实测的对照配置，不是官方最优配置。
 
 ## 测试负载
 
-固定使用 [vLLM 0.29.0 压测客户端](../configs/clients/vllm-bench-0.29.0.yaml)，通过流式 `/v1/completions` 接口发送 random token 请求。
+固定使用 [vLLM 0.29.0 压测客户端](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/clients/vllm-bench-0.29.0.yaml)，通过流式 `/v1/completions` 接口发送 random token 请求。
 
 | 最大并发 | 输入 / 输出 tokens | 正式请求数 / 次 | 有效重复 | 每轮预热请求数 |
 | --- | --- | --- | --- | --- |

@@ -16,7 +16,7 @@
 
 ## 2. 运行条件与配置差异
 
-从[公共TP4 recipe](../configs/recipes/vllm-tp4-baseline.yaml)、[节点47 target](../configs/targets/rtx6000d-47-tp4-baseline.yaml)、[C32 workload](../configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)复制到本机独立工作区后派生，公共原文件未改。下表足以重建候选；探索配置和临时观测脚本继续仅保留本机，未批量归档。
+从[公共TP4 recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/vllm-tp4-baseline.yaml)、[节点47 target](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/targets/rtx6000d-47-tp4-baseline.yaml)、[C32 workload](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)复制到本机独立工作区后派生，公共原文件未改。下表足以重建候选；探索配置和临时观测脚本继续仅保留本机，未批量归档。
 
 | 配置 | 相对公共recipe的变化 | 环境变量变化 | GPU | 服务CPU / NUMA | 客户端CPU / NUMA |
 | --- | --- | --- | --- | --- | --- |
@@ -36,8 +36,8 @@ recipe的其他差异仅ID、描述及来源信息，campaign更新ID和引用�
 ### 工件与实际实现证据
 
 - Git commit：`c54734568603d1ef52f6ccc24ce7673768777c37`；runner源码指纹：`f5c33cf418ed84629e3786be4f4c7e651d66dccc3827e4226685a42e3361b583`。通用源码与公共配置未改；启动前本地tracked差异仅为前次节点47阻塞报告的README状态，完整diff和配置哈希保存在本机。实验期间执行源码和配置保持冻结。
-- 服务及客户端均为[固定runtime](../configs/runtimes/vllm-0.29.0.yaml)/[固定客户端](../configs/clients/vllm-bench-0.29.0.yaml)，image ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；没有拉取或换镜像。
-- [模型](../configs/models/dsv4-flash-nvfp4.yaml)的48个权重分片及所需文件核对通过；配置/tokenizer哈希与分片大小身份：`1e1b7e54442bcf7f15ef55192641b5c5da360bcaa608236aa0d06b273aedf8b4`。分片合计175,550,788,904字节，没有计算完整权重内容哈希。
+- 服务及客户端均为[固定runtime](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/runtimes/vllm-0.29.0.yaml)/[固定客户端](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/clients/vllm-bench-0.29.0.yaml)，image ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；没有拉取或换镜像。
+- [模型](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/models/dsv4-flash-nvfp4.yaml)的48个权重分片及所需文件核对通过；配置/tokenizer哈希与分片大小身份：`1e1b7e54442bcf7f15ef55192641b5c5da360bcaa608236aa0d06b273aedf8b4`。分片合计175,550,788,904字节，没有计算完整权重内容哈希。
 - 实际日志确认V2 Model Runner、`expert_dtype='fp4'`、`FLASHINFER_CUTLASS`、`FLASHINFER_MLA_SPARSE_DSV4`、`fp8_ds_mla`、关闭autotune及Graph捕获。EP4日志明确组大小4、每rank 64/256专家；EP8明确组大小8、每rank 32/256专家，均linear分配。NCCL版本2.30.7；这些是启动/配置路径证据，不是全部kernel或模型数值精度验证。
 - 四卡Docker inspect、worker/客户端线程允许集合检查通过；八卡Docker cpuset字段为空，额外保存服务、客户端和线程快照，观察到CPU0–127、NUMA0–3。实际worker NUMA映射并非全部本地：四卡末次测量快照约79%的worker映射页计数在NUMA2、约20%在NUMA3；八卡分布更分散。该计数可含共享映射，不能相加当作独占物理内存用量。
 

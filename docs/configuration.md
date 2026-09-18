@@ -110,9 +110,9 @@ dataset: {name: random, input_tokens: 8192, output_tokens: 1024, range_ratio: 0}
 traffic: {concurrency: [32], requests: 128, request_rate: inf}
 sampling: {seed: 0, temperature: 0, ignore_eos: true}
 measurement:
-  protocol: jit_clean
+  protocol: quick
   budget_s: 3600
-  max_rounds: 12
+  warmup_rounds: 1
   repetitions: 3
   timeout_s: 1800
 ```
@@ -123,24 +123,24 @@ measurement:
 
 | 字段 | 默认与约束 |
 | --- | --- |
-| `protocol` | 显式选择 `quick`、`jit_clean`、`stable`；新实验建议jit_clean |
+| `protocol` | 显式选择 `quick`、`jit_clean`、`stable`；新实验默认推荐quick；不省略此字段 |
 | `budget_s` | 必填正整数；每workload/并发的总秒数，不含服务启动与最终清理 |
-| `repetitions` | 默认3，整数≥3；quick正式轮数、jit_clean累计目标、stable连续窗口长度 |
+| `repetitions` | 性能/校准默认3且≥3；smoke的quick/jit_clean默认1且≥1；stable至少3。分别表示固定轮数、累计目标或窗口长度 |
 | `timeout_s` | 默认1800；单客户端阶段超时，实际还受剩余budget_s限制 |
 | `max_rounds` | jit_clean/stable默认12，必须≥repetitions；quick固定等于repetitions |
 | `warmup_rounds` | 仅quick接受，默认1，只允许1或2；每轮请求数自动为2×当前并发 |
 | `stability_threshold` | 仅stable接受，默认0.02；有限数，0<值≤1，0.01表示1% |
 
-quick保留全部正式样本及事件标记；jit_clean累计最先无已知事件的样本；stable检查连续窗口内output_throughput、mean_ttft_ms、mean_tpot_ms的相对极差均≤阈值。不接受新旧协议字段混写，也不允许把稳定性参数填到其他模式而静默忽略。
+quick保留全部正式样本及事件标记；jit_clean累计最先无已知事件的样本；stable检查连续窗口内output_throughput、mean_ttft_ms、mean_tpot_ms的相对极差均≤阈值。旧预热/重试字段已移除，必须完整替换measurement块；缺少protocol也会报错。不允许把稳定性参数填到其他模式而静默忽略。
 
 选择其他协议只需替换measurement块，例如：
 
 ```yaml
-# 快速初筛
+# 无已知编译事件验收
 measurement:
-  protocol: quick
-  budget_s: 1800
-  warmup_rounds: 1
+  protocol: jit_clean
+  budget_s: 3600
+  max_rounds: 12
 ```
 
 ```yaml
@@ -154,9 +154,11 @@ measurement:
 
 模板包含这三种C32 workload。预算是示例，运行前按模型和单轮耗时调整；不会自动重启、恢复或跨启动拼接。预算用尽标记PARTIAL；正常轮次边界可继续同服务的下一负载，预算中止了运行中的客户端时结束本case，避免残留请求干扰。故障按FAIL处理。完整资格与统计边界见[压测协议](benchmark-methodology.md)。
 
-### 旧协议兼容
+### 从旧配置切换
 
-没有protocol时，`measurement: {warmup_requests: 8, repetitions: 3}`保持原行为。可选min_warmup_rounds（连续安静轮数，默认2）、max_warmup_rounds（默认4）、max_attempts（默认2）、timeout_s（默认1800）。实际预热量取max(warmup_requests,并发)。此路径每次重复或重试前预热，不自动迁移历史配置。
+`warmup_requests`、`min_warmup_rounds`、`max_warmup_rounds`、`max_attempts`不再支持。整个measurement块替换为上面的三种模式之一；保留原负载、请求量和重复数，并明确总预算。当前仓库内配置已迁移，本地experiments不自动改写，使用前手动新增配置并validate。
+
+功能验证可用 `purpose: smoke` 配合 `protocol: jit_clean`、`repetitions: 1`，不强制测三次。历史结果不重新判定；需原样复现时使用报告记录的源码commit与配置快照。只读的旧结果汇总能力继续保留，不等于保留旧实验执行分支。
 
 ## Campaign
 
@@ -188,9 +190,9 @@ cases:
 
 GPU必须不重叠且并集等于整机target；服务和客户端各自的CPU、内存集合并集也必须等于整机预算。副本间CPU及API端口不得重叠，preflight另查跨副本SMT物理核重叠。每副本TP×PP×DP与其GPU数匹配；model路径、硬件声明、缓存根及本机地址必须一致。
 
-workload中的并发、请求数、预热请求数均为整机总量，须能被副本数整除。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
+workload中的并发、正式请求数均为整机总量，须能被副本数整除；quick的预热量自动取整机并发的两倍。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
 
-每个case将全部副本启动一次，顺序执行所有workload及轮次。每轮同步执行，任一侧事件都会计入整机事件。jit_clean/stable据此拒绝整轮；quick保留并标记。stable依据整机聚合指标判断，单副本明细仍保存；旧协议仍按原预热和重试规则执行。
+每个case将全部副本启动一次，顺序执行所有workload及轮次。每轮同步执行，任一侧事件都会计入整机事件。jit_clean/stable据此拒绝整轮；quick保留并标记。stable依据整机聚合指标判断，单副本明细仍保存；没有额外的旧预热/重试执行路径。
 
 各客户端在官方benchmark计时点同步起跑，保存同宿主monotonic时钟的 `benchmark-window.json`，同步就绪等待最多300秒（不超过客户端阶段超时），起跑偏差不得超过0.5秒。整机窗口为最早开始到最晚结束，不是客户端容器生命周期；吞吐按窗口总量计算。`requests.json`保存成功状态、输入输出tokens、TTFT、延迟和ITL，不保存生成文本。整机分位数由请求/事件合并计算；每次重复之间仍分别统计。
 

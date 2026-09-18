@@ -11,7 +11,7 @@ mkdir -p experiments/my-study/results experiments/my-study/reports
 cp -a projects/_template/configs experiments/my-study/configs
 ```
 
-只在首次建立工作区时复制，已有 configs 时不要重复覆盖。续接已有项目则复制对应 `projects/<项目>/configs/`，不用重新套模板。实验阶段在工作区修改配置、记录过程，形成结论后再建立或更新精选项目。运行前逐项核对：
+只在首次建立工作区时复制，已有 configs 时不要重复覆盖。续接已有项目则复制对应 `projects/<项目>/configs/`，不用重新套模板。实验阶段在工作区修改配置、记录过程，形成结论后再建立或更新精选项目；只保留基线与仍会复用的配置，不归档整个探索矩阵。运行前逐项核对：
 
 - target：本机地址、GPU 列表和型号、模型/缓存路径、端口及容器权限。
 - model/runtime：模型架构、量化、tokenizer、固定镜像 ID 和实际版本支持。
@@ -19,9 +19,9 @@ cp -a projects/_template/configs experiments/my-study/configs
 - workload：长度、全局并发、请求量和预热/重复上限。
 - probe/checks：模型的 thinking 参数、生成预期和实际日志证据。
 
-`functional.yaml` 使用两引擎的正式 serving recipe 做 128/32、C1 短验证，仍会完整加载模型并编译；它不是关闭优化的快速启动 recipe。`c32-comparison.yaml` 使用三套 recipe 测8192/1024、C32、128请求，默认采用 `jit_clean` 累计三轮无已知事件，最多12轮、每档3600秒预算。新协议与模板组合只做离线验证，尚无性能实测。
+`functional.yaml` 使用两引擎的正式 serving recipe 做 128/32、C1 短验证，仍会完整加载模型并编译；它不是关闭优化的快速启动 recipe。该功能workload使用jit_clean，只接纳1轮无事件完整测量。`c32-comparison.yaml` 使用三套 recipe 测8192/1024、C32、128请求，默认采用 `quick`：1轮64请求预热，再固定3轮128请求，保留JIT标记，每档1800秒预算。新协议与模板组合只做离线验证，尚无性能实测。
 
-同目录还提供 `workloads/c32-quick.yaml`（1轮64请求预热＋3轮128请求，预算1800秒）、`workloads/c32-stable.yaml`（连续3轮无事件且三项指标相对极差≤2%，最多12轮、3600秒）。在工作区复制campaign、修改id并替换workloads引用即可选择；不要把三套协议混合求平均。预算需按实际机器核对，C64需新增256请求的workload，不能直接复用C32请求量。
+同目录还提供 `workloads/dsv4-8192-1024-c32-n128-repeat3.yaml`（jit_clean，累计3轮无已知事件，最多12轮、3600秒）、`workloads/c32-stable.yaml`（连续3轮无事件且三项指标相对极差≤2%，最多12轮、3600秒）。在工作区复制campaign、修改id并替换workloads引用即可选择；不要把三套协议混合求平均。预算需按实际机器核对，C64需新增256请求的workload，不能直接复用C32请求量。
 
 ## 验证和执行
 
@@ -38,6 +38,6 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 
 工作区 `configs/` 中的引用均相对于它自身。原始日志和指标放 `experiments/my-study/results/<run-id>/`，草稿放 `experiments/my-study/reports/`；整体不进 Git。具体 run 目录由执行器创建，不要预先创建。
 
-阶段完成后，将选定配置及完整依赖复制到 `projects/my-study/configs/`，精选报告放 `reports/`，小型数据放 `data/`，编写项目 README 后提交。保留 configs 内部结构，归档后再 validate/plan；完整过程见 [目录管理](../../docs/repository-management.md)。原始结果留在工作区，不复制模板或其他项目的性能结论。
+阶段完成后，将当前基线和继续研究的少量配置及完整依赖复制到 `projects/my-study/configs/`，精选报告放 `reports/`，小型数据放 `data/`，编写项目 README 后提交。保留 configs 内部结构，归档后再 validate/plan；完整过程见 [目录管理](../../docs/repository-management.md)。原始结果留在工作区，不复制模板或其他项目的性能结论。
 
 通用要求见 [实验方法](../../docs/benchmark-methodology.md)、[引擎对比](../../docs/engine-comparison.md) 和 [仓库管理](../../docs/repository-management.md)。

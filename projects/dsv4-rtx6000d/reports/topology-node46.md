@@ -12,7 +12,7 @@ prefill 4096单次吞吐924.61 tokens/s，比8192均值低15.92%；mean TTFT更�
 
 ## 2. 运行条件与配置差异
 
-复现从[公共TP4 recipe](../configs/recipes/vllm-tp4-baseline.yaml)、[节点46 target](../configs/targets/rtx6000d-46-tp4-baseline.yaml)、[公共C32 workload](../configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)及[节点46 campaign](../configs/campaigns/46-dsv4-vllm-tp4-baseline.yaml)派生。公共配置保留原文，探索配置仅留在本机；下表列出全部运行参数差异。
+复现从[公共TP4 recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/vllm-tp4-baseline.yaml)、[节点46 target](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/targets/rtx6000d-46-tp4-baseline.yaml)、[公共C32 workload](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)及[节点46 campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/46-dsv4-vllm-tp4-baseline.yaml)派生。公共配置保留原文，探索配置仅留在本机；下表列出全部运行参数差异。
 
 | 配置 | GPU顺序 | TP/PP/DP/EP | 相对公共TP4的改动 | 有效重复 |
 | --- | --- | --- | --- | ---: |
@@ -31,7 +31,7 @@ prefill 4096单次吞吐924.61 tokens/s，比8192均值低15.92%；mean TTFT更�
 
 - Git commit：`c54734568603d1ef52f6ccc24ce7673768777c37`。恢复时已有前次本节点阻塞报告、CSV及README状态变更；本轮未改公共源码或归档配置，也未commit/push。
 - runner源码指纹：`f5c33cf418ed84629e3786be4f4c7e651d66dccc3827e4226685a42e3361b583`，八次run全程一致；运行前后配置SHA256核对一致。
-- 服务和客户端image ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；固定[vLLM runtime](../configs/runtimes/vllm-0.29.0.yaml)与[客户端](../configs/clients/vllm-bench-0.29.0.yaml)，未拉取或更换镜像。
+- 服务和客户端image ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；固定[vLLM runtime](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/runtimes/vllm-0.29.0.yaml)与[客户端](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/clients/vllm-bench-0.29.0.yaml)，未拉取或更换镜像。
 - 模型身份：`1e1b7e54442bcf7f15ef55192641b5c5da360bcaa608236aa0d06b273aedf8b4`；48个分片、175,550,788,904字节，配置/tokenizer哈希及分片大小一致，不等同于全部权重内容校验和。
 - 节点为8×RTX6000D，每卡85,651 MiB，驱动580.159.04、功耗上限600 W；未修改宿主功耗、频率或SMT设置。
 

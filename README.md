@@ -18,17 +18,19 @@
 
 ## 压测协议
 
-默认研究目标是预热后的持续 serving 性能。新实验建议使用 `jit_clean`；根据目的也可选快速初筛或稳定性确认：
+默认研究目标是预热后的持续 serving 性能。新实验默认推荐 `quick`，先用固定成本筛选；需要排除已知编译事件或确认稳定性时再选择其他协议：
 
 | 协议 | 运行和接纳规则 | 用途 |
 | --- | --- | --- |
-| `quick` | 1轮2C请求预热，再固定3轮正式测量；保留并标注JIT事件 | 快速初筛，不保证无JIT |
-| `jit_clean` | 每轮完整正式负载，累计最先通过检查的3轮 | 默认的配置、拓扑比较 |
+| `quick` | 1轮2C请求预热，再固定3轮正式测量；保留并标注JIT事件 | 默认的配置、拓扑初筛，不保证无JIT |
+| `jit_clean` | 每轮完整正式负载，累计最先通过检查的3轮 | 重点候选的无已知编译事件对比 |
 | `stable` | 每轮完整负载，首次连续3轮无已知事件，且吞吐、Mean TTFT、Mean TPOT相对极差均≤2% | 重点候选稳定性确认 |
+
+**无已知编译事件不等于性能稳定。** DSV4中部分通过事件检查的配置，吞吐CV仍约3%–10%。因此默认用quick筛选，需要稳定窗口时用stable；jit_clean仅用于明确要求排除已知编译事件的对照，不是必经步骤。依据和边界见[协议选择经验](docs/benchmark-methodology.md#为什么默认用quick)。
 
 一次启动完成同配置的所有轮次；JIT事件不触发重启。后两种最多12轮，所有新协议必须显式设置每档负载的时间预算。OOM、请求失败或工作量错误单独按故障处理。三个协议的PASS含义不同，不能混合统计；资源背景仍需人工审阅。
 
-完整规则、统计边界及产物见[压测协议](docs/benchmark-methodology.md)，字段见[配置说明](docs/configuration.md#workload)。模板提供三种C32 workload。既有归档配置未指定 `protocol` 时继续执行旧流程，历史结果不重新解释。
+完整规则、统计边界及产物见[压测协议](docs/benchmark-methodology.md)，字段见[配置说明](docs/configuration.md#workload)。模板提供三种C32 workload。当前配置必须显式指定 `protocol`，不再保留旧预热/重试执行分支。历史数据按当时协议解释，精确复现使用报告记录的Git版本。
 
 ## 安装
 
@@ -53,7 +55,7 @@ experiments/<项目>/         本地工作区，整体不进 Git、不进源码�
 
 projects/<项目>/            精选成果，提交 Git
 ├── README.md               项目目标、当前结论与后续计划
-├── configs/                可复现结论的配置及完整依赖
+├── configs/                当前基线、仍需复用的候选及公共依赖
 ├── reports/                精选报告
 └── data/                   小型逐次数据与统计
 
@@ -104,11 +106,12 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 
 ## 把精选成果归档到 projects
 
-实验完成并核对数据后，再做以下整理：
+**projects以报告和精选数据为主，configs不是实验历史仓库。**
 
-1. 将选定 campaign 及其引用的 recipe、workload、target、model、runtime、client 和所需 logging 文件复制到 `projects/<项目>/configs/`，保留它们在 `configs/` 内的相对路径。已有项目只补充本轮选定配置，不整体覆盖旧基线。
-2. 将结论整理到项目 `reports/`，逐次小型数据放 `data/`，更新项目 README。报告链接应指向项目内随 Git 分发的文件；仅本机存在的原始日志路径要明确标注。
-3. 对归档后的 campaign 再运行 `validate`、`plan`，核对参数和报告链接后提交。完整原始结果继续在工作区保留并另行备份，不整个复制进 Git。
+1. 报告直接写结论、完整启动命令、镜像身份、绑定与环境、客户端负载、压测协议和结果。读者不必翻多个YAML才能理解实验；启动命令本身不能确定性能。
+2. configs只保留当前推荐基线和仍需复用的少量候选，携带完整依赖。相同服务参数共用recipe，节点差异在本地target填写；已结束矩阵、失败尝试和补测配置留在experiments或Git历史，不全部上传。
+3. 启动命令从 `bench plan` 或实测产物导出，报告保存当次快照，不手工维护bash和YAML两套标准答案。命令示例与实际测量、当前协议与历史协议分别注明。
+4. 归档后执行validate/plan，核对命令、数字和相对链接。更新基线或精简旧配置时保留历史报告/CSV，原始结果另行备份；精确复现历史用报告记录的commit和运行配置。
 
 **只改变外层目录不会破坏配置引用。** 例如 campaign 中的 `recipe: recipes/tp4.yaml` 始终相对于所属 `configs/`，不是相对于仓库根目录或当前 shell。内部结构和文件内容不变时，从 `experiments/` 复制到 `projects/` 后，解析配置与缓存路径保持一致。
 

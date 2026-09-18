@@ -70,7 +70,7 @@ TileLang 缓存由 **110 增至 115 个文件**：一个新 kernel 目录的四�
 
 ### 补测 02 条件与实际改变
 
-继续使用[公共 campaign 的服务配置](../configs/campaigns/48-dsv4-node8.yaml)。执行 commit 为 `c905e4f`，开始时工作树干净；runner 源码指纹仍为 `edccf507e1246a4525a383ff4c4d3ce45a470378075bf3271922903c10020e34`。固定镜像 ID、权重/tokenizer 身份、recipe、CPU/GPU/NUMA 绑定、客户端、服务参数及日志 gate 与首批一致，已逐字段核验；具体固定值见下文首批记录。
+继续使用[公共 campaign 的服务配置](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-node8.yaml)。执行 commit 为 `c905e4f`，开始时工作树干净；runner 源码指纹仍为 `edccf507e1246a4525a383ff4c4d3ce45a470378075bf3271922903c10020e34`。固定镜像 ID、权重/tokenizer 身份、recipe、CPU/GPU/NUMA 绑定、客户端、服务参数及日志 gate 与首批一致，已逐字段核验；具体固定值见下文首批记录。
 
 **唯一执行配置变化是本地 C64 的每轮计时外预热请求数由 128 改为 256，与正式完整请求集对齐。** C32 仍为预热 64／测量 128；C64 测量仍为 256。8192 输入／1024 输出、seed0、并发、三次重复、连续两轮无已知事件、最多五轮预热／两次测量尝试全部不变。没有修改公共 runner、gate、正式 recipe、镜像源码或服务环境；没有屏蔽 warning。两次新启动均保留全部旧 JIT 缓存。
 
@@ -156,7 +156,7 @@ TP2×PP4 TileLang 缓存由 100 增至 110 个文件，新增两个 kernel 缓�
 
 ### 运行条件与实际参数
 
-配置入口为[本节点 campaign](../configs/campaigns/48-dsv4-node8.yaml)，完整统一协议见[项目 README](../README.md)。本轮原样复制公共 configs 到实验工作区，未修改公共代码或运行配置；以下是实测条件，不能与历史未绑定八卡结果合并。
+配置入口为[本节点 campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-node8.yaml)，完整统一协议见[项目 README](../README.md)。本轮原样复制公共 configs 到实验工作区，未修改公共代码或运行配置；以下是实测条件，不能与历史未绑定八卡结果合并。
 
 | 项目 | 固定条件及核验 |
 | --- | --- |

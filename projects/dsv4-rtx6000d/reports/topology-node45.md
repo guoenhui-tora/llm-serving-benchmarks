@@ -22,7 +22,7 @@
 
 ## 2. 运行条件与配置差异
 
-复现起点为 [TP4 recipe](../configs/recipes/vllm-tp4-baseline.yaml)、[C32 workload](../configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)、[45 target](../configs/targets/rtx6000d-45-tp4-baseline.yaml)、[基线 campaign](../configs/campaigns/45-dsv4-vllm-tp4-baseline.yaml)、[runtime](../configs/runtimes/vllm-0.29.0.yaml)和[客户端](../configs/clients/vllm-bench-0.29.0.yaml)。在工作区复制后派生候选，公共配置保留原样。
+复现起点为 [TP4 recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/vllm-tp4-baseline.yaml)、[C32 workload](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)、[45 target](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/targets/rtx6000d-45-tp4-baseline.yaml)、[基线 campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/45-dsv4-vllm-tp4-baseline.yaml)、[runtime](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/runtimes/vllm-0.29.0.yaml)和[客户端](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/clients/vllm-bench-0.29.0.yaml)。在工作区复制后派生候选，公共配置保留原样。
 
 | 配置 | 相对公共TP4的recipe变化 | Target与环境 |
 | --- | --- | --- |

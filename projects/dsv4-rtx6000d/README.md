@@ -6,7 +6,19 @@
 
 追求更高吞吐，优先继续研究**双 TP2×PP2**和**双 TP2×DP2＋EP**：C64分别为1663.93 ± 74.85、1620.37 ± 17.99 tok/s，较各自本机双TP4提高16.50%／13.45%。前者CV为4.50%，后者1.11%；两者跨节点、均值只差2.69%，尚未分出可靠胜负。所有结论限定本轮普通推理，不直接代表PD分离或投机解码收益。
 
-后续实验按[通用压测协议](../../docs/benchmark-methodology.md)选择quick、jit_clean或stable；本页已归档结果仍按各批原协议解释。新协议已做离线与模拟服务回归，尚未在本项目上实测。续接时复制配置到experiments并新增workload/campaign，不覆盖历史基线。
+## 当前可复用入口
+
+报告和CSV保存研究结论；configs只维护下面三个入口及其依赖，不再为历史矩阵或每个节点复制配置。
+
+| 入口 | 用途 |
+| --- | --- |
+| [tp4.yaml](configs/campaigns/tp4.yaml) | GPU4–7独占TP4，C32 |
+| [dual-tp4.yaml](configs/campaigns/dual-tp4.yaml) | 八卡双TP4公共基线，整机C32/C64 |
+| [dual-candidates.yaml](configs/campaigns/dual-candidates.yaml) | 双TP2×PP2、双TP2×DP2 EP on，后续重点复核 |
+
+单TP4与双TP4共用[同一份服务recipe](configs/recipes/tp4.yaml)。三个target只表达整机、前四卡、后四卡；当前地址为48，其他节点在experiments中修改本机地址并核实映射，不另归档四份相同配置。完整启动命令、CPU绑定、负载和历史入口见[基线与复现](reports/reproduction.md)。
+
+当前workload显式采用 `quick`（1轮2C预热＋3轮正式测量，保留事件标记），新协议组合仅做离线验证；下方历史结果仍使用当时的预热和验收规则，不是新协议的实测。探索配置、全部原始结果留在experiments；只有选定基线和将继续研究的配置进入projects。
 
 ## 2026-09-18：八卡整机部署结果
 
@@ -110,6 +122,12 @@
 
 46还发现Triton产物位于容器 `/root/.triton/cache`，现有持久挂载为 `/root/.cache`，未覆盖该路径。保留JIT缓存不能理解为所有编译产物都跨容器持久化；本轮未改挂载。这是后续公共修复候选，与当前吞吐统计分开处理。
 
+### 无事件测量仍有波动
+
+**通过JIT事件检查，不代表性能稳定。** 47的TP4×DP2 EP off在下午C64补测前完成11轮覆盖预热，之后仍执行原验收流程；最终三次无已知事件测量的吞吐为878.47 ± 26.48 tok/s，CV为3.01%。46的双TP2×DP2 EP on在C32同样通过事件检查，CV仍为10.11%。详见[47节点报告](reports/node8-node47.md)和[46节点报告](reports/node8-node46.md)。额外预热解决了事件验收阻塞，但没有消除重复波动，根因尚未确定。
+
+后续默认用quick控制筛选成本；需要稳定窗口时用stable，明确要求排除已知编译事件时才用jit_clean，不要求逐级执行。选择依据和限制统一见[通用压测协议](../../docs/benchmark-methodology.md#为什么默认用quick)。本批历史数据和验收结论保持原样，不改标为新协议结果。
+
 ### 比较边界与运行条件
 
 四节点报告均未发现本批矿工恢复，按约定保留DOCA背景；CPU绑定不会排除背景线程及其SMT竞争。GPU低频采样未见持续热降频，不能排除瞬时干扰。部分PP/DP配置在测量无已知JIT、无明确抢占的情况下仍有较大波动、双实例尾段或DP coordinator warning，根因尚未唯一定位；所有慢样本均保留。
@@ -160,30 +178,11 @@
 
 服务与客户端镜像均为 `vllm/vllm-openai:v0.29.0`，image ID为 `sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`。首批执行commit为 `aacdc39f0862b82527753ce3ac5cbf0de94c1c68`，补测commit见节点报告；公共runner源码指纹始终为 `edccf507e1246a4525a383ff4c4d3ce45a470378075bf3271922903c10020e34`。模型元数据/tokenizer及分片大小身份一致，未全量重算权重内容哈希。47的本地接续控制器另存指纹，不将其等同于原campaign直接运行。
 
-| 节点 | 公共campaign |
-| --- | --- |
-| 45 | [45-dsv4-node8.yaml](configs/campaigns/45-dsv4-node8.yaml) |
-| 46 | [46-dsv4-node8.yaml](configs/campaigns/46-dsv4-node8.yaml) |
-| 47 | [47-dsv4-node8.yaml](configs/campaigns/47-dsv4-node8.yaml) |
-| 48 | [48-dsv4-node8.yaml](configs/campaigns/48-dsv4-node8.yaml) |
+本批已结束，四节点完整矩阵配置见[固定版本快照](https://github.com/guoenhui-tora/llm-serving-benchmarks/tree/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns)。各节点报告保留参数差异、补测预热修改和执行commit；精确复现时使用对应源码及配置，不将当前quick入口当作历史验收协议。
 
-公共campaign保留首批参数。复现补测时，在新的本地工作区按上面批次表及节点报告重建预热差异，不能把原campaign直接称为最终补测入口。每份报告已记录具体本地负载修改和运行边界，未复制多套公共配置。
+当前继续研究使用上方三个入口，按[工作区说明](../../README.md#先建立本地实验工作区)复制到experiments，再核对资源、镜像和绑定。原始日志、预热、拒绝尝试及遥测仍在各节点本机保留；未删除历史结果或JIT缓存。
 
-以48的双TP4首批配置为例，从仓库根目录执行；复现 `baseline-02` 时另建C64 workload，将预热请求改为256并更新campaign引用：
-
-```bash
-mkdir -p experiments/dsv4-node8-reproduce/results experiments/dsv4-node8-reproduce/reports
-cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-node8-reproduce/configs
-./bench validate experiments/dsv4-node8-reproduce/configs/campaigns/48-dsv4-node8.yaml
-./bench plan experiments/dsv4-node8-reproduce/configs/campaigns/48-dsv4-node8.yaml
-./bench preflight experiments/dsv4-node8-reproduce/configs/campaigns/48-dsv4-node8.yaml --case dual-tp4
-./bench run experiments/dsv4-node8-reproduce/configs/campaigns/48-dsv4-node8.yaml \
-  --case dual-tp4 --run-root experiments/dsv4-node8-reproduce/results/baseline-01
-```
-
-先按[工作区说明](../../README.md#先建立本地实验工作区)和[实验方法](../../docs/benchmark-methodology.md)检查本机资源、镜像和绑定，已有工作区不覆盖，run-root必须新建。原始日志、预热、拒绝尝试及遥测仅在各节点本机 `experiments/` 保留，节点报告注明位置；四台均报告已清理本次容器、保留模型与缓存。
-
-每节点仍只归档一份报告和一份CSV。公共report/export默认只导出最终PASS case；47的C32独立接纳是本次显式复核，不修改原始状态或公共gate。合并不同CSV按列名读取：47新增来源、资格和更多延迟列，其他文件未提供的字段留空，不补零。用于本页对照的主要指标四份均齐全。
+每节点仍只归档一份报告和一份CSV。本批归档时，report/export默认只导出最终PASS case；47的C32独立接纳是本次显式复核，没有修改原始状态或当时的gate。合并不同CSV按列名读取：47新增来源、资格和更多延迟列，其他文件未提供的字段留空，不补零。用于本页对照的主要指标四份均齐全。
 
 ## 2026-09-17：四节点单服务拓扑结果
 
@@ -314,34 +313,13 @@ CPU编号为宿主逻辑ID，每物理核只用一个线程；SMT兄弟为该ID�
 
 上述规则限制本次进程，**不独占这些CPU**。启动后需检查 Docker inspect、worker/client线程允许集合，并用 `numa_maps` 等观察页面分布；内存允许集合不证明全部页面本地驻留。具体字段见[绑定配置](../../docs/configuration.md#cpu--numa-绑定)。
 
-### 准备本机配置
+### 配置入口
 
-公共起点为 [TP4 recipe](configs/recipes/vllm-tp4-baseline.yaml) 和 [C32三次 workload](configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)。配置保留实验时原文；recipe中的待验证描述是准备时状态，实际验收以本轮报告为准。各候选的参数差异、GPU顺序和实际rank映射在节点报告中完整记录，探索文件仅留本机。
-
-| 节点 | 公共 Campaign | 候选参数差异 |
-| --- | --- | --- |
-| 45 | [45-dsv4-vllm-tp4-baseline.yaml](configs/campaigns/45-dsv4-vllm-tp4-baseline.yaml) | [TP8、DP2 EP off/on](reports/topology-node45.md#2-运行条件与配置差异) |
-| 46 | [46-dsv4-vllm-tp4-baseline.yaml](configs/campaigns/46-dsv4-vllm-tp4-baseline.yaml) | [TP8、TP4×PP2、TP2×PP4](reports/topology-node46.md#2-运行条件与配置差异) |
-| 47 | [47-dsv4-vllm-tp4-baseline.yaml](configs/campaigns/47-dsv4-vllm-tp4-baseline.yaml) | [TP8、EP4/EP8](reports/topology-node47.md#2-运行条件与配置差异) |
-| 48 | [48-dsv4-vllm-tp4-baseline.yaml](configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml) | [前四卡TP4、后四卡TP2×PP2](reports/topology-node48.md#2-运行条件与配置差异) |
-
-以48为例，先读根 AGENTS/README及[实验方法](../../docs/benchmark-methodology.md)，在新的本机工作区复制配置；已有工作区不要覆盖。以下只演示公共参照入口，候选另建recipe/target/campaign，保持内部相对引用：
-
-```bash
-mkdir -p experiments/dsv4-topology-node48-followup/results experiments/dsv4-topology-node48-followup/reports
-cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-topology-node48-followup/configs
-./bench validate experiments/dsv4-topology-node48-followup/configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml
-./bench plan experiments/dsv4-topology-node48-followup/configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml
-./bench preflight experiments/dsv4-topology-node48-followup/configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml
-./bench run experiments/dsv4-topology-node48-followup/configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml \
-  --run-root experiments/dsv4-topology-node48-followup/results/tp4-baseline-01
-```
-
-运行前核实整机 GPU空闲、CPU后台负载、目标NUMA内存压力及固定镜像CLI。每个新服务先做health/models和关闭thinking的简短中文探测；运行期间冻结代码/配置。吞吐CV超过3%时先诊断，不丢慢样本；OOM、不支持、超时或资源冲突取证后停止相关候选，不无限重试。复测需另建run-root，与本轮历史结果分开统计。
+本节描述2026-09-17历史实验。各候选的参数差异、GPU顺序和rank映射见节点报告，完整配置见[历史快照](https://github.com/guoenhui-tora/llm-serving-benchmarks/tree/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs)。当前继续研究的TP4命令及配置入口统一放在[基线与复现](reports/reproduction.md)，不再保留四份节点campaign。
 
 ### 归档规则
 
-每节点保留一个 `reports/topology-nodeNN.md` 和一个 `data/topology-nodeNN.csv`，报告说明差异、结果、异常并链接CSV；README整合结论。后续新批次使用新的主题文件名，不覆盖本批逐次数据。原始日志、预热、拒绝尝试、探索配置及临时脚本继续放本机 `experiments/`，不批量上传。公共配置和节点差异足以重建本轮配置；最终选定的部署配置再精选归档，保留完整依赖并validate/plan。
+每节点保留一个 `reports/topology-nodeNN.md` 和一个 `data/topology-nodeNN.csv`，报告说明差异、结果、异常并链接CSV；README整合结论。后续新批次使用新的主题文件名，不覆盖本批逐次数据。原始日志、预热、拒绝尝试、探索配置及临时脚本继续放本机 `experiments/`，不批量上传。报告写明实际命令、负载和验收规则；configs只保留当前基线及仍需复用的候选，并携带完整依赖。历史候选不逐项复制配置到当前目录。
 
 ## 前期实验：镜像选择与双服务对照
 
@@ -357,7 +335,7 @@ cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-topology-node48-followup/c
 | 已知问题 | [排查记录](reports/lessons.md) |
 | RTX6000D通信测量 | [互联报告](reports/interconnect.html) |
 
-`configs/` 同时保留三套TP8 recipe及其依赖：完整对比入口为`48-dsv4-aligned-final-c16-c32.yaml`，仅vLLM C32为`48-dsv4-vllm-baseline-c32.yaml`；`48-dsv4-functional.yaml`是已离线检查、尚未实机运行该负载的短验证入口。
+TP8对比已经完成，参数与结果保留在报告，原三套recipe及campaign见[固定版本配置](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-aligned-final-c16-c32.yaml)。它们不再作为当前基线重复维护。
 
 ### TP4 四节点结果
 

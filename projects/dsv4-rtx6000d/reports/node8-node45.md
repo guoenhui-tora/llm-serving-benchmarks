@@ -10,7 +10,7 @@
 
 ## 运行条件与实际参数
 
-本轮直接复制并使用[节点45公共campaign](../configs/campaigns/45-dsv4-node8.yaml)及其完整依赖，没有修改recipe、workload或公共源码。协议见[项目README的八卡整机部署对照](../README.md#2026-09-18八卡整机部署结果)。本报告与此前晨间单服务拓扑实验独立统计。
+本轮直接复制并使用[节点45公共campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/45-dsv4-node8.yaml)及其完整依赖，没有修改recipe、workload或公共源码。协议见[项目README的八卡整机部署对照](../README.md#2026-09-18八卡整机部署结果)。本报告与此前晨间单服务拓扑实验独立统计。
 
 | 项目 | 本次固定值或证据 |
 | --- | --- |

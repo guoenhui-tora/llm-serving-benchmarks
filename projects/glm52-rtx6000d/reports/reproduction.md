@@ -1,5 +1,8 @@
 # 基线复现
 
+当前configs保留三套精选服务参数，workload已统一改为quick；下面命令用于新一轮对照，不是旧验收协议的逐字复现。历史结果不变，旧配置见[固定版本](https://github.com/guoenhui-tora/llm-serving-benchmarks/tree/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/glm52-rtx6000d/configs)，精确复现需同时使用报告记录的执行源码。
+
+
 本页复现三套配置：vLLM autotune off、SGLang autotune off/on；每套 C16 / C32 各三次。性能结果来自旧仓库两轮实测，新仓库将它们整理为一个顺序执行的 campaign，未重新测量。
 
 ## 环境与固定条件
@@ -8,7 +11,7 @@
 
 target 保留 `SYS_NICE`。SGLang 调度进程的 CPU 允许集合与 GPU 所在 NUMA 对应；未完整验证所有线程及内存页放置，也未单独采集 vLLM 每个 worker 的亲和性。正式采样最高温度不超过 60℃，未观察到外来 GPU 计算任务；低频遥测不能排除瞬时 CPU/I/O 干扰。
 
-固定权重 `/data/models/GLM-5.2-NVFP4` 和同目录 tokenizer；镜像及实际参数见 [选型报告](image-selection.md)。C16 每次正式 64 请求、每轮预热 32；C32 分别为 128、64。每次测量前至少连续两轮无已知编译事件，最多五轮预热、两次测量尝试；这些条件均保留在 workload 中。
+固定权重 `/data/models/GLM-5.2-NVFP4` 和同目录 tokenizer；镜像及实际参数见 [选型报告](image-selection.md)。历史实验中，C16 每次正式 64 请求、每轮预热 32；C32 分别为 128、64。每次测量前至少连续两轮无已知编译事件，最多五轮预热、两次测量尝试。当前 workload 保留正式请求量，改用1轮2C请求预热，再固定3轮正式测量并保留事件标记；每档预算上限7200秒，完成固定轮数即结束。
 
 ## 准备与运行
 
@@ -31,15 +34,15 @@ python3 scripts/prepare_logging.py experiments/glm52-rtx6000d/configs/campaigns/
   --run-root experiments/glm52-rtx6000d/results/reproduction-01
 ```
 
-`--run-root` 必须是尚不存在的新目录。可用 `--case vllm-autotune-off`、`--case sglang-autotune-off` 或 `--case sglang-autotune-on` 选择单组。runner 顺序启动服务，分别完成 health、models、关闭 thinking 的中文探测、预热及测量。
+`--run-root` 必须是尚不存在的新目录。可用 `--case vllm-autotune-off`、`--case sglang-autotune-off` 或 `--case sglang-autotune-on` 选择单组。runner 顺序启动服务，分别完成 health、models、关闭 thinking 的中文探测，再按 quick 协议预热和测量。
 
 prepare 只准备缺失的日志 JSON，不启动服务、不清空 JIT 缓存；已有文件内容不一致时会报错。本次迁移仅在临时目录验证 prepare，没有写入正式缓存或启动 preflight 容器。
 
 ## 迁移边界与缓存
 
-逐项核对历史 `resolved.json`：target、model、runtime、client、workload、推理 flags/options 及探测参数保持一致。GLM 的 SGLang 未另设 `max-prefill-tokens`；不要直接照抄 DSV4 的额外参数或显存比例。
+逐项核对历史 `resolved.json`：target、model、runtime、client、正式负载、推理 flags/options 及探测参数保持一致；当前 workload 的 measurement 已改为新协议。GLM 的 SGLang 未另设 `max-prefill-tokens`；不要直接照抄 DSV4 的额外参数或显存比例。
 
-仅做以下适配：
+除本次协议切换，原归档做过以下适配：
 
 - recipe/workload 文件路径扁平化，三个 case 改为明确的 autotune 名称，合并为一个 campaign；原 recipe/workload ID 保留。
 - SGLang 日志路径从 `/root/.cache/bench-logging/sglang-jit-info.json` 改为新 helper 支持的 `/root/.cache/logging/sglang-jit-info.json`，JSON 内容不变。

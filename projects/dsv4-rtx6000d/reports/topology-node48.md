@@ -20,7 +20,7 @@ prefill **4096** 的三次吞吐761.14 tokens/s与8192均值接近，CV **4.17%*
 
 ## 2. 运行条件与配置差异
 
-基线来自 [公共 TP4 recipe](../configs/recipes/vllm-tp4-baseline.yaml)、[公共 workload](../configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)、[节点48 target](../configs/targets/rtx6000d-48-tp4-baseline.yaml) 和 [节点48 campaign](../configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml)。先复制项目configs建立本机工作区，保留公共原文件；下表给出从公共配置重建候选所需的全部功能差异，记录ID、描述和provenance另行命名。
+基线来自 [公共 TP4 recipe](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/recipes/vllm-tp4-baseline.yaml)、[公共 workload](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/workloads/dsv4-8192-1024-c32-n128-repeat3.yaml)、[节点48 target](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/targets/rtx6000d-48-tp4-baseline.yaml) 和 [节点48 campaign](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/campaigns/48-dsv4-vllm-tp4-baseline.yaml)。先复制项目configs建立本机工作区，保留公共原文件；下表给出从公共配置重建候选所需的全部功能差异，记录ID、描述和provenance另行命名。
 
 | 配置 | recipe options差异 | GPU / 服务CPU、内存NUMA / 客户端CPU、内存NUMA | workload repetitions |
 | --- | --- | --- | --- |
@@ -38,8 +38,8 @@ prefill **4096** 的三次吞吐761.14 tokens/s与8192均值接近，CV **4.17%*
 
 - Git commit：`c54734568603d1ef52f6ccc24ce7673768777c37`；公共源码与配置没有改动。本地Git差异仅节点48报告、CSV和README任务行，探索配置及辅助脚本留在本机工作区。
 - 所有run的runner源码指纹一致：`f5c33cf418ed84629e3786be4f4c7e651d66dccc3827e4226685a42e3361b583`。实验期间冻结源码及全部实验配置，运行包装逐文件检查配置SHA-256。
-- [runtime](../configs/runtimes/vllm-0.29.0.yaml) 与 [client](../configs/clients/vllm-bench-0.29.0.yaml) 均固定`vllm/vllm-openai:v0.29.0`，实际完整ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；未拉取或更换镜像。
-- [模型配置](../configs/models/dsv4-flash-nvfp4.yaml)为同一NVFP4权重与tokenizer。所有run的模型身份相同：`1e1b7e54442bcf7f15ef55192641b5c5da360bcaa608236aa0d06b273aedf8b4`；此身份依据配置/tokenizer哈希及分片大小，不等价于全部权重内容的校验和。
+- [runtime](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/runtimes/vllm-0.29.0.yaml) 与 [client](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/clients/vllm-bench-0.29.0.yaml) 均固定`vllm/vllm-openai:v0.29.0`，实际完整ID：`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；未拉取或更换镜像。
+- [模型配置](https://github.com/guoenhui-tora/llm-serving-benchmarks/blob/4642443b1274251b6a47f0d2742e0e59e2dccc95/projects/dsv4-rtx6000d/configs/models/dsv4-flash-nvfp4.yaml)为同一NVFP4权重与tokenizer。所有run的模型身份相同：`1e1b7e54442bcf7f15ef55192641b5c5da360bcaa608236aa0d06b273aedf8b4`；此身份依据配置/tokenizer哈希及分片大小，不等价于全部权重内容的校验和。
 - 所有新配置均通过validate/plan和实际镜像CLI检查；vLLM无需额外自定义日志文件。每次服务启动均通过health、models与关闭thinking的中文语义探测，保留请求/响应。
 - Docker inspect及服务/客户端线程快照验证实际CPU和内存允许集合符合上表；使用单个SMT线程，不修改宿主SMT、功耗或锁频。`numa_maps`快照可见非目标NUMA上的共享/文件映射页，不能将cpuset限制解释为所有页本地驻留。
 - TP2×PP2实际GPU映射由worker名、宿主PID、GPU UUID和容器DeviceIDs共同核验：PP0_TP0/1落在GPU4/5，PP1_TP0/1落在GPU6/7。GPU4–5、6–7各为PXB近端组；仅凭启动参数推断的情况未作为映射证据。
