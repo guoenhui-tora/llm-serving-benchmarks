@@ -1,0 +1,8 @@
+--- vllm/v1/worker/gpu/spec_decode/dspark/utils.py
++++ vllm/v1/worker/gpu/spec_decode/dspark/utils.py
+@@ -72,0 +73,5 @@
++    from dspark_native_mxfp4 import native_draft_config
++
++    draft_vllm_config.quant_config = native_draft_config(
++        vllm_config, draft_model_config, draft_vllm_config.quant_config
++    )

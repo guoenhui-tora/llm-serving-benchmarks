@@ -22,7 +22,11 @@
 
 ### DSpark 对照数据
 
-已归档 [GovReport近8K请求](data/govreport-near8k.jsonl)及[数据说明与使用方法](data/govreport-near8k.md)，包含256条固定请求，供各节点使用同一数据进行DSpark OFF/ON对照。客户端读取、实际tokenizer计数和单/双实例模拟流式检查已通过；尚未验证模型生成或DSpark性能。数据准备脚本与探索配置保留在本地工作区，后续需在同一真实文本负载上重新测OFF参照。
+已归档 [GovReport近8K请求](data/govreport-near8k.jsonl)及[数据说明与使用方法](data/govreport-near8k.md)，包含256条固定请求，供各节点使用同一数据进行DSpark OFF/ON对照。客户端读取、实际tokenizer计数和单/双实例模拟流式检查已通过；DSpark加载兼容性已单独验证，性能收益尚未确认。数据准备脚本与探索配置保留在本地工作区，后续需在同一真实文本负载上重新测OFF参照。
+
+### DSpark 加载兼容性
+
+固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像，不代表已确认性能收益；探索结果继续留在本地工作区。
 
 ## 2026-09-18：八卡整机部署结果
 
