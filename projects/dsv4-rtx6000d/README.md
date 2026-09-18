@@ -21,7 +21,7 @@
 
 - [x] **45**：18次正式测量完成；双TP2×PP2吞吐均值领先，PP候选波动需保留。见[本节点报告](reports/node8-node45.md)、[逐次CSV](data/node8-node45.csv)。
 - [x] **46**：5个配置共30次正式测量完成；DP4 EP off经独立诊断预热批次补齐，C32/C64波动均需保留。见[节点报告](reports/node8-node46.md)、[逐次CSV](data/node8-node46.csv)。
-- [x] **47**：首批18次正式测量；JIT诊断后TP2×DP4 EP off新增完整6次，合计24次。TP4×DP2 EP off仍因新形状编译阻塞，已保留定位证据。见[本节点报告](reports/node8-node47.md)、[逐次CSV](data/node8-node47.csv)。
+- [x] **47**：完整正式测量24次。TP4×DP2 EP off扩充预热上限后C32三次通过，但C64两次因worker首次使用事件被拒绝；本批无TileLang实际编译记录，部分结果单列。见[本节点报告](reports/node8-node47.md)、[逐次CSV](data/node8-node47.csv)。
 - [x] **48**：四种部署各六次，共24次正式测量完成；TP2×PP4将C64预热上限调为10轮，实际第8轮达到连续两轮安静后补齐。旧失败证据及预热差异保留。见[本节点报告](reports/node8-node48.md)、[逐次CSV](data/node8-node48.csv)。
 
 共10种部署形态、14种EP配置变体；包括四节点各自baseline，总计102次正式测量，不含预热和拒绝尝试。新组合启动失败、OOM或不支持时取证停止该候选；不为了凑满次数切换精度、缩短长度、关闭Graph或改成其他拓扑。对性能明显不稳定的组合先诊断、保留全部样本，不增加无限补测。
