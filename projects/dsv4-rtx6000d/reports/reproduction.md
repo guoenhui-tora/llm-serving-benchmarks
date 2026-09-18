@@ -27,6 +27,7 @@ docker run \
   -e HF_HUB_OFFLINE=1 \
   -e TRANSFORMERS_OFFLINE=1 \
   -e NCCL_DEBUG=WARN \
+  -e TRITON_CACHE_DIR=/root/.cache/triton \
   -e TILELANG_CACHE_DIR=/root/.cache/tilelang \
   -e VLLM_USE_V2_MODEL_RUNNER=1 \
   --entrypoint vllm sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1 serve /model \
@@ -60,6 +61,8 @@ docker run \
   --seed 0 \
   --distributed-executor-backend mp
 ```
+
+当前runtime将Triton缓存写入 `/root/.cache/triton`，复用上面的宿主持久挂载；这一调整已通过小kernel跨容器检查，尚未重跑模型性能。历史容器内未持久化的产物不会自动恢复。
 
 本例缓存目录来自保留的双TP4 recipe；合并前独占TP4的缓存目录仍保留在本机，不复制或删除。新机器按target配置准备自己的目录。正式实验建议使用下方runner入口，它负责功能检查、预算、日志和清理；手工启动示例只解释部署参数。
 

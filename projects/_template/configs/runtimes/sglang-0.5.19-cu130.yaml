@@ -8,3 +8,4 @@ image_id: sha256:d6e7288627be8b02be88e4bba38e73f6d50e2826869f753c13a4c4385ab3eda
 ready_timeout_s: 1800
 environment:
   NCCL_DEBUG: WARN
+  TRITON_CACHE_DIR: /root/.cache/sglang/triton

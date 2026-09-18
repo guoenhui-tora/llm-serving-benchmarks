@@ -120,7 +120,7 @@
 
 本轮JIT诊断区分了三种情况：新MHC split或top-k特化的真实编译、各worker首次从磁盘加载已有内核，以及日志延迟输出。缓存工件变化、固定镜像源码和双时间戳提供了相互印证；`jit_monitor` warning本身不等于CPU重新编译。没有因这一区别事后放行带事件测量，最终采用的窗口均无已知事件。
 
-46还发现Triton产物位于容器 `/root/.triton/cache`，现有持久挂载为 `/root/.cache`，未覆盖该路径。保留JIT缓存不能理解为所有编译产物都跨容器持久化；本轮未改挂载。这是后续公共修复候选，与当前吞吐统计分开处理。
+46还发现Triton产物位于容器 `/root/.triton/cache`，现有持久挂载为 `/root/.cache`，未覆盖该路径。保留JIT缓存不能理解为所有编译产物都跨容器持久化；历史实验当时未改挂载。当前runtime已显式设置 `TRITON_CACHE_DIR=/root/.cache/triton`，纳入已有持久挂载；两份固定镜像的小kernel跨容器复用已验证，未重跑模型性能，历史统计不变。验证范围见[缓存说明](../../docs/benchmark-methodology.md#jit观察边界)。
 
 ### 无事件测量仍有波动
 

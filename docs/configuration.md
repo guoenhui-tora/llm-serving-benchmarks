@@ -48,6 +48,10 @@ Runtime 必填：`engine: vllm|sglang`、`image`、字符串 `version`。
 `image_id` 是 `docker image inspect --format '{{.Id}}' IMAGE` 的值，不是 RepoDigest；名称明确，不混用两者。
 版本是配置声明，实际工件以镜像 ID、RepoDigests、完整 inspect 和启动日志追溯。
 
+当前精选runtime显式设置 `TRITON_CACHE_DIR`：vLLM为 `/root/.cache/triton`，SGLang为 `/root/.cache/sglang/triton`（保持该镜像原有重定向位置）。两者都在既有 `/root/.cache` 持久挂载内，不需要新挂载或修改recipe。宿主根目录仍取target的 `cache_root`；缓存按镜像ID、GPU架构、模型ID和recipe隔离，本次runtime变量调整不改变已有缓存目录指纹。变量优先级为target < runtime < recipe，覆盖时须确认新路径仍被持久挂载。
+
+已有experiments工作区不会自动获得此设置，续接时同步对应runtime的环境变量。旧容器的 `/root/.triton/cache` 不会自动搬迁；已删除容器中未另行保存的产物无法靠新配置恢复。引擎可能在Inductor初始化时进一步重定向缓存，完整模型的实际路径仍需看启动证据。
+
 Client 必填：`tool: vllm-bench`、`image`、字符串 `version`。
 可选：`image_id`、`environment`、`trust_remote_code`（默认 false）。
 客户端目前固定使用 OpenAI completions 流式传输和 `ttft,tpot,itl,e2el` 指标，50/90/95/99 分位数。

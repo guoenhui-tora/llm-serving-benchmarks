@@ -13,6 +13,8 @@ target 保留 `SYS_NICE`。SGLang 调度进程的 CPU 允许集合与 GPU 所在
 
 固定权重 `/data/models/GLM-5.2-NVFP4` 和同目录 tokenizer；镜像及实际参数见 [选型报告](image-selection.md)。历史实验中，C16 每次正式 64 请求、每轮预热 32；C32 分别为 128、64。每次测量前至少连续两轮无已知编译事件，最多五轮预热、两次测量尝试。当前 workload 保留正式请求量，改用1轮2C请求预热，再固定3轮正式测量并保留事件标记；每档预算上限7200秒，完成固定轮数即结束。
 
+当前runtime另显式设置Triton持久缓存：vLLM为 `/root/.cache/triton`，SGLang保持 `/root/.cache/sglang/triton`，均落在已有挂载内。小kernel跨容器复用已验证，未重新测量GLM性能；旧结果仍按原环境解释。
+
 ## 准备与运行
 
 安装根 README 中的 Python 依赖，提前准备固定模型和镜像。核对 target 的本机地址、模型路径、缓存权限以及 GPU 占用。从新仓库根目录执行：
