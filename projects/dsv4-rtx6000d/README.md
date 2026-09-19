@@ -30,6 +30,80 @@
 
 固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
 
+## 下一轮：四节点 DSpark 拓扑与 K 值实验
+
+**目标是在同样四卡资源、GovReport近8K／1024、总C32下，比较TP4与TP2×DP2 EP on/off，并找出合适的草稿token数K。** 主线是TP2×DP2 EP on＋DSpark；它在历史随机负载中有优势，但尚未验证与DSpark叠加后的收益。本轮先完成四卡部署，胜出方案的八卡双部署另行安排。
+
+### 节点任务与预算
+
+每台只操作本机，同一时间只启动一套四卡服务。off表示关闭DSpark；K1–K5分别表示预测1–5个草稿token。**下表每台6个必测配置，每配置累计三轮clean；同配置全部轮次在一次启动内完成。**
+
+| 节点 | 四卡部署 | 执行顺序 | 回答的问题 |
+| --- | --- | --- | --- |
+| **45** | TP4，EP off | off → K5 → K1 → K2 → K3 → K4 | TP4的K值曲线及同机off参照 |
+| **46** | TP2×DP2，EP on | off → K5 → K1 → K2 → K3 → K4 | 主线拓扑与DSpark能否叠加获益 |
+| **47** | TP2×DP2，EP off | off → K5 → K1 → K2 → K3 → K4 | 关闭EP后的K值曲线及同机off参照 |
+| **48** | TP2×DP2，EP on/off | on/off基线 → on/K5 → off/off基线 → off/K5 → on/K4 → off/K4 | 同机比较EP，核实46与47的横向结果 |
+
+48的顺序中，斜线前为EP状态，斜线后为DSpark状态。各节点收益只除以**本机、同拓扑、同EP**的off结果；历史随机负载、TP4或其他节点的off不能代替。48同机EP对照仍有启动顺序与资源背景差异，需记录。
+
+按已有TP4耗时，六配置约2–3.5小时；新DP路径编译较多时可能4–5小时或更久，属于排期估计。每配置协议最多12轮／2700秒，单轮超时900秒，服务启动沿用1800秒上限。以5–6小时作为夜间排期参考，核心任务优先；到6小时不再新增配置，让当前配置按自身预算结束并归档，缺项明确标记，不为完成矩阵无限重试。
+
+核心六配置全部完成且仍有时间时，最多追加两次启动：若同机K5较K4的吞吐提升超过 `max(2%, 2×两组较大CV)` 且无KV压力，可测K6，仍满足该条件再测K7；否则独立重启复测当前最快候选。48优先独立复测同机较优的EP＋K组合。这个阈值只是扩展规则，不是统计显著性检验；差距落在波动内时优先较小K，并保留原结果与复测的独立批次，不合并成同一次启动的样本。K6/K7仅在固定镜像与草稿结构支持时执行。
+
+- [ ] **45**：完成TP4 off与K1–K5，提交本节点报告和CSV。
+- [ ] **46**：完成TP2×DP2 EP on的off与K1–K5，或明确记录阻塞。
+- [ ] **47**：完成TP2×DP2 EP off的off与K1–K5，或明确记录阻塞。
+- [ ] **48**：完成同机EP on/off的off、K4、K5对照，或明确记录阻塞。
+
+### 公共入口与配置准备
+
+**已有入口供派生配置，不代表新矩阵已经实测或已有一键campaign。** TP4 K5已实测；修正Graph后的K1–K4及TP2×DP2＋DSpark仍是候选。各节点先在 `experiments/dspark-k-sweep-nodeNN/` 复制本项目configs和 `data/govreport-near8k.jsonl`，再准备本节点完整矩阵；保留归档recipe，不为每个K向projects复制一套配置。
+
+| 公共文件 | 本轮用法 |
+| --- | --- |
+| [TP4 recipe](configs/recipes/tp4.yaml) | 45的off服务参数 |
+| [TP4 K5 recipe](configs/recipes/tp4-dspark-k5.yaml) | DSpark补丁、采样参数、日志检查及Graph派生起点 |
+| [TP2×DP2 EP on recipe](configs/recipes/dual-tp2-dp2-epon.yaml) | 取其中一套四卡部署的服务参数；不要直接运行双部署campaign。EP off副本移除enable并显式设置no-enable-expert-parallel |
+| [GovReport jit_clean](configs/workloads/govreport-c32-jit-clean.yaml) | 本轮所有配置统一使用，128请求、三轮接纳、12轮／45分钟上限 |
+| [K5 campaign](configs/campaigns/dspark-k5-quick.yaml) | 复制其单case结构，替换recipe及workload；本轮必须换成上面的jit_clean，不能沿用quick |
+| [rear target](configs/targets/rear.yaml) | GPU4–7，服务CPU32–47／NUMA2，客户端CPU48–51／NUMA3；修改本地IP与节点id |
+| [补丁说明](reports/dspark-compatibility.md#后续实验如何使用) | 每份on recipe准备独立缓存内的加载覆盖，并检查补丁标记 |
+
+每个campaign只放一个配置，使用单个rear target，不设置 `replica_targets`。DP2由服务内部管理，不是runner启动两套服务。on recipe合并既有DSpark环境变量与必需日志检查；off不带草稿补丁。`prepare.py`只传on campaign，每次recipe变化后重新prepare，不能复用猜测的旧缓存路径。所有准备、validate和plan在实验前完成；运行期间不pull或修改源码／配置。结束服务后才可处理下一配置的明确阻塞，记录改动与指纹。
+
+### 所有节点统一遵守
+
+- **镜像与硬件：**服务及客户端均为 `vllm/vllm-openai:v0.29.0`，ID `sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；同一 `/data/models/DeepSeek-V4-Flash-0731-NVFP4` 权重和tokenizer。不升级镜像、不改主模型NVFP4或草稿原生MXFP4精度。核实GPU空闲和CPU／NUMA映射；有其他GPU计算任务则报告阻塞，不终止他人任务。
+- **服务与容量：**PP=1、上下文16384、显存比例0.90、FP8 E4M3 KV、prefill预算8192、V2＋async、FULL_DECODE_ONLY，关闭FlashInfer autotune与prefix cache。TP4的 `max-num-seqs=32`；TP2×DP2使用 `data-parallel-size-local=2`、每rank `max-num-seqs=16`，全服务容量目标32。核实实际rank映射；EP on的专家组预期跨本套四卡，不能跨到GPU0–3。prefill预算也是每rank设置，DP的聚合调度预算与TP4不同，报告实际语义，不声称调度实现完全相同。
+- **DSpark参数：**固定 `method=dspark`、`draft_sample_method=greedy`、`rejection_sample_method=standard`、`enable_adaptive_verification=false`，本轮只变K及指定拓扑／EP。不切换采样策略，不额外优化backend或显存比例。
+- **Graph覆盖：**以每rank活动容量B为准，目标验证需覆盖 `B×(K+1)`、草稿需覆盖 `B×K`。从批次列表TP4的 `[1,2,4,8,12,16,24,32]`、DP每rank的 `[1,2,4,8,12,16]` 分别乘K与K+1后合并、去重、排序作为on捕获列表；例如DP K5目标上限96／草稿80。off沿用普通批次列表。用实际CLI、启动日志及执行路径核实；若镜像对DP或K有限制，保留证据，不能照搬TP4上限192或普通decode上限32。
+- **负载：**流式 `/v1/completions`，全服务总C32、每轮128请求、GovReport固定前128条、输出1024，seed=0、temperature=0、ignore_eos=true、request_rate=inf。同一JSONL SHA256见[数据说明](data/govreport-near8k.md)。每轮应128成功、0失败、输入1,042,149／输出131,072 tokens；DP不能每rank再发128条或各设C32。
+- **启动与测量：**每配置validate、plan、preflight，再检查health、models和关闭thinking的短中文生成；新DP＋DSpark先在第一组K5确认补丁、草稿分派、EP及Graph日志，再开始完整负载。无需等48完成才启动其他节点；各自检查通过后继续。首个完整128请求轮也用于观察C32容量，含编译就按jit_clean拒绝并继续，不额外要求一套smoke或多轮安静预热。短探测通过不代表长负载容量通过。
+- **接纳与停止：**同一次启动累计最先三轮通过工作量和事件检查的结果，不按性能挑样本，不因JIT重启。协议预算用尽记PARTIAL；OOM、请求失败、token不符或明确不支持按故障处理，保存现场再清理。共性DP／草稿路径故障停止其余相关K，单一K容量问题只停止该候选；其他独立可运行配置继续。不能放宽gate或更换精度换取PASS。
+- **资源与解释：**保留JIT缓存；记录每配置缓存起点、CPU及SMT兄弟负载、DOCA背景、GPU温度／功耗／频率、KV容量与使用峰值、抢占情况。发现矿工等新增异常先记录并暂停受影响测量，不当作正常背景。无事件不等于性能稳定；记录所有warning和fallback，不擅自锁频、调功耗或改宿主NUMA。结束只清理本次容器。
+
+### DSpark指标与归档规则
+
+**报告不仅回答哪个K快，还要说明接受长度能否抵消草稿与验证的开销。** 每配置报告逐次值、均值、样本标准差与吞吐CV；主表包含输出tok/s、相对本机同拓扑off的提升、Mean／P95 TTFT与TPOT、草稿接受率、平均接受长度。补充requests/s、ITL、端到端延迟、成功／失败数、实际token量、KV容量／峰值／抢占，以及累计取得三轮的轮数和耗时。P95汇总明确为各轮P95的平均，不称为合并请求的P95；DSpark的ITL是流式事件间隔，不等于逐token计算时间。
+
+接受统计按每轮服务端计数器前后增量计算，窗口内不混入功能探测或其他请求。保存指标原名、标签和计算公式；DP按rank记录后累加分子／分母，避免TP worker或重复导出造成重复计数。先核对镜像实际指标定义，计数器重置或缺失时不得跨窗口相减。接受率用总接受草稿token／总提出草稿token；平均接受长度按验证轮数加权，并注明是否包含目标模型补充token。逐位置接受情况在引擎可提供时记录，注明是次数还是比例及其分母；缺失指标留空并说明，不用K或日志片段猜算。只有轮次百分比时只能报告轮次均值，不能冒充计数加权值。
+
+公共runner不保证自动导出这些服务端指标。各节点可在本地工作区用轻量观察脚本保存 `/metrics` 原始快照和窗口，保持相同采样方式；不修改公共runner或gate来增加统计。若不能可靠关联轮次，标为未采集，保留已有性能与日志证据，不伪造精确接受率。接受率高不等于吞吐高，也不替代模型质量评测。
+
+原始配置、完整命令、日志、所有轮次JSON、计数器快照、资源监控和辅助脚本留在 `experiments/dspark-k-sweep-nodeNN/`，每次run指定该工作区内全新的 `--run-root`。**每节点只归档一份报告和一份CSV：**
+
+- `reports/dspark-k-sweep-nodeNN.md`：结论与完成情况、同机off/K值表、接受统计与资源解释、协议成本、失败／缺项、复现入口。注明Git commit、源码指纹、镜像ID、数据哈希、补丁版本，给出从plan或实测导出的启动命令及各K参数差异；所有配置有可复现入口，避免粘贴六份几乎相同命令。只链接仓库文件，本机原始路径明确标“仅本机可用”。
+- `data/dspark-k-sweep-nodeNN.csv`：一轮一行，保留全部正式、拒绝和中断轮，不只导出接纳样本。复用[上一轮CSV](data/dspark-protocol-node46.csv)的30个字段及单位，再追加下列字段；未测得留空，不能把缺失当0。`configuration`使用 `<拓扑>-<EP>-<DSpark>`，拓扑取 `tp4` 或 `tp2-dp2`，EP取 `epon` 或 `epoff`，DSpark取 `off` 或 `kN`，例如 `tp2-dp2-epon-k4`；`run_id`区分首次与独立复测，`accepted`只表示本次协议实际接纳。
+
+```text
+study_phase,tp,dp,ep,num_speculative_tokens,spec_stats_source,draft_tokens,accepted_draft_tokens,verification_steps,acceptance_length_includes_bonus,accepted_tokens_by_position,kv_capacity_tokens_min_per_rank,kv_cache_usage_peak_pct,preemptions_delta
+```
+
+`study_phase`取 `core`、`extension` 或 `restart_check`；off的K填0、草稿指标为空，ep用on/off。计数取该轮增量，接受率和KV使用率单位为百分数，逐位置计数用按预测位置排序的JSON数组（正确CSV转义）。KV容量为各DP rank中的最小值，KV使用峰值为各rank观测最大值，不能把DSV4压缩缓存的等效token容量当作普通全注意力容量；各rank原始分配、采样间隔及局限写入报告。启动、协议总耗时和run总耗时按run在报告单列，不把累计时间重复加到每轮。
+
+完成后只更新本节对应节点的复选框，并链接自己的报告，例如 `- [x] **45**：已完成，见[节点报告](reports/dspark-k-sweep-node45.md)。` 部分完成或阻塞也必须明确写出。提交前从CSV重算数字、检查相对链接与 `git diff --check`；不覆盖旧报告，不批量提交探索配置或脚本，不抢改其他节点和总表。推送按用户在各节点的授权执行。
+
 ## 2026-09-20：四节点预热与负载对照
 
 **GovReport下，单TP4、DSpark off的吞吐在四节点均约664 tok/s；一轮完整负载预热后，三轮正式结果接近且无已知编译事件。独立quick与jit_clean的性能、耗时也接近。K5仍有正式轮编译和明显降速，后续DSpark关键对照优先使用jit_clean。**
