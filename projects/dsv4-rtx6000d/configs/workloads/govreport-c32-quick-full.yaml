@@ -1,0 +1,29 @@
+schema_version: 1
+kind: workload
+id: dsv4-govreport-c32-quick-full
+purpose: performance
+dataset:
+  name: jsonl
+  path: data/govreport-near8k.jsonl
+  max_input_tokens: 9216
+  output_tokens: 1024
+  sha256: 33bdbd36a8b335300974e1b07aa66b2c24c88cc4c4b55a21350aa3564a945d53
+traffic:
+  concurrency:
+  - 32
+  requests: 128
+  request_rate: inf
+sampling:
+  seed: 0
+  temperature: 0
+  ignore_eos: true
+measurement:
+  protocol: quick
+  warmup_rounds: 1
+  warmup_load: full
+  repetitions: 3
+  budget_s: 2700
+  timeout_s: 900
+cache: disabled
+description: 'Candidate: one full 128-request warmup, then three fixed C32 rounds;
+  not yet GPU measured.'

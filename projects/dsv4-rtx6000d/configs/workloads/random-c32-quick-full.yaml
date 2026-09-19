@@ -1,0 +1,28 @@
+schema_version: 1
+kind: workload
+id: dsv4-random-c32-quick-full
+purpose: performance
+dataset:
+  name: random
+  input_tokens: 8192
+  output_tokens: 1024
+  range_ratio: 0
+traffic:
+  concurrency:
+  - 32
+  requests: 128
+  request_rate: inf
+sampling:
+  seed: 0
+  temperature: 0
+  ignore_eos: true
+measurement:
+  protocol: quick
+  warmup_rounds: 1
+  warmup_load: full
+  repetitions: 3
+  budget_s: 2700
+  timeout_s: 900
+cache: disabled
+description: 'Candidate: one full 128-request warmup, then three fixed C32 rounds;
+  not yet GPU measured.'

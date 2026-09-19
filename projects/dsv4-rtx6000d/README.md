@@ -8,7 +8,7 @@
 
 ## 当前可复用入口
 
-报告和CSV保存研究结论；configs只维护下面三个入口及其依赖，不再为历史矩阵或每个节点复制配置。
+报告和CSV保存研究结论；configs维护下面的普通推理入口，以及本页下一轮任务所需的少量公共配置，不再为历史矩阵或每个节点复制配置。
 
 | 入口 | 用途 |
 | --- | --- |
@@ -29,6 +29,115 @@
 ### DSpark 加载兼容性
 
 固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
+
+## 下一轮：四节点验证预热、协议成本与负载差异
+
+**本轮只做单实例TP4、C32、1024输出，先回答测量是否省时可靠、DSpark收益能否复现、真实文本为何比历史随机负载慢。** 不扩展K值、拓扑或并发，不要求每个节点重新取得三轮clean。四台各自在本机执行，不SSH控制其他节点。
+
+### 节点任务与完成标记
+
+下面每个campaign单独执行一次`bench run`，独立启动并清理服务；同配置的全部轮次在这一次启动中完成。off表示关闭DSpark；K5表示开启DSpark、预测5个草稿token。quick在本轮特指**128请求预热1轮＋128请求正式测量3轮**，不是默认的2C预热。
+
+| 节点 | 按顺序执行的campaign | 本机对照与问题 | 预算，不含准备／取证 |
+| --- | --- | --- | --- |
+| **45** | `dspark-off-quick` → `dspark-off-clean` | 同一GovReport负载，比较独立启动的quick／jit_clean性能与时间成本；使用同一缓存快照的两个副本 | 两次启动；每段≤45分钟；clean≤12轮 |
+| **46** | `dspark-off-quick` → `dspark-k5-quick` | 同机off/on收益；两边均使用一次完整负载预热，保留各自JIT和波动 | 两次启动；每配置固定1＋3轮、≤45分钟 |
+| **47** | `tp4-random-quick` → `dspark-off-quick` | off下分别比较随机等长8192与GovReport；两次独立启动，不交替调度；使用同一缓存快照的两个副本 | 两次启动；每负载固定1＋3轮、≤45分钟 |
+| **48** | `dspark-off-quick` | 检查一轮128请求预热后是否仍有慢首轮；本机历史clean 663.92 tok/s仅作参照 | 一次启动；固定1＋3轮、≤45分钟 |
+
+45的两种协议只各启动一次，不能据此证明跨启动耗时稳定；47仍有启动和顺序差异，不能把全部差距唯一归因于文本内容。46的收益只用本机off作分母；48历史clean与本轮缓存历程不同，不是严格的同批配对。不得跨节点拼接off/on计算收益。
+
+- [ ] **45**：独立quick／jit_clean对照完成，或明确记录阻塞；归档后在本行附本节点报告链接。
+- [ ] **46**：同机DSpark off／K5完成，或明确记录阻塞；归档后在本行附本节点报告链接。
+- [ ] **47**：两种负载独立启动对照完成，或明确记录阻塞；归档后在本行附本节点报告链接。
+- [ ] **48**：完整负载预热验证完成，或明确记录阻塞；归档后在本行附本节点报告链接。
+
+### 公共配置与本地准备
+
+| 配置 | 用途与状态 |
+| --- | --- |
+| [tp4 recipe](configs/recipes/tp4.yaml) | 已实测的off服务参数，继续复用 |
+| [TP4 DSpark K5 recipe](configs/recipes/tp4-dspark-k5.yaml) | 与夜间实测修正组相同；含原生MXFP4草稿补丁入口、K5和Graph覆盖 |
+| [GovReport quick](configs/workloads/govreport-c32-quick-full.yaml) / [random quick](configs/workloads/random-c32-quick-full.yaml) | 候选完整预热方案：`warmup_rounds: 1`、`warmup_load: full`、`repetitions: 3`；仅离线验证，尚未GPU实测 |
+| [GovReport jit_clean](configs/workloads/govreport-c32-jit-clean.yaml) | 每轮128请求，累计最先三轮无已知事件，最多12轮／45分钟 |
+| [off quick](configs/campaigns/dspark-off-quick.yaml) / [K5 quick](configs/campaigns/dspark-k5-quick.yaml) / [off clean](configs/campaigns/dspark-off-clean.yaml) / [random quick](configs/campaigns/tp4-random-quick.yaml) | 上表四个执行入口，每个都只有一个case |
+| [rear target](configs/targets/rear.yaml) | GPU4–7；服务CPU32–47/NUMA2，客户端CPU48–51/NUMA3；本地改成本机地址 |
+
+先阅读根README、[压测协议](../../docs/benchmark-methodology.md)及本节。四节点使用同一准备版本；运行期间不pull或修改源码／配置。以下以48为例，在仓库根目录执行；其他节点替换工作区名称。工作区已存在时检查续接，不覆盖原文件。
+
+```bash
+mkdir -p experiments/dspark-protocol-node48/data experiments/dspark-protocol-node48/results experiments/dspark-protocol-node48/reports
+cp -a projects/dsv4-rtx6000d/configs experiments/dspark-protocol-node48/configs
+cp projects/dsv4-rtx6000d/data/govreport-near8k.jsonl experiments/dspark-protocol-node48/data/
+```
+
+在本地`configs/targets/rear.yaml`中设置本机IP（45/46/47/48对应`10.90.1.45`至`.48`），核实GPU/NUMA映射、SMT兄弟及端口空闲。不要改已归档的target。固定服务与客户端镜像`vllm/vllm-openai:v0.29.0`，ID为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；模型为`/data/models/DeepSeek-V4-Flash-0731-NVFP4`。不拉取镜像、不改权重精度。
+
+46只对K5 campaign运行[补丁准备](reports/dspark-compatibility.md#后续实验如何使用)，不要把off campaign传给这个脚本：
+
+```bash
+python3 projects/dsv4-rtx6000d/patches/dspark-native-mxfp4/prepare.py \
+  experiments/dspark-protocol-node46/configs/campaigns/dspark-k5-quick.yaml
+```
+
+各campaign启动前分别validate、plan、preflight，保存解析配置和命令；run仍会执行health、models和短中文生成。例如48：
+
+```bash
+./bench validate experiments/dspark-protocol-node48/configs/campaigns/dspark-off-quick.yaml
+./bench plan experiments/dspark-protocol-node48/configs/campaigns/dspark-off-quick.yaml
+./bench preflight experiments/dspark-protocol-node48/configs/campaigns/dspark-off-quick.yaml
+./bench run experiments/dspark-protocol-node48/configs/campaigns/dspark-off-quick.yaml \
+  --run-root experiments/dspark-protocol-node48/results/off-quick-01
+```
+
+46第二次使用`dspark-k5-quick.yaml`及新的run-root；45第二次使用`dspark-off-clean.yaml`，47先使用`tp4-random-quick.yaml`。45/47还需先完成下面的缓存准备。不要把两个case塞到同一个campaign共用可写缓存，也不要测一轮就重启。
+
+### 缓存起点与资源规则
+
+**45、47的两次运行必须从内容一致、互不共享写入的缓存副本开始。** 在启动任何一组前，从本机已有off recipe的实际缓存目录制作冻结快照，再复制为两个独立可写目录。使用普通复制或reflink，不用硬链接、不共用可写符号链接；原缓存和快照均保留。不能先跑第一组，再从它已经更新的缓存复制第二组。
+
+缓存路径由image ID、SM架构、model ID、完整recipe决定，不能凭旧路径猜测。可在修改cache_root前，用以下只读命令定位源目录（45示例）：
+
+```bash
+PYTHONPATH=src python3 - <<'PY'
+from serving_bench.config import resolve
+from serving_bench.executors.docker import cache_directory
+case = resolve('experiments/dspark-protocol-node45/configs/campaigns/dspark-off-quick.yaml')['cases'][0]
+print(cache_directory(case, case['runtime']['image_id']))
+PY
+```
+
+仅在本地复制两份薄target，分别改`cache_root`，并让两个campaign引用各自target；recipe内容保持不变。仍用`cache_directory`计算两个目标目录，再从同一冻结快照复制。建议缓存根放`~/.cache/serving-bench/dspark-protocol-nodeNN/<批次>/<组名>/`，与results分开。记录快照时间、来源身份、文件相对路径／SHA256／权限清单，两副本开始前内容一致且可读写。遇到不可读文件不得静默漏复制；先解决本次副本访问问题，不能删除原缓存。源不存在或无法形成一致副本时报告阻塞，不擅自清空缓存改成冷启动。克隆目录可能有宿主页缓存、文件路径等剩余差异，要在报告中说明。
+
+46/48正常保留各recipe的持久缓存，记录运行前已有缓存情况。K5与off的缓存、启动历程不要求完全相同，正式指标比较的是各自预热后的serving；如果编译影响不同，报告其影响，不隐去事件。45/47的缓存复制耗时单列，不算服务或协议耗时。
+
+每台同一时间只运行一个推理服务，仅使用本次GPU4–7。所选GPU被其他计算进程占用则停止，不终止他人任务。检查CPU异常负载；已知DOCA负载需记录，新增矿工等异常不能当作正常背景忽略。记录服务/客户端CPU及SMT兄弟忙碌率，低频采样GPU功耗、温度、频率和KV使用；不锁频、不改宿主功耗或全局NUMA配置。结束只清理本次容器，保留缓存及所有结果。
+
+### 统一测量与解释
+
+- TP4/PP1/DP1、EP off、上下文16384、活动容量32、prefill8192、显存比例0.90、FP8 E4M3 KV、V2＋async；关闭autotune和prefix cache。off的Graph上限32；K5保留完整捕获列表，上限192，覆盖目标192／草稿160 tokens。核对启动日志、补丁标记、实际backend和KV分配，不能只看YAML。
+- 客户端固定流式`/v1/completions`，C32、128请求、temperature0、seed0、ignore_eos=true、request_rate=inf。GovReport用同一JSONL前128条且顺序固定；每轮实际输入1,042,149、输出131,072 tokens。random为8192/1024、range_ratio0，每轮输入1,048,576、输出131,072。每轮均应128成功、0失败；不把全256条都加入。
+- quick只有1轮128请求预热＋3轮正式测量，三轮全部保留，包括JIT与慢轮；本轮先按固定入口完成，不自动加三轮clean或重新启动补测。若首轮明显慢、后两轮接近，明确标记“可能需要更多完整负载预热”，保留逐轮证据，后续再决定诊断。无事件不代表稳定，也不能仅凭首轮慢断言两轮预热必然足够。
+- 45的clean是独立服务启动后直接执行完整128请求轮次，不先跑quick。仅该任务要求累计最先三轮无已知事件；最多12轮／2700秒，每客户端阶段900秒。未完成则记录PARTIAL与已花时间，不无限补到PASS。quick同样每段2700秒、单阶段900秒；OOM、请求失败、token数错误属于故障，不当作预热继续。
+- 报告每个指标逐次值、均值、样本标准差和CV。若要描述“接近”，先按吞吐、Mean TTFT、Mean TPOT均值相差≤3%观察；各自相对极差≤3%可描述为本组三次接近，不能改称通过stable。记录事件与资源变化，差距落在波动范围内直接说明。48用历史数据只能作旁证，46/47重点用本机参照。
+- 分开记录服务启动至health、health至功能检查完成、协议阶段墙钟时间、客户端benchmark计时、清理时间及run总耗时。45重点给出两种协议的总成本和实际请求量；不要拿warmup后的clean计时冒充独立协议成本。不合并不同配置的P95；重复P95的均值须明确标注。
+
+### 统一归档与交接
+
+原始日志、解析配置、计划／命令、环境和哈希、全部轮次JSON、缓存清单及资源时间线留在各自`experiments/dspark-protocol-nodeNN/`；不批量提交探索配置、缓存、脚本或大日志。归档只新增：
+
+- `reports/dspark-protocol-nodeNN.md`：先写结论和任务完成程度，再给同机对照表、逐轮表现、耗时、事件／资源限制和复现入口；记录Git commit、源码指纹、镜像ID、数据哈希、完整实际服务命令及本地target/cache变化。引用仓库内的公共配置与CSV，用相对链接；原始路径仅作为“本机可用”的附注。
+- `data/dspark-protocol-nodeNN.csv`：每轮一行，包含预热、全部正式轮及clean拒绝轮，不能仅导出最快或接纳样本。统一字段如下，时间戳使用含时区的ISO8601，数值保留原始精度；未测得字段留空。
+
+```text
+node,run_id,configuration,dataset,protocol,phase,round,accepted,protocol_status,case_status,known_event_lines,started_at,finished_at,duration_s,completed,failed,total_input_tokens,total_output_tokens,output_throughput,request_throughput,mean_ttft_ms,p95_ttft_ms,mean_tpot_ms,p95_tpot_ms,mean_itl_ms,p95_itl_ms,mean_e2el_ms,p95_e2el_ms,spec_decode_acceptance_rate,spec_decode_acceptance_length
+```
+
+`configuration`固定为`tp4-off`或`tp4-k5`，`dataset`为`govreport`或`random`，`phase`为`warmup`或`measurement`，`round`为该阶段内从1起的原轮次，`accepted`用`true/false`。仅case与protocol均PASS且属于正式接纳轮次时填true；quick接纳不等于无JIT。接受率单位为百分数；`duration_s`仅客户端benchmark计时，阶段时间含初始化／检查；启动、协议总耗时与缓存复制成本另列于报告。现有`export_samples.py`仅导出接纳样本，不能用它代替本轮完整轮次CSV。
+
+各节点完成后**只改本节自己的完成标记**，例如 `- [x] **45**：已完成，见[节点报告](reports/dspark-protocol-node45.md)。` 阻塞也可打勾表示已交付，但必须写“阻塞”或“部分完成”，不伪装成功。不要修改其他节点行或抢先重写四节点总表。
+
+提交前从CSV重算报告数字，检查链接、字段、单位和`git diff --check`；本节点只提交报告、CSV及自己的完成行。运行期间不更新源码；实验完成后如需同步远端再处理文档冲突。除用户另行授权外不push。公共功能确有阻塞时先留证据，单独说明修复范围，不让各节点自行修改gate或扩展矩阵。
 
 ## 2026-09-18：八卡整机部署结果
 

@@ -1,0 +1,12 @@
+schema_version: 1
+kind: campaign
+id: dsv4-dspark-off-quick
+target: targets/rear.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/govreport-c32-quick-full.yaml
+cases:
+- id: tp4-off
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/tp4.yaml
