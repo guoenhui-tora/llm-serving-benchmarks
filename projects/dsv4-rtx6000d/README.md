@@ -49,7 +49,7 @@
 
 - [x] **45**：独立quick／jit_clean对照已完成，两组PASS；见[节点报告](reports/dspark-protocol-node45.md)与[CSV](data/dspark-protocol-node45.csv)。
 - [x] **46**：同机off／K5 quick已完成，保留K5慢轮及JIT事件；见[节点报告](reports/dspark-protocol-node46.md)。
-- [ ] **47**：两种负载独立启动对照完成，或明确记录阻塞；归档后在本行附本节点报告链接。
+- [x] **47**：两种负载独立启动对照已完成，见[节点报告](reports/dspark-protocol-node47.md)。
 - [ ] **48**：完整负载预热验证完成，或明确记录阻塞；归档后在本行附本节点报告链接。
 
 ### 公共配置与本地准备
