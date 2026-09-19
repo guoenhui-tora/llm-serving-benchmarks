@@ -44,6 +44,18 @@ class JsonlTests(unittest.TestCase):
     def case(self):
         return resolve(self.campaign)['cases'][0]
 
+    def test_full_warmup_validates_the_actual_request_set(self):
+        self.workload['traffic'].update(concurrency=[4], requests=4)
+        self.workload['measurement'] = dict(protocol='quick', budget_s=60,
+                                            warmup_rounds=1, warmup_load='full')
+        self.workload_path.write_text(yaml.safe_dump(self.workload))
+        case = self.case()
+        self.assertEqual(case['workloads'][0]['measurement']['warmup_load'], 'full')
+        self.workload['measurement'].pop('warmup_load')
+        self.workload_path.write_text(yaml.safe_dump(self.workload))
+        with self.assertRaisesRegex(BenchError, 'needs 8 rows'):
+            self.case()
+
     def test_dataset_identity_changes_with_content_but_not_project_location(self):
         first = self.case()
         relocated = self.root / 'relocated'

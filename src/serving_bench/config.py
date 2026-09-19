@@ -263,13 +263,15 @@ def validate_document(v: dict, kind: str) -> None:
                                  "and budget_s; old warmup/retry fields are no longer supported. "
                                  "See docs/configuration.md#workload")
         m = mapping(v["measurement"], "measurement", {"protocol", "budget_s"},
-                    {"repetitions", "timeout_s", "max_rounds", "warmup_rounds", "stability_threshold"})
+                    {"repetitions", "timeout_s", "max_rounds", "warmup_rounds", "warmup_load", "stability_threshold"})
         enum(m["protocol"], ["quick", "jit_clean", "stable"], "measurement.protocol")
         integer(m["budget_s"], "measurement.budget_s")
         minimum = 1 if v["purpose"] == "smoke" and m["protocol"] != "stable" else 3
         integer(m.setdefault("repetitions", minimum), "measurement.repetitions", minimum)
         integer(m.setdefault("timeout_s", 1800), "measurement.timeout_s")
         if m["protocol"] == "quick":
+            if "warmup_load" in m:
+                enum(m["warmup_load"], ["2c", "full"], "measurement.warmup_load")
             integer(m.setdefault("warmup_rounds", 1), "measurement.warmup_rounds")
             if m["warmup_rounds"] not in (1, 2):
                 raise BenchError("quick warmup_rounds must be 1 or 2")
@@ -277,8 +279,8 @@ def validate_document(v: dict, kind: str) -> None:
             if m["max_rounds"] != m["repetitions"]:
                 raise BenchError("quick max_rounds must equal repetitions (no automatic retries)")
         else:
-            if "warmup_rounds" in m:
-                raise BenchError("Only quick accepts warmup_rounds; other protocols use full rounds")
+            if {"warmup_rounds", "warmup_load"} & m.keys():
+                raise BenchError("Only quick accepts warmup_rounds/warmup_load; other protocols use full rounds")
             integer(m.setdefault("max_rounds", 12), "measurement.max_rounds", m["repetitions"])
         if m["protocol"] == "stable":
             number(m.setdefault("stability_threshold", 0.02), "measurement.stability_threshold")
@@ -348,7 +350,7 @@ def resolve(campaign_path: str | Path, config_root: str | Path | None = None, ca
         except (OSError, ValueError) as exc:
             raise BenchError(f"{w['id']}: {exc}") from exc
         required = w["traffic"]["requests"]
-        if w["measurement"]["protocol"] == "quick":
+        if w["measurement"]["protocol"] == "quick" and w["measurement"].get("warmup_load", "2c") == "2c":
             required = max(required, 2 * max(w["traffic"]["concurrency"]))
         if len(rows) < required:
             raise BenchError(f"{w['id']}: JSONL needs {required} rows, found {len(rows)}; no oversampling")

@@ -50,13 +50,29 @@ class ProjectLayoutTests(unittest.TestCase):
                 working = root / 'experiments' / project.name / 'configs'
                 published = root / 'projects' / project.name / 'configs'
                 shutil.copytree(project / 'configs', working)
+                # JSONL is a project dependency, not a file inside configs/.
+                for campaign in (project / 'configs/campaigns').glob('*.yaml'):
+                    for case in resolve(campaign)['cases']:
+                        for source in case.get('dataset_paths', {}).values():
+                            source = Path(source)
+                            destination = working.parent / source.relative_to(project)
+                            destination.parent.mkdir(parents=True, exist_ok=True)
+                            if not destination.exists():
+                                shutil.copyfile(source, destination)
                 plans = {p.name: resolve(p) for p in (working / 'campaigns').glob('*.yaml')}
-                published.parent.mkdir(parents=True)
-                shutil.move(str(working), published)
+                published.parent.parent.mkdir(parents=True)
+                shutil.move(str(working.parent), published.parent)
+
+                def portable(plan, project_root):
+                    result = copy.deepcopy(plan)
+                    # Plan identity includes resolved host paths; workload hashes
+                    # and all execution parameters must still match after moving.
+                    result.pop('fingerprint')
+                    return json.loads(json.dumps(result).replace(str(project_root), '<project>'))
                 # The original workspace is absent: references must be self-contained.
                 for name, before in plans.items():
                     after = resolve(published / 'campaigns' / name)
-                    self.assertEqual(before, after)
+                    self.assertEqual(portable(before, working.parent), portable(after, published.parent))
                     for old, new in zip(before['cases'], after['cases']):
                         image_id = new['runtime']['image_id']
                         self.assertEqual(server_command(old, 'preview', 'preview', image_id),
@@ -66,7 +82,9 @@ class ProjectLayoutTests(unittest.TestCase):
                             for concurrency in workload['traffic']['concurrency']:
                                 args = (workload, concurrency, workload['traffic']['requests'],
                                         root / 'output', 'preview', 'preview')
-                                self.assertEqual(client_command(old, *args), client_command(new, *args))
+                                old_args = [x.replace(str(working.parent), '<project>') for x in client_command(old, *args)]
+                                new_args = [x.replace(str(published.parent), '<project>') for x in client_command(new, *args)]
+                                self.assertEqual(old_args, new_args)
                         # Logging files must also work from the published copy.
                         isolated = copy.deepcopy(new)
                         isolated['target']['cache_root'] = str(root / 'cache')

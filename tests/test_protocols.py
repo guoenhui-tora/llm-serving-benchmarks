@@ -51,6 +51,17 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual([t['compilation_check'] for t in trials], ['KNOWN_EVENTS', 'NO_KNOWN_EVENTS', 'KNOWN_EVENTS'])
         self.assertEqual(state['status'], 'PASS')
 
+    def test_full_load_warmup_keeps_formal_rounds_and_event_rules(self):
+        self.workload['measurement'].update(protocol='quick', warmup_rounds=1,
+                                            warmup_load='full', max_rounds=3)
+        self.events = iter([1, 1, 0, 0])
+        trials, state = self.run_protocol()
+        self.assertEqual([c[0] for c in self.calls], [128]*4)
+        self.assertEqual(len(state['warmups']), 1)
+        self.assertEqual(state['selected_rounds'], [1, 2, 3])
+        self.assertEqual(trials[0]['compilation_check'], 'KNOWN_EVENTS')
+        self.assertEqual(state['status'], 'PASS')
+
     def test_stable_slides_window_and_checks_latency_too(self):
         self.workload['measurement'].update(protocol='stable', stability_threshold=.02)
         self.values = iter([{'mean_ttft_ms': 30}, {}, {}, {}, {}])
@@ -183,6 +194,9 @@ class ProtocolTests(unittest.TestCase):
                   {'protocol':'stable','budget_s':10,'stability_threshold':0},
                   {'protocol':'jit_clean','budget_s':10,'max_rounds':2},
                   {'protocol':'quick','budget_s':10,'max_rounds':12},
+                  {'protocol':'quick','budget_s':10,'warmup_load':'all'},
+                  {'protocol':'jit_clean','budget_s':10,'warmup_load':'full'},
+                  {'protocol':'stable','budget_s':10,'warmup_load':'2c'},
                   {'protocol':'quick','budget_s':10,'warmup_rounds':3}):
             with self.subTest(measurement=m):
                 source['measurement']=m;dest.write_text(yaml.safe_dump(source))

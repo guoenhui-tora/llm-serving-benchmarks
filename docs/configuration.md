@@ -144,7 +144,7 @@ dataset:
 ```
 
 - prompt 原样用于 `/v1/completions`，不再套 chat 模板。需要角色标记或关闭 thinking 时，在准备数据时完成模型要求的编码。
-- 每轮按文件顺序取前 N 条，不随机打乱、循环补样本或截断。双实例对同一全局前 N 条交错分片：第0侧取0、2、4…，第1侧取1、3、5…。quick 预热取前2C条，正式轮取配置的 requests 条；每次重复使用相同请求集。
+- 每轮按文件顺序取前 N 条，不随机打乱、循环补样本或截断。双实例对同一全局前 N 条交错分片：第0侧取0、2、4…，第1侧取1、3、5…。quick默认预热取前2C条；设置 `measurement.warmup_load: full` 后预热也取配置的 requests 条。正式轮取 requests 条；每次重复使用相同请求集。
 - `validate/plan` 检查格式、数量及声明的长度；计算文件 SHA256 并纳入 workload 指纹。可选 `dataset.sha256` 可固定预期哈希；每轮客户端重新核对，运行中换文件会失败。
 - 客户端在计时前用实际 tokenizer 重新计算所选 prompt 长度（使用 `tokenizer(prompt)` 默认特殊 token 行为）。提供的 input_tokens 必须匹配；实际长度越界也会失败。output_tokens 若写在行内，必须与 workload 一致。
 - 每侧保存 `dataset-manifest.json`：文件哈希、选样顺序、请求 ID、实际输入长度和输出预算。验收核对成功数及输入总量；`ignore_eos: true` 时还要求输出总量恰好为请求数×预算，双实例另核对逐请求及整机总量。`ignore_eos: false` 允许自然结束，应单独比较。
@@ -160,7 +160,8 @@ dataset:
 | `repetitions` | 性能/校准默认3且≥3；smoke的quick/jit_clean默认1且≥1；stable至少3。分别表示固定轮数、累计目标或窗口长度 |
 | `timeout_s` | 默认1800；单客户端阶段超时，实际还受剩余budget_s限制 |
 | `max_rounds` | jit_clean/stable默认12，必须≥repetitions；quick固定等于repetitions |
-| `warmup_rounds` | 仅quick接受，默认1，只允许1或2；每轮请求数自动为2×当前并发 |
+| `warmup_rounds` | 仅quick接受，默认1，只允许1或2 |
+| `warmup_load` | 仅quick接受，省略为 `2c`（每轮2×并发）；`full` 使用 `traffic.requests`，预热与正式请求集一致。只改变请求量，不改变接纳规则 |
 | `stability_threshold` | 仅stable接受，默认0.02；有限数，0<值≤1，0.01表示1% |
 
 quick保留全部正式样本及事件标记；jit_clean累计最先无已知事件的样本；stable检查连续窗口内output_throughput、mean_ttft_ms、mean_tpot_ms的相对极差均≤阈值。旧预热/重试字段已移除，必须完整替换measurement块；缺少protocol也会报错。不允许把稳定性参数填到其他模式而静默忽略。
@@ -222,7 +223,7 @@ cases:
 
 GPU必须不重叠且并集等于整机target；服务和客户端各自的CPU、内存集合并集也必须等于整机预算。副本间CPU及API端口不得重叠，preflight另查跨副本SMT物理核重叠。每副本TP×PP×DP与其GPU数匹配；model路径、硬件声明、缓存根及本机地址必须一致。
 
-workload中的并发、正式请求数均为整机总量，须能被副本数整除；quick的预热量自动取整机并发的两倍。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
+workload中的并发、正式请求数均为整机总量，须能被副本数整除；quick默认预热量取整机并发的两倍；`warmup_load: full`时取整机正式请求数，再等分到各副本。当前支持request_rate=inf和已验证的vLLM 0.29.0客户端；固定全局数据集在计时前按索引交错分片，其他客户端版本或未知官方计时结构拒绝运行。客户端CLI的num-prompts表示全局生成量，实际每侧请求分片见 `request-partition.json`。
 
 每个case将全部副本启动一次，顺序执行所有workload及轮次。每轮同步执行，任一侧事件都会计入整机事件。jit_clean/stable据此拒绝整轮；quick保留并标记。stable依据整机聚合指标判断，单副本明细仍保存；没有额外的旧预热/重试执行路径。
 
