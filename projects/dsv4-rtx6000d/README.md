@@ -22,7 +22,7 @@
 
 ### DSpark 对照数据与性能结果
 
-已归档 [GovReport近8K请求](data/govreport-near8k.jsonl)及[数据说明与使用方法](data/govreport-near8k.md)，包含256条固定请求，供各节点使用同一数据进行DSpark OFF/ON对照。客户端读取、实际tokenizer计数和单/双实例模拟流式检查已通过。
+[GovReport](https://gov-report-data.github.io/) 是英文政府报告的长文档摘要数据集，原始数据见 [Hugging Face](https://huggingface.co/datasets/ccdv/govreport-summarization)。本项目筛选了256篇完整报告，加入摘要指令，形成[近8K输入请求集](data/govreport-near8k.jsonl)，用于DSpark off/on性能对照。当前实验固定取前128条，平均输入8141.79 tokens，输出固定1024 tokens；这是摘要任务的推理性能测试，不是摘要质量评测。筛选方法、来源版本、许可证及使用方式见[数据说明](data/govreport-near8k.md)。
 
 2026-09-19已完成同一真实文本负载下的单TP4、C32对照：off为 **663.92 ± 0.53**，修正Graph覆盖的DSpark K5为 **804.65 ± 5.64 tok/s（+21.20%）**，各三轮无已知编译事件。P95 TPOT略高，不能称为所有延迟全面改善。结果、quick/clean时间成本、Graph修正及复现命令见[DSpark性能报告](reports/dspark-tp4-20260919.md)，逐轮数据见[CSV](data/dspark-tp4-20260919.csv)。该负载与历史随机8192/1024不同，不能混用性能基线。
 

@@ -2,7 +2,7 @@
 
 [govreport-near8k.jsonl](govreport-near8k.jsonl) 固定保存256条英文摘要请求，供 DeepSeek V4 Flash NVFP4 的 DSpark OFF/ON 对照使用。最终输入平均8166 tokens，输出预算1024。其他节点直接使用此文件，不需要下载原始数据或重新筛选。
 
-已通过固定 vLLM 0.29.0 客户端的实际tokenizer校验和单/双实例模拟流式检查；**尚未完成模型生成或DSpark性能验证**。这些请求不是严格等长的8192输入，不能用历史random负载结果计算DSpark加速比。
+已通过固定 vLLM 0.29.0 客户端的实际tokenizer校验和单/双实例模拟流式检查，并完成前128条请求的单TP4、C32、DSpark off/on性能对照，见[性能报告](../reports/dspark-tp4-20260919.md)。本实验不评估摘要质量。这些请求不是严格等长的8192输入，不能用历史random负载结果计算DSpark加速比。
 
 ## 来源与处理
 
