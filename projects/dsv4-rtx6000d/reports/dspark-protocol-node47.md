@@ -127,7 +127,7 @@ GPU采样约5秒，正式阶段GPU4–7且利用率≥90%的采样中，random�
 
 ## 实际命令与复现入口
 
-公共入口：[random campaign](../configs/campaigns/tp4-random-quick.yaml)、[GovReport off campaign](../configs/campaigns/dspark-off-quick.yaml)、[TP4 recipe](../configs/recipes/tp4.yaml)、[rear target](../configs/targets/rear.yaml)、[random workload](../configs/workloads/random-c32-quick-full.yaml)、[GovReport workload](../configs/workloads/govreport-c32-quick-full.yaml)。预算和缓存规则见[节点任务](../README.md#下一轮四节点验证预热协议成本与负载差异)。本轮只改本地rear的IP／节点id，并新增两份薄target分别设置cache_root；两campaign分别引用rear-random／rear-govreport，公共recipe与workload保持原样。
+公共入口：[random campaign](../configs/campaigns/tp4-random-quick.yaml)、[GovReport off campaign](../configs/campaigns/dspark-off-quick.yaml)、[TP4 recipe](../configs/recipes/tp4.yaml)、[rear target](../configs/targets/rear.yaml)、[random workload](../configs/workloads/random-c32-quick-full.yaml)、[GovReport workload](../configs/workloads/govreport-c32-quick-full.yaml)。预算和缓存规则见[节点任务](../README.md#2026-09-20四节点预热与负载对照)。本轮只改本地rear的IP／节点id，并新增两份薄target分别设置cache_root；两campaign分别引用rear-random／rear-govreport，公共recipe与workload保持原样。
 
 本机工作区为`experiments/dspark-protocol-node47/`。两campaign分别完成validate、plan、日志准备和实际CLI preflight后执行以下命令，tmux中的外层观察器只运行CLI并读取资源，不修改runner或测量逻辑。复现需重新从保留的冻结快照制作两个新的可写副本，并使用新的run-root，不能直接复用已写入的缓存来声称相同起点。
 

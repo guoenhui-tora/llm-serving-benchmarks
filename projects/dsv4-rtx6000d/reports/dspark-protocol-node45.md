@@ -107,7 +107,7 @@ CPU每5秒读取/proc/stat，GPU同步低频采样；每15秒保存进程列表�
 
 ## 复现入口和实际命令
 
-公共入口：[off quick campaign](../configs/campaigns/dspark-off-quick.yaml)、[off clean campaign](../configs/campaigns/dspark-off-clean.yaml)、[TP4 recipe](../configs/recipes/tp4.yaml)、[完整预热workload](../configs/workloads/govreport-c32-quick-full.yaml)、[jit_clean workload](../configs/workloads/govreport-c32-jit-clean.yaml)。按[项目任务与缓存规则](../README.md#下一轮四节点验证预热协议成本与负载差异)在本地复制、修改薄target并克隆缓存后执行，不能直接使用归档target的48地址。
+公共入口：[off quick campaign](../configs/campaigns/dspark-off-quick.yaml)、[off clean campaign](../configs/campaigns/dspark-off-clean.yaml)、[TP4 recipe](../configs/recipes/tp4.yaml)、[完整预热workload](../configs/workloads/govreport-c32-quick-full.yaml)、[jit_clean workload](../configs/workloads/govreport-c32-jit-clean.yaml)。按[项目任务与缓存规则](../README.md#2026-09-20四节点预热与负载对照)在本地复制、修改薄target并克隆缓存后执行，不能直接使用归档target的48地址。
 
 服务条件为TP4/PP1/DP1、EP off、上下文16384、活动容量32、prefill8192、显存比例0.90、FP8 E4M3 KV、V2＋async、autotune/prefix cache off，Graph尺寸1/2/4/8/12/16/24/32、上限32。客户端为固定vLLM 0.29.0、流式 `/v1/completions`、C32、128请求、temperature=0、seed=0、ignore_eos=true、request_rate=inf、num_warmups=0。quick单轮full预热＋3轮；clean无独立预热、最先3轮无事件、最多12轮；两组budget_s=2700、timeout_s=900，实际没有重试或扩展预算。
 

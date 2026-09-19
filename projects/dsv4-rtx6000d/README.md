@@ -8,7 +8,7 @@
 
 ## 当前可复用入口
 
-报告和CSV保存研究结论；configs维护下面的普通推理入口，以及本页下一轮任务所需的少量公共配置，不再为历史矩阵或每个节点复制配置。
+报告和CSV保存研究结论；configs维护下面的普通推理入口，以及DSpark协议与负载对照所需的少量公共配置，不再为历史矩阵或每个节点复制配置。
 
 | 入口 | 用途 |
 | --- | --- |
@@ -18,7 +18,7 @@
 
 单TP4与双TP4共用[同一份服务recipe](configs/recipes/tp4.yaml)。三个target只表达整机、前四卡、后四卡；当前地址为48，其他节点在experiments中修改本机地址并核实映射，不另归档四份相同配置。完整启动命令、CPU绑定、负载和历史入口见[基线与复现](reports/reproduction.md)。
 
-当前workload显式采用 `quick`（1轮2C预热＋3轮正式测量，保留事件标记），新协议组合仅做离线验证；下方历史结果仍使用当时的预热和验收规则，不是新协议的实测。探索配置、全部原始结果留在experiments；只有选定基线和将继续研究的配置进入projects。
+上述普通推理入口的workload显式采用 `quick`（1轮2C预热＋3轮正式测量，保留事件标记），这组协议与配置的组合仅做离线验证；历史拓扑结果仍使用当时的预热和验收规则。DSpark的完整负载预热与 `jit_clean` 已实测，见下节。探索配置、全部原始结果留在experiments；只有选定基线和将继续研究的配置进入projects。
 
 ### DSpark 对照数据与性能结果
 
@@ -30,7 +30,55 @@
 
 固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
 
-## 下一轮：四节点验证预热、协议成本与负载差异
+## 2026-09-20：四节点预热与负载对照
+
+**GovReport下，单TP4、DSpark off的吞吐在四节点均约664 tok/s；一轮完整负载预热后，三轮正式结果接近且无已知编译事件。独立quick与jit_clean的性能、耗时也接近。K5仍有正式轮编译和明显降速，后续DSpark关键对照优先使用jit_clean。**
+
+### 条件与结果
+
+固定vLLM 0.29.0、单实例TP4、GPU4–7、C32、每轮128请求／每请求1024输出；服务CPU32–47／NUMA2，客户端CPU48–51／NUMA3。其余服务条件沿用公共recipe：EP off、FP8 KV、autotune off、prefix cache off。K5预测5个草稿token，使用已验证的加载补丁与扩大后的Graph覆盖。
+
+本轮quick为**128请求预热1轮＋128请求正式3轮**；jit_clean从完整128请求轮次开始，累计接纳最先三轮无已知编译事件的结果。同配置所有轮次在一次启动内完成。GovReport固定使用JSONL前128条，每轮实际输入1,042,149、输出131,072 tokens；random为等长8192输入，每轮输入1,048,576、输出131,072 tokens。全部28轮均128成功、0失败。
+
+下表每行n=3，吞吐为均值±样本标准差，CV为吞吐标准差／均值；延迟为三轮对应均值的平均。quick保留全部正式轮，包括有事件的轮次。逐轮结果、P95和其他指标见节点报告与CSV，不跨节点合并样本。
+
+| 节点 | 负载／DSpark | 协议 | 输出 tok/s | CV | Mean TTFT s | Mean TPOT ms |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| 45 | GovReport／off | quick | 664.56 ± 0.28 | 0.04% | 5.650 | 42.61 |
+| 45 | GovReport／off | jit_clean | 663.21 ± 0.51 | 0.08% | 5.653 | 42.70 |
+| 46 | GovReport／off | quick | 663.40 ± 0.51 | 0.08% | 5.648 | 42.69 |
+| 46 | GovReport／K5 | quick | 741.52 ± 116.34 | 15.69% | 4.574 | 38.40 |
+| 47 | random／off | quick | 718.42 ± 2.31 | 0.32% | 6.334 | 38.33 |
+| 47 | GovReport／off | quick | 664.69 ± 0.37 | 0.06% | 5.649 | 42.60 |
+| 48 | GovReport／off | quick | 664.41 ± 0.32 | 0.05% | 5.658 | 42.61 |
+
+### 这轮解决了什么
+
+**off基线可以复现，负载差异需要单独看。** 四节点GovReport off quick均值最大差异仅0.195%，各组三轮CV均低于0.08%。47同机GovReport比random吞吐低7.48%，Mean TPOT高11.12%，Mean TTFT低10.81%；这支持将两种负载分开建立基线。两组为独立启动，random首轮还含8条事件，文本、输入长度分布、运行顺序和后台负载的影响未分别隔离，不能据此认定某一种内部机制是原因。
+
+**本次quick没有明显节约时间。** 45从同一缓存快照的两个独立副本启动：quick与jit_clean吞吐仅差0.20%，Mean TTFT／TPOT差异均低于0.23%。两者实际都执行4轮128请求，协议耗时分别15.79／15.81分钟，整个run均约18.35分钟；run包含内部预检、启动、协议和收尾，不含外部准备及缓存复制。每种协议只独立启动一次，这个结果不代表所有配置的成本都相同。
+
+**K5有提升潜力，但一轮完整预热仍未覆盖后续编译。** 46正式吞吐为806.44／607.21／810.92 tok/s，事件行数为0／40／0；第二轮日志包含实际TileLang编译起止，不能只当作缓存加载。三轮全部保留后均值741.52 tok/s，较本机off高11.78%，但CV达15.69%，尚不能作为稳定收益。编译与慢轮同现，CPU／SMT负载也有差异，未完全隔离因果；事件行数不等于独立编译次数。
+
+此前48的修正K5已取得三轮clean **804.65 ± 5.64 tok/s，较同批off提高21.20%**，可作为已有收益证据，不能与46的两轮快样本拼成一组。该次累计验收共运行5轮，协议耗时15.85分钟，见[夜间报告](reports/dspark-tp4-20260919.md)。46本轮K5 quick协议耗时19.38分钟、run总耗时27.57分钟，但其K5缓存此前不存在，启动与编译历程不同，不能拿这两个批次推断clean比quick更快。
+
+### 后续采用的测量方式
+
+GovReport TP4 off的快速筛选可继续用本轮完整负载quick；**DSpark参数与拓扑的关键收益对照优先使用jit_clean，off/on采用同一协议**。每轮执行完整正式工作量，同一次启动内累计最先三轮无已知编译事件，不再额外要求“两轮安静预热后重新测三轮”。沿用最多12轮／45分钟的协议预算，保留拒绝轮、全部耗时和波动；未完成则明确记录，不能挑最快三轮。
+
+无已知事件仍不等于性能稳定，需同时检查CV、延迟、请求和token数量以及资源干扰。本轮没有运行stable，也没有修改公共默认协议；上述建议限于当前单TP4、C32与这份负载，不能直接推广到双实例或其他K值。
+
+### 节点报告与复现入口
+
+- [x] **45**：独立quick／jit_clean对照已完成，两组PASS；见[节点报告](reports/dspark-protocol-node45.md)与[CSV](data/dspark-protocol-node45.csv)。
+- [x] **46**：同机off／K5 quick已完成，保留K5慢轮及JIT事件；见[节点报告](reports/dspark-protocol-node46.md)。
+- [x] **47**：两种负载独立启动对照已完成，见[节点报告](reports/dspark-protocol-node47.md)。
+- [x] **48**：完整负载预热验证完成，quick PASS；见[节点报告](reports/dspark-protocol-node48.md)。
+
+<details>
+<summary>本轮原执行方案、公共配置与归档约定（已完成）</summary>
+
+以下保留本轮执行约定供复现；节点任务均已交付，不是待执行的新一轮实验。
 
 **本轮只做单实例TP4、C32、1024输出，先回答测量是否省时可靠、DSpark收益能否复现、真实文本为何比历史随机负载慢。** 不扩展K值、拓扑或并发，不要求每个节点重新取得三轮clean。四台各自在本机执行，不SSH控制其他节点。
 
@@ -47,18 +95,13 @@
 
 45的两种协议只各启动一次，不能据此证明跨启动耗时稳定；47仍有启动和顺序差异，不能把全部差距唯一归因于文本内容。46的收益只用本机off作分母；48历史clean与本轮缓存历程不同，不是严格的同批配对。不得跨节点拼接off/on计算收益。
 
-- [x] **45**：独立quick／jit_clean对照已完成，两组PASS；见[节点报告](reports/dspark-protocol-node45.md)与[CSV](data/dspark-protocol-node45.csv)。
-- [x] **46**：同机off／K5 quick已完成，保留K5慢轮及JIT事件；见[节点报告](reports/dspark-protocol-node46.md)。
-- [x] **47**：两种负载独立启动对照已完成，见[节点报告](reports/dspark-protocol-node47.md)。
-- [x] **48**：完整负载预热验证完成，quick PASS；见[节点报告](reports/dspark-protocol-node48.md)。
-
 ### 公共配置与本地准备
 
 | 配置 | 用途与状态 |
 | --- | --- |
 | [tp4 recipe](configs/recipes/tp4.yaml) | 已实测的off服务参数，继续复用 |
 | [TP4 DSpark K5 recipe](configs/recipes/tp4-dspark-k5.yaml) | 与夜间实测修正组相同；含原生MXFP4草稿补丁入口、K5和Graph覆盖 |
-| [GovReport quick](configs/workloads/govreport-c32-quick-full.yaml) / [random quick](configs/workloads/random-c32-quick-full.yaml) | 候选完整预热方案：`warmup_rounds: 1`、`warmup_load: full`、`repetitions: 3`；仅离线验证，尚未GPU实测 |
+| [GovReport quick](configs/workloads/govreport-c32-quick-full.yaml) / [random quick](configs/workloads/random-c32-quick-full.yaml) | 本轮已实测：`warmup_rounds: 1`、`warmup_load: full`、`repetitions: 3`；K5仍有正式轮JIT，见上方结果 |
 | [GovReport jit_clean](configs/workloads/govreport-c32-jit-clean.yaml) | 每轮128请求，累计最先三轮无已知事件，最多12轮／45分钟 |
 | [off quick](configs/campaigns/dspark-off-quick.yaml) / [K5 quick](configs/campaigns/dspark-k5-quick.yaml) / [off clean](configs/campaigns/dspark-off-clean.yaml) / [random quick](configs/campaigns/tp4-random-quick.yaml) | 上表四个执行入口，每个都只有一个case |
 | [rear target](configs/targets/rear.yaml) | GPU4–7；服务CPU32–47/NUMA2，客户端CPU48–51/NUMA3；本地改成本机地址 |
@@ -138,6 +181,8 @@ node,run_id,configuration,dataset,protocol,phase,round,accepted,protocol_status,
 各节点完成后**只改本节自己的完成标记**，例如 `- [x] **45**：已完成，见[节点报告](reports/dspark-protocol-node45.md)。` 阻塞也可打勾表示已交付，但必须写“阻塞”或“部分完成”，不伪装成功。不要修改其他节点行或抢先重写四节点总表。
 
 提交前从CSV重算报告数字，检查链接、字段、单位和`git diff --check`；本节点只提交报告、CSV及自己的完成行。运行期间不更新源码；实验完成后如需同步远端再处理文档冲突。除用户另行授权外不push。公共功能确有阻塞时先留证据，单独说明修复范围，不让各节点自行修改gate或扩展矩阵。
+
+</details>
 
 ## 2026-09-18：八卡整机部署结果
 
