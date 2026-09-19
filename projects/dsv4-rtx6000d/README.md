@@ -54,7 +54,7 @@
 - [x] **45**：TP4 off与K1–K5及K3独立复测均已完成，见[节点报告](reports/dspark-k-sweep-node45.md)与[CSV](data/dspark-k-sweep-node45.csv)。
 - [x] **46**：off已完成（jit_clean PASS）；K5启动遇共性DP草稿路径断言，K1–K4按规则停止，见[节点报告](reports/dspark-k-sweep-node46.md)。
 - [x] **47**：部分完成：off三轮clean PASS；K5启动遇共同DP／草稿路径断言，K1–K4按约定停止，见[节点报告](reports/dspark-k-sweep-node47.md)与[完整CSV](data/dspark-k-sweep-node47.csv)。
-- [ ] **48**：完成同机EP on/off的off、K4、K5对照，或明确记录阻塞。
+- [x] **48**：已按预算执行并归档；两组off均为PARTIAL（各2轮clean），K5实测DP草稿启动阻塞，其余相关K按规则跳过。见[节点报告](reports/dspark-k-sweep-node48.md)与[完整逐轮CSV](data/dspark-k-sweep-node48.csv)。
 
 ### 公共入口与配置准备
 
