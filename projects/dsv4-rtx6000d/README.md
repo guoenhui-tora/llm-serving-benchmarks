@@ -20,13 +20,15 @@
 
 当前workload显式采用 `quick`（1轮2C预热＋3轮正式测量，保留事件标记），新协议组合仅做离线验证；下方历史结果仍使用当时的预热和验收规则，不是新协议的实测。探索配置、全部原始结果留在experiments；只有选定基线和将继续研究的配置进入projects。
 
-### DSpark 对照数据
+### DSpark 对照数据与性能结果
 
-已归档 [GovReport近8K请求](data/govreport-near8k.jsonl)及[数据说明与使用方法](data/govreport-near8k.md)，包含256条固定请求，供各节点使用同一数据进行DSpark OFF/ON对照。客户端读取、实际tokenizer计数和单/双实例模拟流式检查已通过；DSpark加载兼容性已单独验证，性能收益尚未确认。数据准备脚本与探索配置保留在本地工作区，后续需在同一真实文本负载上重新测OFF参照。
+已归档 [GovReport近8K请求](data/govreport-near8k.jsonl)及[数据说明与使用方法](data/govreport-near8k.md)，包含256条固定请求，供各节点使用同一数据进行DSpark OFF/ON对照。客户端读取、实际tokenizer计数和单/双实例模拟流式检查已通过。
+
+2026-09-19已完成同一真实文本负载下的单TP4、C32对照：off为 **663.92 ± 0.53**，修正Graph覆盖的DSpark K5为 **804.65 ± 5.64 tok/s（+21.20%）**，各三轮无已知编译事件。P95 TPOT略高，不能称为所有延迟全面改善。结果、quick/clean时间成本、Graph修正及复现命令见[DSpark性能报告](reports/dspark-tp4-20260919.md)，逐轮数据见[CSV](data/dspark-tp4-20260919.csv)。该负载与历史随机8192/1024不同，不能混用性能基线。
 
 ### DSpark 加载兼容性
 
-固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像，不代表已确认性能收益；探索结果继续留在本地工作区。
+固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
 
 ## 2026-09-18：八卡整机部署结果
 

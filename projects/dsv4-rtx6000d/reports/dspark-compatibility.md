@@ -1,6 +1,6 @@
 # DSpark 草稿量化加载问题与本地补丁
 
-**固定 vLLM 0.29.0 镜像加载 NVIDIA Flash-0731 内置 DSpark 草稿时，会错误地将主模型的 NVFP4 专家配置用于 MXFP4 草稿。当前采用本地加载补丁，保留原权重及其精度。** 本机 TP4 功能检查已确认草稿分派恢复、scale 不匹配警告消失；这不代表完成模型质量评测或证明 DSpark 有性能收益。
+**固定 vLLM 0.29.0 镜像加载 NVIDIA Flash-0731 内置 DSpark 草稿时，会错误地将主模型的 NVFP4 专家配置用于 MXFP4 草稿。当前采用本地加载补丁，保留原权重及其精度。** 本机 TP4 功能检查已确认草稿分派恢复、scale 不匹配警告消失；这不代表完成模型质量评测。后续性能与Graph覆盖修正另见[TP4 DSpark对照报告](dspark-tp4-20260919.md)。
 
 ## 适用范围与问题
 
@@ -32,6 +32,10 @@
 ```yaml
 options:
   # 与原 options 合并，不覆盖其他参数。
+  compilation-config:
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_capture_sizes: [5,6,10,12,20,24,40,48,60,72,80,96,120,144,160,192]
+    max_cudagraph_capture_size: 192
   speculative-config:
     method: dspark
     num_speculative_tokens: 5
@@ -43,7 +47,7 @@ environment:
   PYTHONPATH: /root/.cache/dspark-native-mxfp4
 ```
 
-以上是已做功能检查的起点，不是最优参数。保持原有日志规则，并在 `checks.required` 中追加 `LOCAL_DSPARK_FORMAT_FIX: validated 768 native MXFP4 draft experts` 和 `Mxfp4 MoE backend`，确认补丁实际加载。
+以上K5、C32配置已完成后续性能对照，不是最优参数。Graph尺寸按token计，目标验证需覆盖192、草稿需160，不能沿用普通TP4上限32；其他K或容量需重新核对覆盖范围。保持原有日志规则，并在 `checks.required` 中追加 `LOCAL_DSPARK_FORMAT_FIX: validated 768 native MXFP4 draft experts` 和 `Mxfp4 MoE backend`，确认补丁实际加载。
 
 在仓库根目录，使用 Python 环境中的项目依赖运行：
 
@@ -82,4 +86,4 @@ docker run --rm --pull never --network none \
 - [0731模型讨论 #2](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4/discussions/2)及[社区转换方案](https://github.com/takashito/DeepSeek-V4-Flash-0731-NVFP4-mtpfix)提供将同一0731草稿转为 NVFP4 的另一条路线。作者报告权重反量化值一致，但另加了未单独校准的 input scale；不能将其等同于端到端数值无变化。本机未采用或验证此方案。
 - [社区 SM120 分派修复记录](https://github.com/jasl/vllm/issues/35)也报告保留 MXFP4 草稿后接受率恢复，但使用定制镜像，不能替代当前镜像的本机验证。
 
-因此当前保留已验证的原权重＋加载补丁，后续再单独研究性能。完整探索日志、配置和数据仍保存在节点48的 `experiments/dsv4-rtx6000d/`，仅本机可用，不随 Git 分发。
+因此当前保留已验证的原权重＋加载补丁；后续性能研究已单独归档到[对照报告](dspark-tp4-20260919.md)。完整探索日志、配置和数据仍保存在节点48的 `experiments/dsv4-rtx6000d/`，仅本机可用，不随 Git 分发。
