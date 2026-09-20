@@ -1,0 +1,939 @@
+{
+  "case": "C3",
+  "status": {
+    "case": "C3",
+    "owner": "pd-night-20260921-c3-01",
+    "status": "FAILED_WITH_EVIDENCE",
+    "started": 1789942521.8233242,
+    "spec": {
+      "owner": "pd-night-20260921-c3-01",
+      "case_id": "C3",
+      "mode": "pd",
+      "ready_timeout_s": 900,
+      "budget_s": 3300,
+      "members": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "url": "http://10.90.1.46:31249",
+          "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/c3-p0.yaml"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "url": "http://10.90.1.48:31249",
+          "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/c3-d0.yaml"
+        }
+      ],
+      "workload": "overnight-8k-c32",
+      "concurrency": 32,
+      "requests": 128,
+      "group": "dp2-dspark-k5-8k-c32",
+      "description": "Symmetric DP2 EPon K5 DSpark PD;8GPU C32;draft startup coverage and3SWA registration required.",
+      "require_targeted_warmup": true,
+      "expected_dp_engines": 2,
+      "functional_requests": 8,
+      "require_dspark_warmup": true,
+      "expected_transfers_per_request": {
+        "d0": 2
+      }
+    },
+    "ready_at": 1789942717.2962208,
+    "last_round": {
+      "name": "functional-c8",
+      "started": 1789942717.3376079,
+      "finished": 1789942755.852509,
+      "requests": 8,
+      "throughput": 506.1696133402106,
+      "events": 20
+    },
+    "error": "BenchError('Request count mismatch: completed=126, expected=128')",
+    "protocol": {
+      "version": 1,
+      "protocol": "quick",
+      "workload": "govreport-8k-c32-n128-quick-full",
+      "concurrency": 32,
+      "status": "FAIL",
+      "started_at": "2026-09-20T22:19:15.853411+00:00",
+      "budget_s": 1800,
+      "max_rounds": 3,
+      "warmups": [
+        {
+          "path": "warmup-01",
+          "started_at": "2026-09-20T22:19:15.853605+00:00",
+          "status": "FAILED",
+          "error": "Request count mismatch: completed=126, expected=128",
+          "finished_at": "2026-09-20T22:21:09.040296+00:00"
+        }
+      ],
+      "rounds": [],
+      "selected_rounds": [],
+      "windows": [],
+      "elapsed_s": 113.18695795000531,
+      "event_rounds": 0,
+      "clean_rounds": 0,
+      "all_clean_statistics": {},
+      "all_round_statistics": {},
+      "selected_statistics": {},
+      "stop_reason": "runtime_error",
+      "error": "Request count mismatch: completed=126, expected=128",
+      "finished_at": "2026-09-20T22:21:09.040352+00:00"
+    },
+    "controller": {
+      "status": "STOPPED",
+      "owner": "pd-night-20260921-c3-01",
+      "started": 1789942521.9273643,
+      "ready_at": 1789942712.8999162,
+      "changed_files": [],
+      "cleanup_errors": [],
+      "ended": 1789942874.9721496
+    },
+    "changed_scripts": [],
+    "ended": 1789942875.0057275
+  },
+  "functional_counters": {
+    "p0": {
+      "vllm:nixl_num_failed_transfers_total": 0.0,
+      "vllm:nixl_num_failed_notifications_total": 0.0,
+      "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+      "vllm:nixl_bytes_transferred_count": 0.0,
+      "vllm:nixl_bytes_transferred_sum": 0.0,
+      "vllm:nixl_xfer_time_seconds_count": 0.0,
+      "vllm:nixl_xfer_time_seconds_sum": 0.0,
+      "vllm:request_prefill_kv_computed_tokens_sum": 63310.0,
+      "vllm:num_preemptions_total": 0.0,
+      "vllm:external_prefix_cache_hits_total": 0.0,
+      "vllm:request_success_total": 8.0,
+      "vllm:spec_decode_num_drafts_total": 0.0,
+      "vllm:spec_decode_num_draft_tokens_total": 0.0,
+      "vllm:spec_decode_num_accepted_tokens_total": 0.0
+    },
+    "d0": {
+      "vllm:nixl_num_failed_transfers_total": 0.0,
+      "vllm:nixl_num_failed_notifications_total": 0.0,
+      "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+      "vllm:nixl_bytes_transferred_count": 16.0,
+      "vllm:nixl_bytes_transferred_sum": 906024960.0,
+      "vllm:nixl_xfer_time_seconds_count": 16.0,
+      "vllm:nixl_xfer_time_seconds_sum": 3.0731260000000002,
+      "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+      "vllm:num_preemptions_total": 0.0,
+      "vllm:external_prefix_cache_hits_total": 63310.0,
+      "vllm:request_success_total": 8.0,
+      "vllm:spec_decode_num_drafts_total": 2540.0,
+      "vllm:spec_decode_num_draft_tokens_total": 12700.0,
+      "vllm:spec_decode_num_accepted_tokens_total": 5670.0
+    }
+  },
+  "failed_warmup_raw": {
+    "date": "20260920-222108",
+    "endpoint_type": "vllm",
+    "backend": "vllm",
+    "label": null,
+    "model_id": "/model",
+    "tokenizer_id": "/model",
+    "num_prompts": 128,
+    "request_rate": "inf",
+    "burstiness": 1.0,
+    "max_concurrency": 32,
+    "duration": 89.36540170991793,
+    "completed": 126,
+    "failed": 2,
+    "total_input_tokens": 1025173,
+    "total_output_tokens": 129024,
+    "request_throughput": 1.4099416282936743,
+    "request_goodput": null,
+    "output_throughput": 1443.7802273727225,
+    "total_token_throughput": 12915.479345648208,
+    "max_output_tokens_per_s": 672.0,
+    "max_concurrent_requests": 38,
+    "rtfx": 0.0,
+    "mean_ttft_ms": 4641.561708122026,
+    "median_ttft_ms": 3613.044290977996,
+    "std_ttft_ms": 3252.9022755789015,
+    "p50_ttft_ms": 3613.044290977996,
+    "p90_ttft_ms": 9507.052520057186,
+    "p95_ttft_ms": 11366.61349152564,
+    "p99_ttft_ms": 13237.155729031656,
+    "mean_tpot_ms": 15.862206312840975,
+    "median_tpot_ms": 15.61136094868986,
+    "std_tpot_ms": 2.240705139599948,
+    "p50_tpot_ms": 15.61136094868986,
+    "p90_tpot_ms": 18.393576522014094,
+    "p95_tpot_ms": 19.989985380722768,
+    "p99_tpot_ms": 22.863101723558614,
+    "mean_itl_ms": 55.56751529545739,
+    "median_itl_ms": 48.15568798221648,
+    "std_itl_ms": 52.90218981657206,
+    "p50_itl_ms": 48.15568798221648,
+    "p90_itl_ms": 51.33766497019678,
+    "p95_itl_ms": 169.45792944170526,
+    "p99_itl_ms": 190.04296619212255,
+    "mean_e2el_ms": 20868.598766158342,
+    "median_e2el_ms": 20756.47935795132,
+    "std_e2el_ms": 3783.071559158562,
+    "p50_e2el_ms": 20756.47935795132,
+    "p90_e2el_ms": 26019.790191436186,
+    "p95_e2el_ms": 27682.55840879283,
+    "p99_e2el_ms": 29947.470000799512
+  },
+  "failed_requests": [
+    {
+      "event": "start",
+      "time": 1789942829.2064288,
+      "monotonic": 820541.836341283,
+      "request_id": "bench-0d99f285-92"
+    },
+    {
+      "event": "pd_route",
+      "time": 1789942829.206458,
+      "monotonic": 820541.836370723,
+      "request_id": "bench-0d99f285-92",
+      "prefill": "http://10.90.1.46:31249",
+      "decode": "http://10.90.1.48:31249",
+      "prefill_inflight": {
+        "http://10.90.1.46:31249": 11
+      },
+      "decode_inflight": {
+        "http://10.90.1.48:31249": 32
+      }
+    },
+    {
+      "event": "prefill_done",
+      "time": 1789942834.7192903,
+      "monotonic": 820547.349203299,
+      "request_id": "bench-0d99f285-92",
+      "elapsed": 5.513062880025245,
+      "kv_transfer_params": {
+        "do_remote_prefill": true,
+        "do_remote_decode": false,
+        "remote_block_ids": [
+          [
+            9775,
+            9774,
+            9773
+          ],
+          [
+            9766,
+            9765,
+            9764
+          ],
+          [
+            8155,
+            9950,
+            8046,
+            8045,
+            8044,
+            8043,
+            8042,
+            8041,
+            8040,
+            8039,
+            8038,
+            8037,
+            8036,
+            8035,
+            8034,
+            8033,
+            2750,
+            2751,
+            2752,
+            2764,
+            2765,
+            2766,
+            8462,
+            8463,
+            8464,
+            1753,
+            1752,
+            1751,
+            1750,
+            1749,
+            1748,
+            1747,
+            1746,
+            9763,
+            9762
+          ],
+          [
+            0,
+            4130,
+            4131
+          ],
+          [
+            0,
+            8704,
+            8705,
+            8706,
+            8707,
+            8708,
+            8709,
+            8710,
+            8711,
+            8712,
+            8713,
+            8714,
+            8715,
+            8716,
+            8717,
+            8718,
+            8719
+          ]
+        ],
+        "remote_engine_id": "53a57078-6773-4fc6-b30e-89ba5b0166ab_dp1",
+        "remote_request_id": "cmpl-bench-0d99f285-92-0-9d60c3cf",
+        "remote_host": "10.90.1.46",
+        "remote_port": 56301,
+        "tp_size": 2,
+        "dcp_size": 1,
+        "pp_size": 1,
+        "remote_num_tokens": 8903,
+        "remote_blocks_expiry_time": null,
+        "transfer_mode": "pull"
+      },
+      "usage": {
+        "prompt_tokens": 8903,
+        "total_tokens": 8904,
+        "completion_tokens": 1,
+        "prompt_tokens_details": null,
+        "completion_tokens_details": null
+      },
+      "prefill": "http://10.90.1.46:31249",
+      "decode": "http://10.90.1.48:31249"
+    },
+    {
+      "event": "error",
+      "time": 1789942834.7205532,
+      "monotonic": 820547.350465976,
+      "request_id": "bench-0d99f285-92",
+      "elapsed": 5.514325577998534,
+      "error": "ServerDisconnectedError('Server disconnected')"
+    },
+    {
+      "event": "pd_release",
+      "time": 1789942834.7206311,
+      "monotonic": 820547.350543562,
+      "request_id": "bench-0d99f285-92",
+      "prefill_inflight": {
+        "http://10.90.1.46:31249": 5
+      },
+      "decode_inflight": {
+        "http://10.90.1.48:31249": 31
+      }
+    },
+    {
+      "event": "start",
+      "time": 1789942841.617858,
+      "monotonic": 820554.247770619,
+      "request_id": "bench-0d99f285-106"
+    },
+    {
+      "event": "pd_route",
+      "time": 1789942841.6178913,
+      "monotonic": 820554.247803704,
+      "request_id": "bench-0d99f285-106",
+      "prefill": "http://10.90.1.46:31249",
+      "decode": "http://10.90.1.48:31249",
+      "prefill_inflight": {
+        "http://10.90.1.46:31249": 1
+      },
+      "decode_inflight": {
+        "http://10.90.1.48:31249": 31
+      }
+    },
+    {
+      "event": "error",
+      "time": 1789942841.618398,
+      "monotonic": 820554.248310611,
+      "request_id": "bench-0d99f285-106",
+      "elapsed": 0.000693504000082612,
+      "error": "ServerDisconnectedError('Server disconnected')"
+    },
+    {
+      "event": "pd_release",
+      "time": 1789942841.618444,
+      "monotonic": 820554.248356434,
+      "request_id": "bench-0d99f285-106",
+      "prefill_inflight": {
+        "http://10.90.1.46:31249": 0
+      },
+      "decode_inflight": {
+        "http://10.90.1.48:31249": 30
+      }
+    }
+  ],
+  "draft_registration": {
+    "p0": [
+      {
+        "phase": "COMPLETE",
+        "rank": 1,
+        "dp_rank": 1,
+        "pid": 479,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "53a57078-6773-4fc6-b30e-89ba5b0166ab_dp1",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.1509624356403947,
+        "passes": [
+          {
+            "seconds": 0.07533645257353783,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.0751373777166009,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 0,
+        "dp_rank": 0,
+        "pid": 473,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "53a57078-6773-4fc6-b30e-89ba5b0166ab_dp0",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.14962700940668583,
+        "passes": [
+          {
+            "seconds": 0.07474567834287882,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.07443086057901382,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 0,
+        "dp_rank": 1,
+        "pid": 478,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "53a57078-6773-4fc6-b30e-89ba5b0166ab_dp1",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.19327853061258793,
+        "passes": [
+          {
+            "seconds": 0.09664176683872938,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.09605510905385017,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 1,
+        "dp_rank": 0,
+        "pid": 474,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "53a57078-6773-4fc6-b30e-89ba5b0166ab_dp0",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.18977136630564928,
+        "passes": [
+          {
+            "seconds": 0.09563795756548643,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.09346983302384615,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      }
+    ],
+    "d0": [
+      {
+        "phase": "COMPLETE",
+        "rank": 0,
+        "dp_rank": 1,
+        "pid": 476,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "8691b940-91cf-438c-9baa-a827ed08de41_dp1",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.15159408189356327,
+        "passes": [
+          {
+            "seconds": 0.07555678952485323,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.07566721178591251,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 1,
+        "dp_rank": 1,
+        "pid": 477,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "8691b940-91cf-438c-9baa-a827ed08de41_dp1",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.18824469298124313,
+        "passes": [
+          {
+            "seconds": 0.0939496411010623,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.09371108748018742,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 1,
+        "dp_rank": 0,
+        "pid": 470,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "8691b940-91cf-438c-9baa-a827ed08de41_dp0",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.14827076811343431,
+        "passes": [
+          {
+            "seconds": 0.07368333265185356,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.07408036477863789,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      },
+      {
+        "phase": "COMPLETE",
+        "rank": 0,
+        "dp_rank": 0,
+        "pid": 469,
+        "k": 5,
+        "token_min": 1,
+        "token_max": 96,
+        "draft_kv_groups": {
+          "model.layers.43.attn.swa_cache": 1,
+          "model.layers.44.attn.swa_cache": 0,
+          "model.layers.45.attn.swa_cache": 1
+        },
+        "nixl_registration": {
+          "engine_id": "8691b940-91cf-438c-9baa-a827ed08de41_dp0",
+          "compat_hash": "abfaf30825a928ae44df9dbb9fbd6bb4fc3c6a6b528cce457f32436fe9285fa7",
+          "num_regions": 1,
+          "local_transfer_handles": 1
+        },
+        "cache_tensors": [
+          {
+            "name": "model.layers.43.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.44.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          },
+          {
+            "name": "model.layers.45.attn.swa_cache",
+            "shape": [
+              26610,
+              64,
+              584
+            ],
+            "dtype": "torch.uint8"
+          }
+        ],
+        "seconds": 0.14915615878999233,
+        "passes": [
+          {
+            "seconds": 0.07454282697290182,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          },
+          {
+            "seconds": 0.07409649156033993,
+            "cache_entries": {
+              "mhc_pre_big_fuse_with_norm_tilelang": 23,
+              "mhc_fused_tilelang": 2,
+              "mhc_post_tilelang": 1,
+              "hc_head_fuse_tilelang": 1
+            }
+          }
+        ],
+        "memory_allocated_delta": 0
+      }
+    ]
+  }
+}
