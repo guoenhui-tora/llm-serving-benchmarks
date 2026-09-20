@@ -1,0 +1,25 @@
+sample,request_id,input_tokens,output_tokens,wall_seconds,text_sha256,text_prefix
+ordinary_D_initial,direct-00,8631,256,20.998791815014556,b9474ed34e3151b9d56cd0d1bb3f8a958fe0e0e40e7511c8f4212c117940aba1,"Here is a detailed summary of the government report.
+
+### Summary of the GAO Report on the National Medicare Education Program (NMEP)
+
+**Background an"
+PD_initial,pd-00,8631,256,21.78751044999808,b7457d90128ecaff9c3f968c528a215f71309372b371f63e34b968acd5990566,"Here is a detailed summary of the government report:
+
+### Summary of GAO Report on Medicare's National Medicare Education Program (NMEP)
+
+**Background"
+ordinary_D_repeat,direct-d-repeat,8631,256,3.4680414930917323,2d8ee506f406cda0d78692b9bd4e4014b9ac0681655b897dfd37da5dd9347374,"**Summary of the Government Report on Medicare’s National Medicare Education Program (NMEP)**
+
+**Background and Central Questions:**  
+The report exam"
+ordinary_P_reference,direct-p-reference,8631,256,3.437034955015406,05b0918631f4ddc20279e9e4020db9dbcf7fe2a5966896563bea12069f12dea8,"# Detailed Summary: Medicare+Choice National Medicare Education Program (NMEP) Report
+
+## Background
+
+The report examines the National Medicare Educat"
+PD_repeat,pd-repeat,8631,256,3.702270112000406,6b8ccffeaf561e3e2097a64bbccac674990c9c67135e8cb67f7aa1abe931d0ab,"# Summary of GAO Report on Medicare's National Medicare Education Program (NMEP)
+
+## Background
+
+In 1997, before the establishment of the Medicare+Cho"

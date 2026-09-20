@@ -1,0 +1,78 @@
+{
+  "scope": "TP4 P46 D48, 4 GPUs per service, 8 total; DSpark off; C1 only",
+  "protocol_status": "correctness FAIL; semantic correctness INCONCLUSIVE; no performance measurements",
+  "run_git": "9a7ee69",
+  "plan_git": "2cf5b32",
+  "image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+  "nixl_version": "1.3.2",
+  "request_count_client": 5,
+  "pd_requests": 2,
+  "ordinary_requests": 3,
+  "client_input_tokens": 43155,
+  "client_output_tokens": 1280,
+  "producer_internal_requests": 2,
+  "producer_internal_output_tokens": 2,
+  "decode_nixl_transfers": 8.0,
+  "decode_nixl_bytes": 465039360.0,
+  "decode_transfer_failures": 0.0,
+  "decode_external_hits": 17262.0,
+  "decode_reported_computed_prefill_tokens": 17262.0,
+  "ordinary_D_text_equal": false,
+  "PD_text_equal": false,
+  "first_pd_nic_deltas": {
+    "prefill": {
+      "before": 1789910407.2374475,
+      "after": 1789910434.3454008,
+      "bytes": {
+        "mlx5_4": {
+          "port_xmit_data": 59018032,
+          "port_rcv_data": 79680
+        },
+        "mlx5_5": {
+          "port_xmit_data": 59009124,
+          "port_rcv_data": 68016
+        },
+        "mlx5_6": {
+          "port_xmit_data": 59012048,
+          "port_rcv_data": 73700
+        },
+        "mlx5_7": {
+          "port_xmit_data": 59006392,
+          "port_rcv_data": 65288
+        }
+      }
+    },
+    "decode": {
+      "before": 1789910408.104941,
+      "after": 1789910435.241989,
+      "bytes": {
+        "mlx5_4": {
+          "port_xmit_data": 78860,
+          "port_rcv_data": 59021192
+        },
+        "mlx5_5": {
+          "port_xmit_data": 68016,
+          "port_rcv_data": 59009124
+        },
+        "mlx5_6": {
+          "port_xmit_data": 72880,
+          "port_rcv_data": 59015208
+        },
+        "mlx5_7": {
+          "port_xmit_data": 65288,
+          "port_rcv_data": 59006396
+        }
+      }
+    }
+  },
+  "lifecycle": {
+    "status": "STOPPED",
+    "owner": "pd1p1d-20260920-01",
+    "started": 1789910006.1579685,
+    "ready_at": 1789910325.6658306,
+    "changed_files": [],
+    "cleanup_errors": [],
+    "ended": 1789910616.9675777
+  },
+  "raw_artifacts": "gpu-6000d-45:/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-1p1d/results/link-01 (local only)"
+}

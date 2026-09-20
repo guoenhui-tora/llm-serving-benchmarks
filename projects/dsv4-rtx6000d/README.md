@@ -10,7 +10,7 @@
 
 ## 跨节点PD研究
 
-已定案的[首轮1P1D计划](reports/pd-1p1d-plan.md)：两节点各四卡TP4、DSpark off，先验证真实KV传输，再做同八卡资源的GovReport总C32对照。计划不代表PD已兼容或已有性能结果。
+已定案的[首轮1P1D计划](reports/pd-1p1d-plan.md)：两节点各四卡TP4、DSpark off，先验证真实KV传输，再做同八卡资源的GovReport总C32对照。[首轮实测](reports/pd-1p1d-20260920.md)已完成46P→48D的两条C1真实KV传输；因普通路径重复输出也不一致，正确性仍未定，未进入C32或性能对照。
 
 ## 当前可复用入口
 
