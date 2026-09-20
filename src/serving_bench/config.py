@@ -16,7 +16,7 @@ from .executors.affinity import id_set
 
 FIELDS = {
     "target": ({"executor", "address", "gpus", "gpu", "model_root", "cache_root", "port"},
-               {"model_paths", "environment", "ulimits", "cap_add", "binding"}),
+               {"model_paths", "environment", "ulimits", "cap_add", "binding", "listen_address", "devices"}),
     "model": ({"directory", "served_name", "architecture", "required_files"}, {"quantization"}),
     "runtime": ({"engine", "image", "version"}, {"image_id", "environment", "ready_timeout_s"}),
     "recipe": ({"compatible", "mode", "options", "flags"}, {"environment", "checks", "probe", "provenance"}),
@@ -137,6 +137,17 @@ def validate_document(v: dict, kind: str) -> None:
     if kind == "target":
         enum(v["executor"], ["docker"], "target.executor")
         string(v["address"], "target.address")
+        if "listen_address" in v:
+            import ipaddress
+            try:
+                ipaddress.ip_address(v["listen_address"])
+            except ValueError as exc:
+                raise BenchError("target.listen_address must be an IP address") from exc
+        strings(v.get("devices", []), "target.devices")
+        for device in v.get("devices", []):
+            absolute(device, "target.devices")
+            if not device.startswith("/dev/") or ".." in Path(device).parts:
+                raise BenchError("target.devices must contain paths under /dev")
         if not isinstance(v["gpus"], list) or not v["gpus"]:
             raise BenchError("target.gpus must be a nonempty list")
         for gpu in v["gpus"]:

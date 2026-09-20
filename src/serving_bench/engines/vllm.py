@@ -12,7 +12,7 @@ COMPILATION_PATTERNS = [r"JIT compilation during inference", r"Triton autotun(?:
 
 def server_args(case: dict) -> list[str]:
     return PREFIX + ["/model", "--served-model-name", case["model"]["served_name"],
-                     "--host", "127.0.0.1", "--port", str(case["target"]["port"])] + native_args(case["recipe"])
+                     "--host", case["target"].get("listen_address", "127.0.0.1"), "--port", str(case["target"]["port"])] + native_args(case["recipe"])
 
 
 def validate(case: dict) -> int:

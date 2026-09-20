@@ -165,6 +165,8 @@ def server_command(case: dict, name: str, owner: str, image_id: str | None = Non
         argv += ["--ulimit", f"{name_}={value}"]
     for capability in target.get("cap_add", []):
         argv += ["--cap-add", capability]
+    for device in target.get("devices", []):
+        argv += ["--device", device]
     env = {**target.get("environment", {}), **case["runtime"].get("environment", {}), **case["recipe"].get("environment", {})}
     for key, value in env.items():
         argv += ["-e", f"{key}={value}"]
