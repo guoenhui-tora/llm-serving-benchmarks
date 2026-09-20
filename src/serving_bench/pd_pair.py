@@ -115,7 +115,7 @@ print(json.dumps(out))'''])
                     f.write(json.dumps({'time':time.time(),'metrics':metrics})+'\n')
                 telemetry=remote(m['host'], ['python3','-c', '''import pathlib,json,subprocess,time
 p=pathlib.Path('/sys/class/infiniband'); d={'time':time.time(),'proc_stat':pathlib.Path('/proc/stat').read_text(),'net':{}}
-for n in ['mlx5_4','mlx5_5','mlx5_6','mlx5_7']:
+for n in sorted(q.name for q in p.iterdir()) if p.exists() else []:
  d['net'][n]={f.name:f.read_text().strip() for f in (p/n/'ports/1/counters').glob('*') if f.name in ['port_xmit_data','port_rcv_data','port_xmit_packets','port_rcv_packets']}
 d['gpu']=subprocess.run(['nvidia-smi','--query-gpu=index,utilization.gpu,memory.used,power.draw,clocks.sm,temperature.gpu','--format=csv,noheader'],capture_output=True,text=True).stdout
 print(json.dumps(d))'''],timeout=20)
