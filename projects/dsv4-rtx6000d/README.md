@@ -24,7 +24,7 @@
 
 当前1P1D低11.21%，平均TTFT/TPOT也未改善；已证明真实KV传输，不能再用早期受JIT干扰的普通682 tok/s作为分母。[完整实测、原因和实际命令](reports/pd-targeted-warmup-20260921.md)／[逐轮数据](data/pd-targeted-warmup-20260921.csv)。
 
-下一轮顺序已调整为：TP4同节点/跨节点四组对照 → 16K真实输入及P预算 → 尽早验证TP2×DP2 EP on和DSpark → 有效候选配比与规模筛选。8K/16K均以GovReport真实数据为主线，random仅作独立诊断。见[九小时PD分层筛选计划](reports/pd-overnight-plan-20260921.md)及[原始数据下载说明](data/govreport-source-download.md)；本轮只归档规划，尚未启动实验。
+下一轮顺序已调整为：TP4同节点/跨节点四组对照 → 16K真实输入及P预算 → 尽早验证TP2×DP2 EP on和DSpark → 有效候选配比与规模筛选。8K/16K均以GovReport真实数据为主线，random仅作独立诊断。见[九小时PD分层筛选计划](reports/pd-overnight-plan-20260921.md)及[原始数据下载说明](data/govreport-source-download.md)；用户已授权夜间执行，逐组状态及预算见规划的执行更新。
 
 16K数据准备已完成首分片扫描：**397条完整近16K请求**，足够每轮128/256条；512/1024条池仍需扩充。数据仅完成CPU离线校验，未验证16K服务性能，见[数据就绪报告](reports/govreport-near16k-readiness-20260921.md)。
 
