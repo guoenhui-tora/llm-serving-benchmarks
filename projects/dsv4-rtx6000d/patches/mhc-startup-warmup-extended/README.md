@@ -4,7 +4,7 @@
 
 | 目录 | 已实测范围 | 结果边界 |
 | --- | --- | --- |
-| tp4-off | TP4/DP1/PP1、DSpark off；8K/16K真实输入，P预算≤16384、C32 | B1/B2/B3A/B4三轮0已知事件；C64尚待D阶段 |
+| tp4-off | TP4/DP1/PP1、DSpark off；8K/16K真实输入，P预算≤16384；C32及16K/C64 | B1/B2/B3A/B4，及C64普通三副本/2P1D均三轮0已知事件 |
 | dp-off | TP2×DP2 EP on、PP1、DSpark off；8K、C32 | C1 PD三轮0事件；C2普通0事件但CV5.73% |
 | dspark | TP2×DP2 EP on、PP1、K5对称P/D或普通；8K、C32 | C3H/C4完成quick，正式仍有草稿输入准备Triton事件；不是无JIT基线 |
 
