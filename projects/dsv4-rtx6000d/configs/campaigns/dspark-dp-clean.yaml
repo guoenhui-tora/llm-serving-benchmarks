@@ -1,0 +1,12 @@
+schema_version: 1
+kind: campaign
+id: dsv4-dspark-dp-clean
+target: targets/rear.yaml
+client: clients/vllm-bench-0.29.0.yaml
+workloads:
+- workloads/govreport-c32-jit-clean.yaml
+cases:
+- id: tp2-dp2-epon-k5
+  model: models/dsv4-flash-nvfp4.yaml
+  runtime: runtimes/vllm-0.29.0.yaml
+  recipe: recipes/tp2-dp2-dspark-k5.yaml
