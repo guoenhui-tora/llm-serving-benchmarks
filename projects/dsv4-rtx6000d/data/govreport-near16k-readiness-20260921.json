@@ -1,0 +1,169 @@
+{
+  "source": "/source/document/train-00000-of-00002.parquet",
+  "source_rows": 8759,
+  "source_bytes": 227793632,
+  "source_revision": "4e21184e01ae8017e2c036e180fe5e541fef60a0",
+  "hashes": {
+    "source": "8b02abb5691b3fa1ba95f76331cadc8bb3e80195c626b4656b480d36e0c92242",
+    "tokenizer": "8f9f37ca37fdc4f5fd36d5cf4d3b0e8392edb4e894fd10cc0d70b4957c8633cf",
+    "encoding": "abc0d26120250dda0ae077dc64aa28836026e61e970854aaeb792445e6a0dde6"
+  },
+  "pyarrow_version": "25.0.1",
+  "tokenizer_class": "<class 'vllm.tokenizers.hf.get_cached_tokenizer.<locals>.CachedTokenizer'>",
+  "unique_nonempty": 8748,
+  "duplicates": [
+    {
+      "row": 3568,
+      "duplicate_of": 662
+    },
+    {
+      "row": 3795,
+      "duplicate_of": 1730
+    },
+    {
+      "row": 4615,
+      "duplicate_of": 4091
+    },
+    {
+      "row": 4730,
+      "duplicate_of": 1781
+    },
+    {
+      "row": 5148,
+      "duplicate_of": 555
+    },
+    {
+      "row": 5640,
+      "duplicate_of": 5499
+    },
+    {
+      "row": 5811,
+      "duplicate_of": 5499
+    },
+    {
+      "row": 5828,
+      "duplicate_of": 5762
+    },
+    {
+      "row": 5868,
+      "duplicate_of": 3263
+    },
+    {
+      "row": 6516,
+      "duplicate_of": 1866
+    },
+    {
+      "row": 6604,
+      "duplicate_of": 5158
+    }
+  ],
+  "invalid_rows": [],
+  "all_input_lengths": {
+    "count": 8748,
+    "min": 235,
+    "max": 307246,
+    "mean": 9777.137517146777,
+    "total": 85530399,
+    "p50": 8376,
+    "p95": 20401
+  },
+  "ranges": {
+    "near8k_7168_9216": {
+      "count": 1364,
+      "min": 7168,
+      "max": 9216,
+      "mean": 8165.57917888563,
+      "total": 11137850,
+      "p50": 8155,
+      "p95": 9099
+    },
+    "near16k_15360_17408": {
+      "count": 397,
+      "min": 15364,
+      "max": 17408,
+      "mean": 16332.609571788413,
+      "total": 6484046,
+      "p50": 16273,
+      "p95": 17281
+    },
+    "wide16k_14336_18432": {
+      "count": 832,
+      "min": 14339,
+      "max": 18424,
+      "mean": 16090.78125,
+      "total": 13387530,
+      "p50": 15944,
+      "p95": 18152
+    },
+    "at_least16k": {
+      "count": 955,
+      "min": 16396,
+      "max": 307246,
+      "mean": 23239.176963350787,
+      "total": 22193414,
+      "p50": 19945,
+      "p95": 37782
+    },
+    "within32768_with1024_output": {
+      "count": 8673,
+      "min": 235,
+      "max": 31709,
+      "mean": 9395.235673930589,
+      "total": 81484879,
+      "p50": 8312,
+      "p95": 19638
+    }
+  },
+  "verified_historical_rows": 256,
+  "selection": "first unique report in source order; inclusive 15360..17408; random.Random(0).shuffle; first N",
+  "pool": {
+    "path": "data/govreport-near16k-pool.jsonl",
+    "count": 397,
+    "sha256": "c14a2f705579a88b93e5d2698344d4f015c8d4841aa810193341c0b47de87e76",
+    "bytes": 35243167,
+    "stats": {
+      "count": 397,
+      "min": 15364,
+      "max": 17408,
+      "mean": 16332.609571788413,
+      "total": 6484046,
+      "p50": 16273,
+      "p95": 17281
+    }
+  },
+  "subsets": {
+    "128": {
+      "count": 128,
+      "min": 15364,
+      "max": 17344,
+      "mean": 16343.640625,
+      "total": 2091986,
+      "p50": 16292,
+      "p95": 17282,
+      "output_tokens": 131072
+    },
+    "256": {
+      "count": 256,
+      "min": 15364,
+      "max": 17408,
+      "mean": 16326.69140625,
+      "total": 4179633,
+      "p50": 16274,
+      "p95": 17275,
+      "output_tokens": 262144
+    }
+  },
+  "max_prompt_plus_output": 18432,
+  "elapsed_s": 183.31510021199938,
+  "no_gpu": true,
+  "inference_requests": 0,
+  "analysis_script_sha256": "983cfd400c96444b2fedca51092401089909eb75c1aaa3654e655d1efd679098",
+  "pool_host_path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-govreport-16k/data/govreport-near16k-pool.jsonl",
+  "source_host_path": "/home/enhui/datasets/govreport/document/train-00000-of-00002.parquet",
+  "image_id": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+  "validation": {
+    "client_jsonl_reader": true,
+    "unique_prompts": 397,
+    "manifest_and_subset_totals": true
+  }
+}

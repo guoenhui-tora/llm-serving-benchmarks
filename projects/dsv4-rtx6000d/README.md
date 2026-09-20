@@ -26,6 +26,8 @@
 
 下一轮顺序已调整为：TP4同节点/跨节点四组对照 → 16K真实输入及P预算 → 尽早验证TP2×DP2 EP on和DSpark → 有效候选配比与规模筛选。8K/16K均以GovReport真实数据为主线，random仅作独立诊断。见[九小时PD分层筛选计划](reports/pd-overnight-plan-20260921.md)及[原始数据下载说明](data/govreport-source-download.md)；本轮只归档规划，尚未启动实验。
 
+16K数据准备已完成首分片扫描：**397条完整近16K请求**，足够每轮128/256条；512/1024条池仍需扩充。数据仅完成CPU离线校验，未验证16K服务性能，见[数据就绪报告](reports/govreport-near16k-readiness-20260921.md)。
+
 ## 普通推理与 DSpark 参照
 
 **当前保留 vLLM 0.29.0、FlashInfer autotune off。四卡GovReport投机解码优先采用TP2×DP2、EP on、DSpark K5：966.00 ± 15.92 output tok/s，较本机同负载off提高30.97%。** 这是当前完成三轮clean的候选中吞吐最高的一组，适用总C32；K3/K4尚不能据此判为更差，见[DSpark汇总](#dspark-阶段总结)。

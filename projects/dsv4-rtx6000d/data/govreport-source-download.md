@@ -1,8 +1,8 @@
 # GovReport原始分片下载：为近16K真实请求做准备
 
-**在控制机45的home目录建立`~/hf_env` Python虚拟环境，通过`https://hf-mirror.com`下载固定版本的一个训练分片到`~/datasets/govreport/`。** 本文件只提供用户手动执行的下载命令，本轮未联网验证镜像可达性、未下载文件，也未生成16K请求集。
+**在控制机45的home目录建立`~/hf_env` Python虚拟环境，通过`https://hf-mirror.com`下载固定版本的一个训练分片到`~/datasets/govreport/`。** 本文件提供用户手动执行的下载命令。用户已完成首分片下载，随后CPU扫描得到397条完整近16K请求，见[就绪报告](../reports/govreport-near16k-readiness-20260921.md)；以下仍保留首分片的固定下载与校验入口。
 
-该分片与[现有8K子集](govreport-near8k.md)来源完全相同，先下载它即可，不需要整个数据仓库或模型。能否筛出128篇完整近16K报告，须下载后用固定DSV4 tokenizer实际统计；不预先保证数量，不自动追加其他分片。数据公开，命令不要求HF登录、不发送本地HF token。虚拟环境只用于下载，不改仓库的Python环境。
+该分片与[现有8K子集](govreport-near8k.md)来源完全相同，先下载它即可，不需要整个数据仓库或模型。现已用固定DSV4 tokenizer确认首分片有397篇完整近16K报告；要备足512/1024条，需要追加第二分片统计并跨分片去重，不自动放宽长度范围。数据公开，命令不要求HF登录、不发送本地HF token。虚拟环境只用于下载，不改仓库的Python环境。
 
 | 项目 | 固定值 |
 | --- | --- |
@@ -51,4 +51,4 @@ PY
 
 后续由实验准备步骤读取本地Parquet，沿用8K的指令、编码与tokenizer身份，从完整报告中筛选最终输入约15K–17K的固定128条；保存来源行号、选择规则、实际token数、JSONL哈希和许可说明。每条输出1024，普通/PD与DSpark off/on复用同一个新请求集。16K prompt加1K输出需验证上下文32768；数据文件下载成功不代表模型长度、PD或DSpark已通过验证。
 
-来源仍为GovReport、CC BY 4.0；原始分片和完整下载缓存留在home目录，不提交Git。精选16K JSONL和生成说明待校验后归档，详见[PD规划](../reports/pd-overnight-plan-20260921.md)。
+来源仍为GovReport、CC BY 4.0；原始分片和完整下载缓存留在home目录，不提交Git。近16K JSONL已经过CPU校验并保存在实验工作区；来源清单、统计与方法报告已归档，性能阶段安排见[PD规划](../reports/pd-overnight-plan-20260921.md)。
