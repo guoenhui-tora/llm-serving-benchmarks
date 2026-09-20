@@ -26,6 +26,8 @@
 
 下一轮顺序已调整为：TP4同节点/跨节点四组对照 → 16K真实输入及P预算 → 尽早验证TP2×DP2 EP on和DSpark → 有效候选配比与规模筛选。8K/16K均以GovReport真实数据为主线，random仅作独立诊断。见[九小时PD分层筛选计划](reports/pd-overnight-plan-20260921.md)及[原始数据下载说明](data/govreport-source-download.md)；用户已授权夜间执行，逐组状态及预算见规划的执行更新。
 
+[夜间位置对照已完成](reports/pd-overnight-placement-progress-20260921.md)：同节点普通/PD为1026.74/911.15，跨节点为1028.71/914.23 tok/s（各三轮无已知事件）；PD分别低11.26%/11.13%。同节点原UCX配置有真实握手失败反例，修正候选及其网络边界均已保留。正在继续P预算、16K与DP/DSpark研究。
+
 16K数据储备已完成：四分片筛出**815条完整近16K报告**；另准备**1024个唯一的真实报告前缀请求，每条精确16384输入tokens、输出预算1024**，作为夜间16K主负载。两套数据分开标注，原8K前128条保持不变。数据已通过固定镜像tokenizer的CPU校验，服务性能仍需实测，见[1024条准备证据](data/govreport-16k-1024-preparation.json)；[首分片就绪报告](reports/govreport-near16k-readiness-20260921.md)保留为历史。
 
 ## 普通推理与 DSpark 参照
