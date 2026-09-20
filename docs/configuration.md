@@ -242,3 +242,10 @@ recipe 中的日志路径是容器路径，声明环境变量不会自动复制�
 vLLM target可选`listen_address`（IP，默认127.0.0.1）和`devices`（显式/dev路径列表，例如/dev/infiniband）。它们只改变生成的Docker服务命令，不会让原runner自动SSH。当前本机runner的探测仍走loopback，因此跨节点使用0.0.0.0监听；网络可达性和安全边界由实验部署核实。
 
 实验入口`python3 -m serving_bench.pd_pair DEPLOYMENT --run-root NEW_DIRECTORY`读取显式的SSH host、角色、campaign和HTTP URL，保存resolved/command、模型和镜像身份、日志/遥测，在STOP文件或期限到达时只清理匹配run label的容器。它不发送测量请求，也不替代原benchmark协议。配套`pd_proxy`只实现NIXL pull completions及普通副本轮询；缺失传输元数据直接失败，无重试回退。代理运行依赖aiohttp，使用固定客户端镜像已有版本。当前属于有预算的实验工具，不是生产编排器。
+
+### 实验性PD代理的普通副本对照
+
+`python3 -m serving_bench.pd_proxy --ordinary URL_A URL_B` 默认按请求轮询。
+显式加 `--ordinary-policy least-inflight` 可选择当前在途请求最少的副本；计数覆盖完整流式响应，并在成功、失败或取消后释放。相同计数时按URL顺序选择。
+轮询保证分派数量轮替，不保证并发均分；least-inflight也不保证token工作量均衡、固定请求分片或服务端活动序列数相等。`route`日志记录分派目标、策略和分派时在途计数，用于验收实际分流。
+这只是普通对照的可选路由策略，不改变PD的先P后D流程，也不自动重试或转移失败请求。

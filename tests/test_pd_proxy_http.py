@@ -1,4 +1,5 @@
 """Run with aiohttp installed (the pinned client image provides it)."""
+import asyncio
 import unittest
 try:
     from aiohttp import web
@@ -9,6 +10,48 @@ from serving_bench.pd_proxy import make_app
 
 @unittest.skipUnless(web, "aiohttp is available in the pinned client image")
 class ProxyHTTPTests(unittest.IsolatedAsyncioTestCase):
+    async def test_least_inflight_tracks_stream_and_releases_errors(self):
+        opened = asyncio.Event()
+        release = asyncio.Event()
+        calls = []
+        async def a(r):
+            body = await r.json()
+            calls.append(('a', body['prompt']))
+            if body['prompt'] == 'hold':
+                response = web.StreamResponse(headers={'Content-Type': 'text/event-stream'})
+                await response.prepare(r)
+                await response.write(b'data: first\n\n')
+                opened.set()
+                await release.wait()
+                await response.write_eof()
+                return response
+            return web.Response(status=500)
+        async def b(r):
+            calls.append(('b', (await r.json())['prompt']))
+            return web.json_response({})
+        aa = web.Application(); aa.router.add_post('/v1/completions', a)
+        ba = web.Application(); ba.router.add_post('/v1/completions', b)
+        async with TestServer(aa) as sa, TestServer(ba) as sb:
+            urls = [str(s.make_url('')).rstrip('/') for s in (sa, sb)]
+            async with TestClient(TestServer(make_app(None, None, urls, ordinary_policy='least-inflight'))) as c:
+                try:
+                    held = await c.post('/v1/completions', json={'prompt': 'hold', 'stream': True})
+                    await asyncio.wait_for(opened.wait(), 2)
+                    for prompt in ('fast1', 'fast2'):
+                        r = await c.post('/v1/completions', json={'prompt': prompt})
+                        self.assertEqual(r.status, 200)
+                        await r.read()
+                    self.assertEqual(calls, [('a', 'hold'), ('b', 'fast1'), ('b', 'fast2')])
+                finally:
+                    release.set()
+                await held.read()
+                # A failed upstream must also release its in-flight reservation.
+                for prompt in ('error1', 'error2'):
+                    r = await c.post('/v1/completions', json={'prompt': prompt})
+                    self.assertEqual(r.status, 502)
+                    await r.read()
+                self.assertEqual(calls[-2:], [('a', 'error1'), ('a', 'error2')])
+
     async def test_missing_metadata_never_reaches_decoder(self):
         calls=[]
         async def p(r):return web.json_response({'choices':[{'text':'x'}]})
