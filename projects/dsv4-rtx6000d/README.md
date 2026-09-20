@@ -24,7 +24,7 @@
 
 当前1P1D低11.21%，平均TTFT/TPOT也未改善；已证明真实KV传输，不能再用早期受JIT干扰的普通682 tok/s作为分母。[完整实测、原因和实际命令](reports/pd-targeted-warmup-20260921.md)／[逐轮数据](data/pd-targeted-warmup-20260921.csv)。
 
-下一轮拟先验证P端16K预算，再比较同资源下的并发和P/D配比，见[九小时有界PD计划](reports/pd-overnight-plan-20260921.md)；该计划尚未执行。
+下一轮拟加入近16K真实输入、1P2D/2P1D及同16卡配比筛选，并安排TP2×DP2 EP on和DSpark兼容分支；4P2D用于后续规模验证。见[九小时PD分层筛选计划](reports/pd-overnight-plan-20260921.md)，仍是待讨论执行的规划，尚未启动。
 
 ## 普通推理与 DSpark 参照
 
