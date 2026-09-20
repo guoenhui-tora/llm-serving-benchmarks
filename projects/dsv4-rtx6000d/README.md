@@ -2,7 +2,9 @@
 
 本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，当前以单机为主。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
 
-**当前保留 vLLM 0.29.0、FlashInfer autotune off；单机八卡以双 TP4 作为公共基线。** 在8192输入／1024输出下，四节点整机C32约1091–1097、C64约1428–1434 output tok/s，各组三次重复的吞吐CV均低于1%。这是本轮已接受后台负载下的基线，不代表长期无干扰性能。
+**当前保留 vLLM 0.29.0、FlashInfer autotune off。四卡GovReport投机解码优先采用TP2×DP2、EP on、DSpark K5：966.00 ± 15.92 output tok/s，较本机同负载off提高30.97%。** 这是当前完成三轮clean的候选中吞吐最高的一组，适用总C32；K3/K4尚不能据此判为更差，见[DSpark汇总](#dspark-阶段总结)。
+
+**普通推理的单机八卡公共基线仍为双TP4，使用random负载。** 在8192输入／1024输出下，四节点整机C32约1091–1097、C64约1428–1434 output tok/s，各组三次重复的吞吐CV均低于1%。这是本轮已接受后台负载下的基线，不代表长期无干扰性能。
 
 追求更高吞吐，优先继续研究**双 TP2×PP2**和**双 TP2×DP2＋EP**：C64分别为1663.93 ± 74.85、1620.37 ± 17.99 tok/s，较各自本机双TP4提高16.50%／13.45%。前者CV为4.50%，后者1.11%；两者跨节点、均值只差2.69%，尚未分出可靠胜负。所有结论限定本轮普通推理，不直接代表PD分离或投机解码收益。
 
@@ -21,23 +23,134 @@
 
 上述普通推理入口的workload显式采用 `quick`（1轮2C预热＋3轮正式测量，保留事件标记），这组协议与配置的组合仅做离线验证；历史拓扑结果仍使用当时的预热和验收规则。DSpark的完整负载预热与 `jit_clean` 已实测，见下节。探索配置、全部原始结果留在experiments；只有选定基线和将继续研究的配置进入projects。
 
-### DSpark 对照数据与性能结果
+## DSpark 阶段总结
 
-[GovReport](https://gov-report-data.github.io/) 是英文政府报告的长文档摘要数据集，原始数据见 [Hugging Face](https://huggingface.co/datasets/ccdv/govreport-summarization)。本项目筛选了256篇完整报告，加入摘要指令，形成[近8K输入请求集](data/govreport-near8k.jsonl)，用于DSpark off/on性能对照。当前实验固定取前128条，平均输入8141.79 tokens，输出固定1024 tokens；这是摘要任务的推理性能测试，不是摘要质量评测。筛选方法、来源版本、许可证及使用方式见[数据说明](data/govreport-near8k.md)。
+**当前优先配置是四卡TP2×DP2、EP on、K5；K3–K5已进入吞吐平台区，暂不需要为了选型补齐所有缺项。** TP4完整曲线和DP EP off曲线都没有显示增大K带来持续收益；DP EP on的部分结果仍含JIT，只能辅助判断范围，不能证明K5是唯一最优值。以下合并看首轮TP4、预热协议对照、完整K扫描及DP补丁后续测，不把不同批次拼成一组重复。
 
-2026-09-19已完成同一真实文本负载下的单TP4、C32对照：off为 **663.92 ± 0.53**，修正Graph覆盖的DSpark K5为 **804.65 ± 5.64 tok/s（+21.20%）**，各三轮无已知编译事件。P95 TPOT略高，不能称为所有延迟全面改善。结果、quick/clean时间成本、Graph修正及复现命令见[DSpark性能报告](reports/dspark-tp4-20260919.md)，逐轮数据见[CSV](data/dspark-tp4-20260919.csv)。该负载与历史随机8192/1024不同，不能混用性能基线。
+### 负载与统计口径
+
+[GovReport](https://gov-report-data.github.io/) 是英文政府报告的长文档摘要数据集，原始数据见 [Hugging Face](https://huggingface.co/datasets/ccdv/govreport-summarization)。本项目筛选了256篇完整报告，加入摘要指令，形成[近8K输入请求集](data/govreport-near8k.jsonl)。当前实验固定取前128条、总C32，平均输入8141.79 tokens，输出固定1024 tokens；每轮128成功、0失败，实际输入1,042,149／输出131,072 tokens。筛选方法、来源版本、许可证及用法见[数据说明](data/govreport-near8k.md)。本轮只评估推理性能，没有评估摘要质量。
+
+下列GovReport结果均使用固定vLLM 0.29.0、GPU4–7，服务CPU32–47／NUMA2、客户端CPU48–51／NUMA3；autotune和prefix cache关闭，FP8 KV、显存比例0.90，保留正常Graph并按K扩大捕获范围。DP组每rank容量16，总容量32；草稿固定greedy、standard rejection。各配置一次启动完成所有轮次，`jit_clean`累计接纳最先三轮无已知编译事件且工作量正确的样本，最多12轮／45分钟。
+
+**正式表只列完成三轮验收的组，吞吐为均值±样本标准差；延迟为逐轮指标的平均。** P95的重复均值不是合并请求后的P95。后面的PARTIAL表按输出吞吐选取最快三轮，延迟也取同三轮；它是有向上选择偏差的暂列结果，不改原gate判定、不用于计算正式收益，也不证明性能稳定。
+
+### 已完成的性能对照
+
+| 节点 | 四卡拓扑 | DSpark | 输出 tok/s | 吞吐CV | Mean TTFT s | Mean TPOT ms |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| 45 | TP4，EP off | off | 663.38 ± 0.20 | 0.03% | 5.655 | 42.69 |
+| 45 | TP4，EP off | K1 | 733.17 ± 1.58 | 0.22% | 4.711 | 38.62 |
+| 45 | TP4，EP off | K2 | 774.19 ± 4.16 | 0.54% | 4.352 | 36.37 |
+| 45 | TP4，EP off | K3 | 807.66 ± 3.01 | 0.37% | 4.333 | 34.57 |
+| 45 | TP4，EP off | K4 | 802.43 ± 8.63 | 1.08% | 4.418 | 34.32 |
+| 45 | TP4，EP off | K5 | 798.99 ± 8.63 | 1.08% | 4.290 | 34.63 |
+| 46 | TP2×DP2，EP on | off，补测前 | 737.56 ± 22.34 | 3.03% | 4.995 | 35.13 |
+| 46 | TP2×DP2，EP on | K5 | **966.00 ± 15.92** | 1.65% | 3.081 | 28.54 |
+| 47 | TP2×DP2，EP off | K3 | 860.77 ± 15.39 | 1.79% | 3.672 | 32.41 |
+| 47 | TP2×DP2，EP off | K4 | 874.25 ± 22.34 | 2.56% | 3.691 | 32.03 |
+| 47 | TP2×DP2，EP off | K5 | 862.60 ± 2.49 | 0.29% | 3.906 | 31.91 |
+| 48 | TP2×DP2，EP off | off | 735.77 ± 42.01 | 5.71% | 5.870 | 35.79 |
+| 48 | TP2×DP2，EP off | K3 | 855.20 ± 4.22 | 0.49% | 3.764 | 32.41 |
+
+46的K5相对本机上轮off提高**30.97%**，48的EP off K3相对本轮off提高**16.23%**。46两批的模型、负载、主要参数和绑定已核对一致，但仍有启动批次及后台资源波动。47上轮off为710.39 ± 20.66 tok/s；补测时客户端核／SMT竞争背景明显变化，保留历史值，不计算配对收益。
+
+首轮48的TP4 off／K5为663.92／804.65 tok/s（+21.20%），与45的完整曲线方向一致；45另一次独立重启的K3为809.15 ± 1.27 tok/s，比首次807.66仅高0.18%。这些结果分别保留，没有跨节点或跨启动合并样本。
+
+### TP4如何选K：为什么K3之后吞吐趋平
+
+**在TP4、EP off、GovReport近8K／1024、C32这个场景，优先选K3。** 它的已测吞吐均值最高，独立重启复测也接近；K4/K5没有显示额外收益。K3–K5的最大均值差仅约1.08%，应理解为平台区内优先选K3，尚不足以宣布K3显著胜出。
+
+下表来自45的完整K扫描，各组三轮clean。接受率按三个接纳轮次的计数分子／分母汇总计算；平均接受草稿长度**不含目标模型补充token**，与节点报告中含bonus的长度相差1。
+
+| K | 输出 tok/s，均值±SD | 加权草稿接受率 | 每步平均接受草稿token |
+| --- | ---: | ---: | ---: |
+| K1 | 733.17 ± 1.58 | 83.66% | 0.84 |
+| K2 | 774.19 ± 4.16 | 74.32% | 1.49 |
+| K3 | 807.66 ± 3.01 | 64.47% | 1.93 |
+| K4 | 802.43 ± 8.63 | 55.67% | 2.23 |
+| K5 | 798.99 ± 8.63 | 48.66% | 2.43 |
+
+**多预测两个token，不等于每步多输出两个token。** K3→K5时，平均接受草稿长度只从1.93增至2.43，多约0.50个token。后部位置必须连同前缀一起通过验证，越往后累计接受的机会越小；在本轮数据中，增大K的边际收益已经下降。
+
+接受长度增加，仍然能减少验证步数，但要付出更多草稿及验证工作。三轮相同请求量的实际计数如下：
+
+| 三个接纳轮次合计 | K3 | K5 | 变化 |
+| --- | ---: | ---: | ---: |
+| 验证步数 | 134,025 | 114,622 | 减少14.5% |
+| 提出的草稿tokens | 402,075 | 573,110 | 增加42.5% |
+
+这里的“步数”按请求累加，不是GPU kernel调用次数。K5减少了验证步数，却增加了草稿候选并改变了每步验证的工作量，因此验证总耗时不一定同比下降。可以粗略理解为：**每个输出token的成本，取决于每步草稿、验证及调度通信耗时，除以每步实际推进的token数。** 这是解释取舍的近似关系，不是本轮拟合出的性能模型。
+
+这条吞吐曲线可以先升后降，也可以有一段平缓平台，并不要求出现尖锐的局部最优。当前K1→K3明显上升、K3→K5略降，与新增收益逐渐被额外开销抵消的解释一致。C32下的批处理、GPU利用率和kernel效率也可能影响曲线形状；目前没有分阶段profiler，尚不能确定草稿、验证、调度或通信分别贡献了多少开销。
+
+**TP4选K3，不等于所有拓扑都选K3。** TP2×DP2、EP on当前仍优先保留已有完整验收的K5；它的K3/K4结果不足以确定排序。换拓扑、并发或数据集后需要重新判断。计数定义、逐位置接受量及独立复测见[45节点报告](reports/dspark-k-sweep-node45.md#接受长度与开销)和[逐轮CSV](data/dspark-k-sweep-node45.csv)。
+
+### 未完成clean的配置：最快三轮暂列
+
+以下四组各运行12轮，均因未凑齐三轮clean而保持 **PARTIAL**；请求数与token数正确，并非启动失败。全12轮均值包含初始编译与后续慢轮，用来展示选取最快三轮的影响，不代表预热后吞吐。
+
+| 节点 | TP2×DP2配置 | clean轮数 | 最快三轮 tok/s | 全12轮 tok/s | Mean TTFT s | Mean TPOT ms |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| 46 | EP on，K3 | 1 | 955.08 | 819.82 | 2.945 | 29.42 |
+| 46 | EP on，K4 | 0 | 983.32 | 857.76 | 2.862 | 28.60 |
+| 48 | EP on，off | 1 | 755.20 | 705.09 | 4.618 | 34.52 |
+| 48 | EP on，K3 | 2 | 970.26 | 864.63 | 3.020 | 28.86 |
+
+选取轮次及对应已知事件行数：46 K3为第11/10/9轮（4/0/10行），K4为第7/8/11轮（8/6/2行）；48 off为第4/7/9轮（0/4/4行），K3为第7/8/12轮（4/10/0行）。事件行数不等于独立编译次数；这些暂列均值都包含有事件的轮次。48 K3另外已有两轮clean，均值961.61 tok/s，与46 K5约966接近，但不足三轮验收。
+
+### 推荐配置与此前random结果并排看
+
+三行均来自46、后四卡TP2×DP2、EP on、实例总C32、每轮128请求／1024输出，但random一行来自**八卡双部署中的后侧实例**，取该实例自己的计时窗口；GovReport两行来自单套四卡部署。不能把三行当成严格只改变数据集或DSpark的配对实验。
+
+| 负载／部署背景 | DSpark | 输出 tok/s | Mean / P95 TTFT s | Mean / P95 TPOT ms |
+| --- | --- | ---: | ---: | ---: |
+| random 8192，八卡双部署中的后四卡 | off | 838.67 ± 49.15 | 4.946 / 12.142 | 31.21 / 33.59 |
+| GovReport近8K，单套四卡 | off | 737.56 ± 22.34 | 4.995 / 11.619 | 35.13 / 37.81 |
+| GovReport近8K，单套四卡 | K5 | **966.00 ± 15.92** | 3.081 / 11.103 | 28.54 / 41.03 |
+
+因此，当前真实文本的K5吞吐已高于这份历史random off参照；**DSpark收益仍以同负载off为分母，即737.56→966.00，而不是838.67→966.00。** 历史双部署的整机吞吐为1620.37 tok/s，不能与单套四卡的966直接排名，也不能把966乘二当作已测整机结果。原始参照见[46八卡报告](reports/node8-node46.md)及[CSV](data/node8-node46.csv)。
+
+### 本阶段得到的结论
+
+- **K3–K5差距小，增大K不再持续提速。** TP4三组均值约799–808 tok/s，最大差1.08%；DP EP off约861–874，最大差1.57%，与重复波动接近。DP EP on的暂列结果约955–983，方向也接近，但含JIT和选样偏差，不能确定最优K。
+- **TP2×DP2、EP on、K5是当前优先配置。** 它取得本批已完成验收组中最高吞吐，且相对本机GovReport off有约31%的提升。EP on比EP off更有潜力，但完整K5对照来自不同节点，48同机EP on仍PARTIAL；这是继续优化的选择，不是已隔离全部变量的EP因果结论。
+- **TP4场景优先选K3，接受率本身不是选K标准。** K3兼顾已测吞吐与较短草稿，独立重启也复现了接近的结果；更大的K虽增加接受长度，却没有继续提速。计数证据和解释见[TP4选K分析](#tp4如何选k为什么k3之后吞吐趋平)。
+- **吞吐、平均延迟有收益，尾延迟未必改善。** 46 K5的Mean TTFT／TPOT比off降低38.31%／18.76%，但P95 TPOT增加8.54%；48 EP off K3的P95 TPOT也增加15.13%。不能称为所有延迟全面改善，DSpark的流式ITL也不能直接当作逐token耗时。
+- **GovReport必须有自己的off基线；clean也不等于稳定。** 早先四节点TP4 GovReport off均约664 tok/s；47同机random为718.42，GovReport为664.69。文本、长度分布、启动与资源背景没有分别隔离，不能把差距唯一归因于数据内容。本轮48的DP off即使三轮clean，CV仍为5.71%。
+
+DP补丁后各组均完成实际请求，未复现原启动断言；本轮未报告OOM或抢占，DSpark的KV观测峰值约28%。剩余缺项主要是编译事件验收，不能解释为NVFP4精度不支持或C32容量不足。当前无需为选定后续方向补齐全部PARTIAL；若要声称某个K更快，或发布该配置的正式基线，再针对该配置补充完整验收。
+
+### 报告与复现入口
+
+| 阶段 | 证据与用途 |
+| --- | --- |
+| TP4首轮DSpark验证 | [9月19日报告](reports/dspark-tp4-20260919.md)：off/on收益、Graph修正、quick与clean成本 |
+| 四节点协议与负载对照 | [本页汇总](#2026-09-20四节点预热与负载对照)：GovReport off复现、random差异、K5正式轮JIT |
+| TP4完整K扫描 | [45报告](reports/dspark-k-sweep-node45.md)／[CSV](data/dspark-k-sweep-node45.csv)：K1–K5及独立K3复测 |
+| DP首轮基线与启动阻塞 | [46](reports/dspark-k-sweep-node46.md)、[47](reports/dspark-k-sweep-node47.md)、[48](reports/dspark-k-sweep-node48.md)：历史off、失败及资源证据 |
+| DP补丁后续测 | [46报告](reports/dspark-dp-resume-node46.md)／[CSV](data/dspark-dp-resume-node46.csv)、[47报告](reports/dspark-dp-resume-node47.md)／[CSV](data/dspark-dp-resume-node47.csv)、[48报告](reports/dspark-dp-resume-node48.md)／[CSV](data/dspark-dp-resume-node48.csv) |
+
+复用[TP2×DP2 EP on K5 recipe](configs/recipes/tp2-dp2-dspark-k5.yaml)、[正式campaign](configs/campaigns/dspark-dp-clean.yaml)和[GovReport jit_clean workload](configs/workloads/govreport-c32-jit-clean.yaml)。本机地址在工作区target中修改；两处补丁的准备与核验必不可少，实际启动命令及完整指标见节点报告。四卡结果尚未扩展到双部署、其他并发或PD分离。
 
 ### DSpark 加载兼容性
 
 固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
 
-DP＋DSpark另有启动profiling元数据错误；已回移上游已合并PR #54856的最小修复，保留固定镜像。2026-09-20在48完成TP2×DP2、K5、EP on/off功能验证：两组均通过启动、CUDA Graph及完整C32请求，各128成功、0失败。首轮含编译事件，未取得无JIT性能结果；旧失败批次仍保留，后续K值实验在本地recipe中显式启用补丁，并使用新的结果目录。来源、验证范围与启用方式见[DP启动修复](reports/dspark-compatibility.md#dpdspark回移已合并的上游修复)。
+DP＋DSpark另有启动profiling元数据错误；已回移上游已合并PR #54856的最小修复，保留固定镜像。2026-09-20在48完成TP2×DP2、K5、EP on/off功能验证：两组均通过启动、CUDA Graph及完整C32请求，各128成功、0失败。随后46的EP on K5、47的EP off K3/K4/K5及48的EP off K3取得完整三轮clean，结果见上方汇总。旧失败批次和首轮含事件的功能验证仍保留，不改判为正式性能样本。来源、验证范围与启用方式见[DP启动修复](reports/dspark-compatibility.md#dpdspark回移已合并的上游修复)。
 
-## 下一轮：DP＋DSpark 补丁后续测
+<a id="下一轮dpdspark-补丁后续测"></a>
+
+## DP＋DSpark 补测记录（已结束）
+
+四节点已交付，结果和推荐见上方汇总；以下保留原任务、预算与复现步骤，不是待执行的新任务。
+
+<details>
+<summary>原节点分工、公共配置、执行与归档规则</summary>
 
 **本轮只研究四卡TP2×DP2、GovReport近8K／1024、总C32，先测K5、K3、K4。** K是草稿预测token数；off表示关闭DSpark，EP on/off另行标明。TP4完整曲线已由45完成：K3–K5约799–808 tok/s，K1/K2约733／774 tok/s，因此先缩小DP搜索范围；这不代表DP下排序必然相同。
 
-DP启动修复已包含在提交 `d529c37`。48的K5、EP on/off均完成一轮128请求功能验证，但含JIT、协议为PARTIAL，不能作为正式性能样本。本节是**当前执行任务**；上轮结果只作参照，不再执行旧的全K矩阵。
+DP启动修复已包含在提交 `d529c37`。48的K5、EP on/off均完成一轮128请求功能验证，但含JIT、协议为PARTIAL，不能作为正式性能样本。这是补测开始时的任务范围；上轮结果只作参照，没有重新执行旧的全K矩阵。
 
 ### 节点任务与执行顺序
 
@@ -73,7 +186,7 @@ DP启动修复已包含在提交 `d529c37`。48的K5、EP on/off均完成一轮1
 
 | 公共文件 | 用法与验证范围 |
 | --- | --- |
-| [DP K5 recipe](configs/recipes/tp2-dp2-dspark-k5.yaml) | 默认TP2×DP2、EP on，已包含两处补丁入口和required检查；服务参数与48功能验证一致，正式三轮尚未测 |
+| [DP K5 recipe](configs/recipes/tp2-dp2-dspark-k5.yaml) | 默认TP2×DP2、EP on，已包含两处补丁入口和required检查；服务参数与48功能验证一致，后续46的K5取得正式三轮clean |
 | [DP正式campaign](configs/campaigns/dspark-dp-clean.yaml) | 单case、单rear target、正式jit_clean，作为各K入口模板；禁止添加 `replica_targets` |
 | [GovReport jit_clean](configs/workloads/govreport-c32-jit-clean.yaml) | 128请求，累计三轮clean，最多12轮／2700秒，单轮超时900秒 |
 | [rear target](configs/targets/rear.yaml) | GPU4–7，服务CPU32–47／NUMA2，客户端CPU48–51／NUMA3；本地改成本机IP和id |
@@ -94,7 +207,7 @@ DP启动修复已包含在提交 `d529c37`。48的K5、EP on/off均完成一轮1
 | 可选K2 | `[2,3,4,6,8,12,16,24,32,36,48]` | 48 |
 | 可选K1 | `[1,2,4,8,12,16,24,32]` | 32 |
 
-on尺寸由基本批次 `[1,2,4,8,12,16]` 分别乘K和K+1后取并集，覆盖草稿 `16×K` 与目标 `16×(K+1)`。K1–K4本轮只完成离线准备，仍需实际验证，不能称为已测最优配置。
+on尺寸由基本批次 `[1,2,4,8,12,16]` 分别乘K和K+1后取并集，覆盖草稿 `16×K` 与目标 `16×(K+1)`。任务下发时K1–K4只完成离线准备；此后K3/K4已实际运行，验收状态见上方汇总，DP K1/K2未扩展。
 
 **DSpark on必须同时启用量化分派和DP修复。** 公共recipe已设置 `PYTHONPATH=/root/.cache/dspark-native-mxfp4`、`SERVING_BENCH_DSPARK_DP_PROFILE_FIX=1`，并要求 `LOCAL_DSPARK_FORMAT_FIX`、`Mxfp4 MoE backend`、`UPSTREAM_DSPARK_DP_PROFILE_FIX: PR #54856 facd9a74a1` 日志。旧recipe需补齐这些项，每个on campaign重新运行prepare与 `--check`；仅pull代码不会更新服务读取的缓存内补丁。
 
@@ -161,6 +274,8 @@ KV容量取各DP rank的最小值，KV使用率取各rank采样峰值，抢占�
 | 46 | [EP on基线与阻塞](reports/dspark-k-sweep-node46.md) | [CSV](data/dspark-k-sweep-node46.csv) |
 | 47 | [EP off基线与阻塞](reports/dspark-k-sweep-node47.md) | [CSV](data/dspark-k-sweep-node47.csv) |
 | 48 | [同机基线与阻塞](reports/dspark-k-sweep-node48.md) | [CSV](data/dspark-k-sweep-node48.csv) |
+
+</details>
 
 ## 2026-09-20：四节点预热与负载对照
 
