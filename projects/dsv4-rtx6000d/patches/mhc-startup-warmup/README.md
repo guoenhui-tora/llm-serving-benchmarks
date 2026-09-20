@@ -1,6 +1,6 @@
 # 固定vLLM 0.29.0 NVIDIA DSV4启动预热候选
 
-只扩展启动阶段，不修改forward、kernel或权重。GPU验证状态见[预热计划](../../reports/pd-targeted-warmup-plan.md)及后续报告；提交时已通过固定镜像导入和离线分派覆盖检查。
+只扩展启动阶段，不修改forward、kernel或权重。已在普通双TP4及1P1D共四个GPU服务、16个worker验证，每模式一轮完整HTTP预热后三轮无已知编译事件。结果及边界见[实测报告](../../reports/pd-targeted-warmup-20260921.md)，原预算见[计划](../../reports/pd-targeted-warmup-plan.md)。
 
 固定image ID为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`。worker启动时对四个实现文件核对SHA256，版本不匹配直接失败。适用NVIDIA DSV4 Flash、hidden4096、hc_mult4、TP4/PP1/DP1、DSpark off、max-batched-tokens≤8192。
 
