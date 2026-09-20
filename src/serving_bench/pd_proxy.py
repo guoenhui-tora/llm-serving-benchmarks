@@ -69,7 +69,7 @@ class PDPool:
 
 
 def make_app(prefill, decode, ordinary=(), timeout=180, ordinary_policy='round-robin'):
-    from aiohttp import web, ClientSession, ClientTimeout
+    from aiohttp import web, ClientSession, ClientTimeout, TCPConnector
     app = web.Application()
     cycle = itertools.cycle(ordinary)
     if ordinary_policy not in ('round-robin', 'least-inflight'):
@@ -79,7 +79,11 @@ def make_app(prefill, decode, ordinary=(), timeout=180, ordinary_policy='round-r
     app['pd_pool'] = pool
 
     async def lifecycle(app):
-        app['client'] = ClientSession(timeout=ClientTimeout(total=timeout), trust_env=False)
+        # Each upstream POST gets a fresh connection: an idle peer may close
+        # a pooled socket while P and D have very different service times.
+        # Never retry a non-idempotent model request after a disconnect.
+        app['client'] = ClientSession(timeout=ClientTimeout(total=timeout),
+                                      connector=TCPConnector(force_close=True), trust_env=False)
         yield
         await app['client'].close()
     app.cleanup_ctx.append(lifecycle)

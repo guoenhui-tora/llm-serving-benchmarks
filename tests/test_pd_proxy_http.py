@@ -53,6 +53,26 @@ class ProxyHTTPTests(unittest.IsolatedAsyncioTestCase):
                     await r.read()
                 self.assertEqual(calls[-2:], [('a', 'error1'), ('a', 'error2')])
 
+    async def test_upstream_connections_are_not_reused_or_retried(self):
+        transports = []
+        async def upstream(request):
+            transports.append(request.transport)
+            body = await request.json()
+            if body['prompt'] == 'disconnect':
+                request.transport.close()
+                return web.Response()
+            return web.json_response({'ok': True})
+        app = web.Application(); app.router.add_post('/v1/completions', upstream)
+        async with TestServer(app) as server:
+            url = str(server.make_url('')).rstrip('/')
+            async with TestClient(TestServer(make_app(None, None, [url]))) as client:
+                for prompt, status in [('first', 200), ('second', 200), ('disconnect', 502), ('after', 200)]:
+                    response = await client.post('/v1/completions', json={'prompt': prompt})
+                    self.assertEqual(response.status, status)
+                    await response.read()
+                self.assertEqual(len(transports), 4)
+                self.assertEqual(len(set(transports)), 4)
+
     async def test_missing_metadata_never_reaches_decoder(self):
         calls=[]
         async def p(r):return web.json_response({'choices':[{'text':'x'}]})
