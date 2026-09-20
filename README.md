@@ -2,7 +2,7 @@
 
 用同一套脚本在不同模型、镜像和硬件上运行可追溯的 serving 实验。框架负责启动、检查、压测和保存证据；每个项目独立固定配置与结论。
 
-当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。多台机器可以分别运行同一版本；尚未实现跨节点 SSH 编排和 PD 部署。随机负载和本地 [JSONL 真实文本负载](docs/configuration.md#jsonl-真实文本数据集)共用压测流程，后者支持实际 tokenizer 长度校验和双实例固定分片。
+当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。常规runner面向本机；另有有界的实验性SSH 1P1D工具，已用于DSV4首轮跨节点KV传输验证，正确性仍未定，见[部署与协同流程](projects/dsv4-rtx6000d/reports/pd-cross-node-flow.md)。随机负载和本地 [JSONL 真实文本负载](docs/configuration.md#jsonl-真实文本数据集)共用压测流程，后者支持实际 tokenizer 长度校验和双实例固定分片。
 
 ## 从哪里开始
 
