@@ -10,7 +10,7 @@
 
 代码允许的其他参数（例如TP4 K3、16K DSpark、DP off的16K预算）不等于已经GPU实测。DSpark两个模式每次八个worker均完成target/draft覆盖，三层draft SWA cache均完成PD注册检查；真实KV和各DP引擎draft/accepted在客户端协议中另验收。该检查不是完整模型质量证明。
 
-将选定子目录中的`dsv4_mhc_worker.py`、`warmup_plan.py`和`pinned-source.json`完整复制到该服务独立缓存的`dsv4-mhc-warmup/`，设置`PYTHONPATH=/root/.cache/dsv4-mhc-warmup`、`--worker-cls dsv4_mhc_worker.Worker`。DSpark还必须按[原兼容补丁](../dspark-native-mxfp4/README.md)加载native MXFP4分派及DP profiling回移，PYTHONPATH同时包含两模块目录。固定镜像image ID仍为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；worker核对固定物理源码SHA，任何不匹配直接失败。
+将选定子目录中的`dsv4_mhc_worker.py`、`warmup_plan.py`和`pinned-source.json`完整复制到该服务独立缓存的`dsv4-mhc-warmup/`，设置`PYTHONPATH=/root/.cache/dsv4-mhc-warmup`、`--worker-cls dsv4_mhc_worker.Worker`。DSpark还必须按[原兼容补丁](../../reports/dspark-compatibility.md)加载native MXFP4分派及DP profiling回移，PYTHONPATH同时包含两模块目录。固定镜像image ID仍为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；worker核对固定物理源码SHA，任何不匹配直接失败。
 
 每服务复制原缓存并核对原文件哈希，保留来源，不能从空缓存开始却称为热缓存。不将所有子目录同时加进PYTHONPATH，以免导入同名模块。实际命令由每次报告command.json导出；这些快照尚未自动应用到精选baseline recipe。
 
