@@ -65,7 +65,7 @@ DP启动修复已包含在提交 `d529c37`。48的K5、EP on/off均完成一轮1
 - [x] **45**：本轮无新增任务，沿用[TP4报告](reports/dspark-k-sweep-node45.md)。
 - [ ] **46**：完成EP on的K5/K3/K4或明确记录阻塞，归档本轮报告和CSV。
 - [ ] **47**：完成EP off的K5/K3/K4或明确记录阻塞，归档本轮报告和CSV。
-- [ ] **48**：完成两组off与K3的同机对照或明确记录阻塞，归档本轮报告和CSV。
+- [x] **48**：部分完成；四组核心均已执行，EP off的off／K3均PASS，K3吞吐均值提高16.23%；EP on两组PARTIAL（off 1轮／K3 2轮clean），未扩展K5。见[本轮报告](reports/dspark-dp-resume-node48.md)与[CSV](data/dspark-dp-resume-node48.csv)。
 
 ### 配置准备：复用公共入口，在工作区修改
 
