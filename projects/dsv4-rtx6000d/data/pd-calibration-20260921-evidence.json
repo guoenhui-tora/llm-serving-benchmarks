@@ -1,0 +1,135 @@
+{
+  "scope": "Ordinary baseline diagnosis only; PD skipped, no completed three-clean-round group.",
+  "execution_commit": "3e721e6",
+  "run_status": {
+    "started": 1789919697.122697,
+    "modes": {
+      "ordinary": {
+        "status": "PERFORMANCE",
+        "started": 1789919697.1235042,
+        "ended": 1789920928.3484135
+      }
+    },
+    "status": "STOPPED_WITH_EVIDENCE",
+    "error": "RuntimeError('User STOP')",
+    "ended": 1789920928.3491538,
+    "changed_scripts": []
+  },
+  "controller_state": {
+    "status": "STOPPED",
+    "owner": "pd-calibration-20260920-ordinary",
+    "started": 1789919697.2236016,
+    "ready_at": 1789919798.5418036,
+    "changed_files": [],
+    "cleanup_errors": [],
+    "ended": 1789920928.281542
+  },
+  "protocol_status": "FAIL",
+  "protocol_error": "User STOP",
+  "early_stop": {
+    "time": 1789920816.4166749,
+    "reason": "Three clean rounds cannot be reached within the declared eight-round ceiling; complete the already-running round, skip further rounds and PD.",
+    "completed_rounds": 6,
+    "clean_rounds": 0,
+    "remaining_max_rounds": 2,
+    "in_progress": [
+      "measurement-07"
+    ]
+  },
+  "all_round_throughput": {
+    "mean": 984.7289358436701,
+    "sd": 75.70975930067435
+  },
+  "proxy": {
+    "events": {
+      "start": 896,
+      "route": 896,
+      "done": 896
+    },
+    "max_inflight_per_destination": 16,
+    "max_inflight_total": 32,
+    "global32_route_samples": 634,
+    "global32_always_16_16": true,
+    "completions_by_destination": {
+      "http://10.90.1.46:31249": 454,
+      "http://10.90.1.48:31249": 442
+    }
+  },
+  "old_ordinary_inflight": [
+    {
+      "round": 1,
+      "peak_inflight": {
+        "http://10.90.1.46:31249": 31,
+        "http://10.90.1.48:31249": 16
+      },
+      "max_gap_at_total32": 30
+    },
+    {
+      "round": 2,
+      "peak_inflight": {
+        "http://10.90.1.46:31249": 22,
+        "http://10.90.1.48:31249": 29
+      },
+      "max_gap_at_total32": 26
+    },
+    {
+      "round": 3,
+      "peak_inflight": {
+        "http://10.90.1.46:31249": 25,
+        "http://10.90.1.48:31249": 16
+      },
+      "max_gap_at_total32": 18
+    }
+  ],
+  "metric_deltas": {
+    "prefill": {
+      "vllm:num_preemptions_total": 0.0,
+      "vllm:request_prefill_kv_computed_tokens_sum": 3705972.0,
+      "vllm:request_success_total": 454.0
+    },
+    "decode": {
+      "vllm:num_preemptions_total": 0.0,
+      "vllm:request_prefill_kv_computed_tokens_sum": 3589071.0,
+      "vllm:request_success_total": 442.0
+    }
+  },
+  "resources": {
+    "prefill": {
+      "sample_count": 163,
+      "host_cpu_busy_pct": 12.960883281309611,
+      "service_cpuset_busy_pct": 34.200851766851656,
+      "gpu_util_pct": 81.1840490797546,
+      "gpu_sm_clock_mhz": 2416.056748466258
+    },
+    "decode": {
+      "sample_count": 163,
+      "host_cpu_busy_pct": 12.927035591783817,
+      "service_cpuset_busy_pct": 33.54414063738268,
+      "gpu_util_pct": 78.18711656441718,
+      "gpu_sm_clock_mhz": 2417.5
+    }
+  },
+  "total_input_tokens": 7295043,
+  "total_output_tokens": 917504,
+  "duration_s": 1231.2264566421509,
+  "cleanup_verification": {
+    "nodes46_48_no_gpu_compute_processes": true,
+    "nodes45_46_48_no_running_containers": true,
+    "checked_after_run": true
+  },
+  "fixed_image_source_hashes": {
+    "utils/jit_monitor.py": {
+      "sha256": "8ba1c1e02472382e986aba2ab583e33c071038d5d24d9ee811f2cfac4555dc98",
+      "lines": 559
+    },
+    "model_executor/kernels/mhc/tilelang.py": {
+      "sha256": "c8ce81539c779436eb2b9fbba84738f3114bf3ac0a149f2b606f7d38bd1067ce",
+      "lines": 790
+    },
+    "model_executor/kernels/mhc/tilelang_kernels.py": {
+      "sha256": "cf38ef189b03da9783ea3965e80bf847c1254c60b693bb03ebb4066e11f5a3b2",
+      "lines": 940
+    }
+  },
+  "same_model_metadata_as_previous_run": true
+}
