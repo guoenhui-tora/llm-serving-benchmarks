@@ -19,6 +19,8 @@
 
 **已实测范围：固定镜像v0.29.0、RTX6000D、NVIDIA DSV4 Flash NVFP4、TP4/PP1/DP1、DSpark off、prefill budget=8192、GovReport总C32。** 预热模块允许的预算范围为≤8192。 当前精选`configs/recipes/tp4.yaml`尚未自动启用该worker，需要按适配说明接入；16K预算、其他拓扑、并发或DSpark须先验证新增覆盖和容量。
 
+夜间扩展模块另存为[16K预算／DP／DSpark启动覆盖快照](patches/mhc-startup-warmup-extended/README.md)，各目录明确标注实测范围，原TP4模块不变。**DSpark尚有另一类JIT缺口**：TP2×DP2 EP on、K5的PD/普通quick正式事件分别4/2/0及4/0/2，来自草稿输入准备`_prepare_dflash_inputs_kernel`；target/draft mHC覆盖通过不代表其他内核已穷尽。
+
 | 同八卡、同GovReport总C32 | 输出 tok/s，三轮均值±样本SD | 正式已知编译事件 |
 | --- | ---: | ---: |
 | 普通双TP4：2服务×4卡 | **1029.25±1.58** | 0 |
