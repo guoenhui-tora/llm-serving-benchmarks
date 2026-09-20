@@ -30,6 +30,8 @@
 
 16K数据储备已完成：四分片筛出**815条完整近16K报告**；另准备**1024个唯一的真实报告前缀请求，每条精确16384输入tokens、输出预算1024**，作为夜间16K主负载。两套数据分开标注，原8K前128条保持不变。数据已通过固定镜像tokenizer的CPU校验，服务性能仍需实测，见[1024条准备证据](data/govreport-16k-1024-preparation.json)；[首分片就绪报告](reports/govreport-near16k-readiness-20260921.md)保留为历史。
 
+夜间执行总览：[已完成对照、当前结论与剩余队列](reports/pd-overnight-results-20260921.md)。
+
 ## 普通推理与 DSpark 参照
 
 **当前保留 vLLM 0.29.0、FlashInfer autotune off。四卡GovReport投机解码优先采用TP2×DP2、EP on、DSpark K5：966.00 ± 15.92 output tok/s，较本机同负载off提高30.97%。** 这是当前完成三轮clean的候选中吞吐最高的一组，适用总C32；K3/K4尚不能据此判为更差，见[DSpark汇总](#dspark-阶段总结)。
