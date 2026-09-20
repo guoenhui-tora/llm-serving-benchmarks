@@ -1,6 +1,32 @@
 # DeepSeek V4 Flash NVFP4 在 RTX6000D 上的推理优化
 
-本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，当前以单机为主。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
+本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，已完成单机拓扑研究，当前推进跨节点PD分离。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
+
+## 性能测试先看：已验证的 JIT 处理方案
+
+**先补齐启动阶段的实际kernel分派覆盖，再做一轮完整负载HTTP预热；不要靠反复压测碰齐编译组合。** 固定vLLM 0.29.0的NVIDIA DSV4路径存在mHC预热入口遗漏。适配后，普通双TP4和1P1D各连续三轮无已知编译事件，吞吐CV分别为0.15%和0.18%。这是本项目后续性能测试的重要起点。
+
+为什么固定输入还会反复JIT：镜像原预热按`hc_pre/hc_post`属性找层，但当前NVIDIA层没有这些属性，预热提前返回；真实forward直接调用另一组mHC入口。运行时chunked prefill的批次token数又会改变`n_splits`等分派组合，相同请求并不保证相同kernel组合。这解释了本轮已定位的持续mHC事件，不能据此把历史所有JIT都归为同一个原因。
+
+推荐执行顺序：
+
+1. **保留并核对编译缓存。** 新recipe可能改变缓存目录指纹；需要继承时完整复制对应旧缓存并核对内容，不把新空目录当成热缓存，不清JIT缓存。
+2. **启用[项目启动预热适配](patches/mhc-startup-warmup/README.md)。** 通过`--worker-cls dsv4_mhc_worker.Worker`及对应模块挂载，在真实层参数上覆盖mHC分派，随后完整执行原启动预热和图捕获。核对固定源码哈希、每个worker的完成记录、第二遍缓存key不增加及覆盖检查。它不修改forward、权重或运行时分派算法。
+3. **单独保存一轮完整正式负载的HTTP预热，再用quick固定测三轮。** 本轮完整负载是GovReport前128条、总C32、每条输出1024 tokens；默认2C预热不能视作已验证替代。启动预热并不覆盖所有其他内核：普通路径HTTP预热仍出现16条其他Triton事件，正式三轮才全部为0。
+4. **保留每轮JIT标记、真实工作量和波动。** quick包含事件时仍保留三轮，不挑最快、不自动无限加轮；影响排序时另设有界诊断。当前实测协议是“一轮独立完整HTTP预热＋jit_clean”，均在最先三轮通过；据此推荐上述quick流程，但尚未证明所有配置都能同样收敛。
+
+**已实测范围：固定镜像v0.29.0、RTX6000D、NVIDIA DSV4 Flash NVFP4、TP4/PP1/DP1、DSpark off、prefill budget=8192、GovReport总C32。** 预热模块允许的预算范围为≤8192。 当前精选`configs/recipes/tp4.yaml`尚未自动启用该worker，需要按适配说明接入；16K预算、其他拓扑、并发或DSpark须先验证新增覆盖和容量。
+
+| 同八卡、同GovReport总C32 | 输出 tok/s，三轮均值±样本SD | 正式已知编译事件 |
+| --- | ---: | ---: |
+| 普通双TP4：2服务×4卡 | **1029.25±1.58** | 0 |
+| 1P1D：1个P×4卡＋1个D×4卡 | **913.91±1.66** | 0 |
+
+当前1P1D低11.21%，平均TTFT/TPOT也未改善；已证明真实KV传输，不能再用早期受JIT干扰的普通682 tok/s作为分母。[完整实测、原因和实际命令](reports/pd-targeted-warmup-20260921.md)／[逐轮数据](data/pd-targeted-warmup-20260921.csv)。
+
+下一轮拟先验证P端16K预算，再比较同资源下的并发和P/D配比，见[九小时有界PD计划](reports/pd-overnight-plan-20260921.md)；该计划尚未执行。
+
+## 普通推理与 DSpark 参照
 
 **当前保留 vLLM 0.29.0、FlashInfer autotune off。四卡GovReport投机解码优先采用TP2×DP2、EP on、DSpark K5：966.00 ± 15.92 output tok/s，较本机同负载off提高30.97%。** 这是当前完成三轮clean的候选中吞吐最高的一组，适用总C32；K3/K4尚不能据此判为更差，见[DSpark汇总](#dspark-阶段总结)。
 
