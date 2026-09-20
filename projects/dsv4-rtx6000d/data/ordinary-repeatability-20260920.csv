@@ -1,0 +1,68 @@
+mode,request_id,phase,request_sha256,input_tokens,output_tokens,wall_time_s,output_sha256,first_token,first_token_logprob,text_prefix
+connector,warmup-00,warmup,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.672004,75c15c52b148f823a1debeed95b721fba829ecce4c0743224d092c98f01478ef,,,"Here is a detailed summary of the government report.
+
+### Summary of GAO Report on the National Medicare Education Progr"
+connector,original-00,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.455575,9c5291caa0aeeb7ae5add658361d6c59a945b9ea16960447f44c44302b3d72b6,,,"**Summary of GAO Report on Medicare’s National Medicare Education Program (NMEP)**
+
+**Background and Central Questions**"
+connector,original-01,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.472072,1a0ba8508f25148d35c5a9e24564a3b1636939301ed651992a549deff360119c,,,"Here is a detailed summary of the government report.
+
+### Summary of GAO Report on Medicare Education Efforts
+
+**Backgro"
+connector,original-02,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.452735,fc6727ba77476c1875de2fdcd832d90c8f4fcdc474b514fdf276d2a4af4f1c0f,,,"Here is a detailed summary of the government report.
+
+### Summary of GAO Report on the National Medicare Education Progr"
+connector,logprobs-00,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.187599,48daa344c588c16e160e83584a0d8cde6f7cd8a38df6e8dda3290f59d1965701,token_id:666,-0.4101836383342743,"**Background**
+
+In 1997, before the Medicare+Choice (M+C) program was established, approximately 5.2 million, or 14 perc"
+connector,logprobs-01,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.200175,e6a07430fa2afdbffd119d9b63f0373f1b2e7bbb8561eb5def9272f6bf6435f8,token_id:666,-0.4475419521331787,"**Summary of the GAO Report on the National Medicare Education Program (NMEP)**
+
+**Background and Central Questions**
+Th"
+connector,logprobs-02,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.198293,5ba1cf5bc56acfb0cfb01625aaaf4529096a333ffc61310333a926a6e4d890b5,token_id:9544,-0.6540687680244446,"Here is a detailed summary of the government report:
+
+**Background and Central Questions**
+
+The report examines the impl"
+connector,fixed-prefix-00,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.891215,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.5910633206367493, before
+connector,fixed-prefix-01,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.883002,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.48657625913619995, before
+connector,fixed-prefix-02,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.867947,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.26517224311828613, before
+connector,short-00,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,8.957397,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw
+connector,short-01,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,0.510314,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw
+connector,short-02,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,0.509852,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw
+ordinary,warmup-00,warmup,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,19.758554,1ec1e5addfb19f425cb8de5f6fd119eddc89467212d1bc8fb7fe0717e3e89976,,,"Here is a detailed summary of the government report.
+
+### Summary of GAO Report on Medicare Education Program (NMEP)
+
+**"
+ordinary,original-00,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.455650,35eef92202a26bfb022a7fcac1d2fdcc1696e1be2ed287482531060a1f9b35d9,,,"Here is a detailed summary of the government report.
+
+**Background and Central Questions**
+
+The report examines the impl"
+ordinary,original-01,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.407767,42a04cb9a4df1d5ff1a0713e12f08dd958cc8d556fd19cafecc985aa1d7ccfab,,,"Here is a detailed summary of the government report.
+
+**Background and Central Questions**
+
+The report, produced by the "
+ordinary,original-02,diagnostic,efaf241f9fb2e7fea3cde80b2d39f1853c45e99220d99b9919ee73f1ab84b214,8631,256,3.372835,a3af499dd416b9ca2752495b14bc832b8d781ba50b9a67ca11530e325f07c94d,,,"Here is a detailed summary of the government report.
+
+### Summary of GAO Report on Medicare’s National Medicare Educatio"
+ordinary,logprobs-00,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.168943,1d5eec100fbd9cbcaf7e8ac68965d1e2515508d2d0a4645e78e4838cf955415b,token_id:666,-0.1073981449007988,"**Summary of GAO Report on Medicare’s National Medicare Education Program (NMEP)**
+
+**Background and Central Questions**"
+ordinary,logprobs-01,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.159683,1650eff20b701ad4194c22f16c9f44e1da63a64c8bd01db9db43a9f37c5c0a72,token_id:9544,-0.6012651920318604,"Here is a detailed summary of the government report.
+
+**Background and Central Questions**
+
+The report, produced by the "
+ordinary,logprobs-02,diagnostic,303aaf0c785552a355abcf99a92a772822ed7cb9620bb7a743bf4d10530d102f,8631,32,1.161917,fe6e04d6c60b2fb6e14775487453532f83044824eb0adb49e3b088e544a6020f,token_id:666,-0.6054970026016235,"**Summary of the Government Report on the Medicare National Medicare Education Program (NMEP)**
+
+**Background and Centra"
+ordinary,fixed-prefix-00,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.861460,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.48821690678596497, before
+ordinary,fixed-prefix-01,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.858368,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.7029860615730286, before
+ordinary,fixed-prefix-02,diagnostic,45744df63a842d1ccee04cbf6bec4107fb8b2e6bd8b05103e93182ef6fd856c2,8639,1,0.857372,bf5f5cc7f1268ef18187991588fce523b267d14998a10ea08e4b3d353e9ff977,token_id:1936,-0.39255794882774353, before
+ordinary,short-00,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,9.142547,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw
+ordinary,short-01,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,0.508883,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw
+ordinary,short-02,diagnostic,bf4ea0dc7c0bd5f492ebc3ff6804d47b9f33a33606b9562bee8e3cf87ac1fc0b,5,32,0.507359,973e5fd8c1e39937bd38d6d15fca4dbb101dcd96fcdd9bbc7cc37f17a9cc7c35,token_id:11111,-0.17092777788639069, Paris. The capital of Spain is Madrid. The capital of Italy is Rome.\n\nQuestion: What is the capital of Germany?\nAnsw

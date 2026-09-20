@@ -12,7 +12,7 @@
 
 [跨节点PD启动与协同流程](reports/pd-cross-node-flow.md)解释45如何通过SSH启动两端模型、代理如何安排先P后D、NIXL如何直接传输KV，附请求时序图和首轮验证边界。
 
-已定案的[首轮1P1D计划](reports/pd-1p1d-plan.md)：两节点各四卡TP4、DSpark off，先验证真实KV传输，再做同八卡资源的GovReport总C32对照。[首轮实测](reports/pd-1p1d-20260920.md)已完成46P→48D的两条C1真实KV传输；因普通路径重复输出也不一致，正确性仍未定，未进入C32或性能对照。
+已定案的[首轮1P1D计划](reports/pd-1p1d-plan.md)：两节点各四卡TP4、DSpark off，先验证真实KV传输，再做同八卡资源的GovReport总C32对照。[首轮实测](reports/pd-1p1d-20260920.md)已完成46P→48D的两条C1真实KV传输；因普通路径重复输出也不一致，正确性仍未定，未进入C32或性能对照。 [后续普通路径诊断](reports/ordinary-repeatability-20260920.md)确认：移除NIXL connector后，相同长输入的首token概率及输出仍会变化；短输入重复一致，具体计算原因待定位。
 
 ## 当前可复用入口
 
