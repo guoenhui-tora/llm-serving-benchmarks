@@ -1,4 +1,4 @@
-"""Overlay one audited module, failing closed if the image or patch differs."""
+"""Overlay audited modules, failing closed if the image or patch differs."""
 import hashlib
 import importlib.abc
 import importlib.machinery
@@ -19,6 +19,16 @@ except BaseException as error:
 
 class DraftOverlay(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path, target=None):
+        profile = MANIFEST['dp_profile_backport']
+        if (os.environ.get('SERVING_BENCH_DSPARK_DP_PROFILE_FIX') == '1'
+                and fullname == profile['module']):
+            from dspark_dp_profile import ProfileLoader
+            original = importlib.machinery.PathFinder.find_spec(fullname, path)
+            if not original or not original.origin:
+                raise RuntimeError('Cannot locate pinned DFlash source')
+            loader = ProfileLoader(fullname, original.origin, profile['original_sha256'])
+            return importlib.util.spec_from_file_location(fullname, original.origin,
+                                                         loader=loader)
         if fullname != MANIFEST['module']:
             return None
         original = importlib.machinery.PathFinder.find_spec(fullname, path)

@@ -1,0 +1,13 @@
+--- a/vllm/v1/worker/gpu/spec_decode/dflash/speculator.py
++++ b/vllm/v1/worker/gpu/spec_decode/dflash/speculator.py
+@@ -367,9 +367,7 @@
+                 num_query_tokens,
+                 attn_metadata=None,
+                 slot_mappings=None,
+-                num_tokens_across_dp=(
+-                    dp_sync.num_tokens_across_dp if dp_sync is not None else None
+-                ),
++                num_tokens_across_dp=None,
+                 cudagraph_runtime_mode=CUDAGraphMode.NONE,
+             )
+             return self.draft_tokens[:num_reqs]

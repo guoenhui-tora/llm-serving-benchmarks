@@ -3,8 +3,21 @@
   "original_sha256": "56f6b81f5712817689e24088b2c5302d5832fd4e6d5b2630d7e28be73c84b298",
   "files": {
     "utils.py": "e0c060632a5b2a9ce7016edb7e10ac666e3a58464c0216803b9318a083f1b902",
-    "dspark_native_mxfp4.py": "33df649eec0abfe5350fafc18dc84bcbd492238e65b9652a13fcea9e3bdf4730"
+    "dspark_native_mxfp4.py": "33df649eec0abfe5350fafc18dc84bcbd492238e65b9652a13fcea9e3bdf4730",
+    "dspark_dp_profile.py": "f2280688a5b86746166344dd0b7c1cf20b85d0011678c7b6483a59a02786163f",
+    "sitecustomize.py": "65a4771826b7f9f3b23c8113e4bd8e672822e2ac8af59bd6a93c0a6bdaf3ffa0"
   },
   "upstream_reference": "https://github.com/vllm-project/vllm/pull/49133",
-  "note": "Local adaptation, not a merged upstream fix; preserves target model_config and original tensor formats."
+  "note": "Local adaptation, not a merged upstream fix; preserves target model_config and original tensor formats.",
+  "dp_profile_backport": {
+    "module": "vllm.v1.worker.gpu.spec_decode.dflash.speculator",
+    "original_sha256": "4a6b86232fa98eeb62143c469f2f5789c94d3af0f80851f623ddaa8c78e23f7b",
+    "patched_sha256": "7c6ac7be20c0aa5e2e6a4cb9972621c9da878385a669c83aaa93098b3a5dbf3a",
+    "upstream_pr": "https://github.com/vllm-project/vllm/pull/54856",
+    "upstream_commit": "facd9a74a1cd1b9fed324cdc2cceb8d54fdad3d0",
+    "issue": "https://github.com/vllm-project/vllm/issues/56281",
+    "enable_environment": "SERVING_BENCH_DSPARK_DP_PROFILE_FIX=1",
+    "scope": "Only the dummy_run + skip_attn_for_dummy_run hunk; excludes normal-decode DP sync optimization.",
+    "accessed": "2026-09-20"
+  }
 }

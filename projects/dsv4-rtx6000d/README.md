@@ -30,6 +30,8 @@
 
 固定 vLLM 0.29.0 对本模型内置草稿存在 NVFP4/MXFP4 分派问题。已保留原权重并验证本地加载补丁，问题原因、适用范围、使用与回退方法见[DSpark 兼容性说明](reports/dspark-compatibility.md)。补丁不修改镜像；加载兼容性与性能收益分别验证。K5 C32还需扩大Graph捕获范围，不能直接沿用普通TP4的上限32，具体见上述性能报告。
 
+DP＋DSpark另有启动profiling元数据错误；已回移上游已合并PR #54856的最小修复，保留固定镜像。2026-09-20在48完成TP2×DP2、K5、EP on/off功能验证：两组均通过启动、CUDA Graph及完整C32请求，各128成功、0失败。首轮含编译事件，未取得无JIT性能结果；旧失败批次仍保留，后续K值实验在本地recipe中显式启用补丁，并使用新的结果目录。来源、验证范围与启用方式见[DP启动修复](reports/dspark-compatibility.md#dpdspark回移已合并的上游修复)。
+
 ## 下一轮：四节点 DSpark 拓扑与 K 值实验
 
 **目标是在同样四卡资源、GovReport近8K／1024、总C32下，比较TP4与TP2×DP2 EP on/off，并找出合适的草稿token数K。** 主线是TP2×DP2 EP on＋DSpark；它在历史随机负载中有优势，但尚未验证与DSpark叠加后的收益。本轮先完成四卡部署，胜出方案的八卡双部署另行安排。

@@ -25,7 +25,7 @@ for case in resolve(args.campaign)['cases']:
     assert case['runtime']['image_id'] == 'sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1'
     assert case['recipe']['environment']['PYTHONPATH'] == '/root/.cache/dspark-native-mxfp4'
     destination = cache_directory(case, case['runtime']['image_id']) / 'dspark-native-mxfp4'
-    for name in ('utils.py', 'dspark_native_mxfp4.py', 'manifest.json', 'sitecustomize.py'):
+    for name in (*manifest['files'], 'manifest.json'):
         source = HERE / name
         target = destination / name
         if target.exists():
