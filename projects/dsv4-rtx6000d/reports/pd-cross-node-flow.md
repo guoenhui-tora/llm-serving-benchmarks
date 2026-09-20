@@ -96,3 +96,23 @@ D仍需原prompt来建立token序列、位置、采样和请求状态。**收到
 - 固定镜像构建版本的上游实现：[NIXL pull scheduler](https://github.com/vllm-project/vllm/blob/98dff2a81d747d1dba01a47f939f48c3526d4206/vllm/distributed/kv_transfer/kv_connector/v1/nixl/pull_scheduler.py)、[NIXL pull worker](https://github.com/vllm-project/vllm/blob/98dff2a81d747d1dba01a47f939f48c3526d4206/vllm/distributed/kv_transfer/kv_connector/v1/nixl/pull_worker.py)。解释依据为本轮从镜像提取的源码，不套用最新版本文档。
 
 完整请求、日志、提取的镜像源码及探索配置仅保存在45本机 `/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-1p1d/`，不随Git分发。Git中的本说明、时序图、精选结果和小型数据用于交接；复现实验还需按计划准备本地部署配置与新的run-root。
+
+## 2026-09-21：扩展为多个P/D服务
+
+控制机仍为45，每请求选择一个P和一个D，完整prompt由所选P处理。代理选择服务后保留D名额直到生成结束，P取得合法KV元数据后即可接下一条prefill。D从metadata读取实际P engine id、host、side port和block groups，因而可逐请求切换KV来源。
+
+```mermaid
+flowchart LR
+  C[单客户端：全系统C64] --> X[45代理：分别选择P和D]
+  X --> P0[46：P0 / TP4 / 4GPU]
+  X --> P1[47：P1 / TP4 / 4GPU]
+  X --> D[48：D0 / TP4 / 4GPU]
+  D -. NIXL拉取所选P的KV .-> P0
+  D -. NIXL拉取所选P的KV .-> P1
+  D --> X
+  X --> C
+```
+
+此2P1D是3个API服务×4GPU=12GPU；图中两条KV线表示不同请求可以选择不同P。2026-09-21的12条16K功能请求中，两条P→D路径各完成6条；D有48次TP-rank真实传输、196,608个远端命中tokens、0输入重算、0失败/过期/抢占。随后性能协议与同12卡普通三副本匹配，当前进度见[配比报告](pd-ratios-c64-20260921.md)。
+
+代理已支持多P/多D列表和两侧least-inflight，普通实验也显式使用least-inflight；上游POST使用新连接且不重试。4P2D的全部八条路由已通过CPU HTTP测试，真实GPU规模实验另按前序结果决定，不能把模拟测试当成NIXL传输验证。该实验工具仍不提供生产级故障恢复或完整模型质量保证。
