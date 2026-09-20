@@ -34,6 +34,8 @@
 
 16K数据储备已完成：四分片筛出**815条完整近16K报告**；另准备**1024个唯一的真实报告前缀请求，每条精确16384输入tokens、输出预算1024**，作为夜间16K主负载。两套数据分开标注，原8K前128条保持不变。数据已通过固定镜像tokenizer的CPU校验，服务性能仍需实测，见[1024条准备证据](data/govreport-16k-1024-preparation.json)；[首分片就绪报告](reports/govreport-near16k-readiness-20260921.md)保留为历史。
 
+[C64配比研究](reports/pd-ratios-c64-20260921.md)已开始：16K普通三副本（3服务×4GPU=12GPU）1157.11±0.46 tok/s、三轮0事件；同资源2P1D正在验证。
+
 夜间执行总览：[已完成对照、当前结论与剩余队列](reports/pd-overnight-results-20260921.md)。
 
 ## 普通推理与 DSpark 参照

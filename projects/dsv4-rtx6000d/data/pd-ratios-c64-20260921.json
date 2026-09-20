@@ -1,0 +1,1996 @@
+{
+  "updated_beijing": "2026-09-21T07:20:58.250190",
+  "states": {
+    "D16O3": "COMPLETE",
+    "D16P2D1": "STARTING",
+    "D16P1D2": "NOT_RUN",
+    "D8O3": "NOT_RUN",
+    "D8P1D2": "NOT_RUN",
+    "D8P2D1": "NOT_RUN",
+    "D16O4": "NOT_RUN",
+    "D16P3D1": "NOT_RUN",
+    "D16O6": "NOT_RUN",
+    "D16P4D2": "NOT_RUN"
+  },
+  "cases": {
+    "D16O3": {
+      "case": "D16O3",
+      "status": "COMPLETE",
+      "clean": true,
+      "cv": 0.0003968487874117297,
+      "spec": {
+        "owner": "pd-night-20260921-d16o3-01",
+        "case_id": "D16O3",
+        "mode": "ordinary",
+        "ready_timeout_s": 900,
+        "budget_s": 4200,
+        "members": [
+          {
+            "role": "r0",
+            "host": "gpu-6000d-46",
+            "url": "http://10.90.1.46:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16o3-r0.yaml"
+          },
+          {
+            "role": "r1",
+            "host": "gpu-6000d-47",
+            "url": "http://10.90.1.47:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16o3-r1.yaml"
+          },
+          {
+            "role": "r2",
+            "host": "gpu-6000d-48",
+            "url": "http://10.90.1.48:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16o3-r2.yaml"
+          }
+        ],
+        "workload": "overnight-16k-c64-n256",
+        "concurrency": 64,
+        "requests": 256,
+        "group": "16k-c64-12gpu",
+        "description": "D16O3: 3 API services x4GPU=12GPU,TP4 off,16K,C64,N256,all-routes gate.",
+        "require_targeted_warmup": true,
+        "functional_requests": 12,
+        "require_all_api_routes": true
+      },
+      "controller": {
+        "status": "STOPPED",
+        "owner": "pd-night-20260921-d16o3-01",
+        "started": 1789944993.0597715,
+        "ready_at": 1789945191.4404664,
+        "changed_files": [],
+        "cleanup_errors": [],
+        "ended": 1789946280.7883265
+      },
+      "revision": {
+        "commit": "01fe2d40bdd60d3c46d37392ff3320510bdd34f1",
+        "script_hashes": {
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/candidate.py": "ae0190bc53d428cdc1e0f52b438f949561d49c6ddbdfe6d3de26e8165b32fddd",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_a.py": "71236d0227139680afea8902657d44a49227011afa1de0122f1fb9d9d26b9a7a",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/run_case.py": "4e56d362f252a0c85e12753d048cf7c57d3dd07469ee5fb0e8245d74b60669aa",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_c_spec.py": "5edc18765af274525139127c3b5b9cea0d0a2116504d9e20e7ca793a4a5a5696",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_d.py": "f093e9ea24f12d654287b2f7d49e40bb7222abf55f38dd631503e370b2f8c814",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/test_runtime_gate.py": "d0c8e140dbe35dedc86366335081996a3c086365ecece1573d04e45ca380a02c",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_c_dp.py": "2fa154b4e16d09d4a85e075d4526bec140c498f5068b75d6d54ccebf5aba1b3c",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_b.py": "3932657fedb9520bdd34a1110fe4407da53dfcbb4807635065f98e076657aefe",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/dsv4_mhc_worker.py": "2d5862327ac8a0dfc65ea600d01be31e93ed07e8c7036e2fe6bdb77f273787c6",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/__pycache__/dsv4_mhc_worker.cpython-312.pyc": "510aae6c1384cc494d88deae426d5edb81efecac92f24197a4114450d44635fa",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/dsv4_mhc_worker.py": "e1e13316d13070caf305ba078d1ffbce7cf77ce3130faa9686428fbf1f9017bb",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/pinned-source.json": "932116ee2076a004b1a84c1fcb47ff45005f2c86c5aba49f173b2780205528d2",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/__pycache__/dsv4_mhc_worker.cpython-312.pyc": "333de7319d2520085cc422d5468c4f63fe8b60debdddf0228714923db908e405",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/warmup_plan.py": "47ca2f574bd6661cbd7e4c44e8b1c24c64b9010ad43671a3c848b5285e4a538b",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/test_warmup_plan.py": "cb4a934df9bd495f4adcfe458385a3743e49f9921d981cdde52b1095488a5b6a",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/dsv4_mhc_worker.py": "d1edf17e93d5b24a440f23dcea005ab71c4bafd68b6ef1e1ea478eb5241c42d3",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/dsv4_mhc_worker.py": "d1edf17e93d5b24a440f23dcea005ab71c4bafd68b6ef1e1ea478eb5241c42d3",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf"
+        }
+      },
+      "proxy_command": [
+        "docker",
+        "run",
+        "-d",
+        "--pull",
+        "never",
+        "--name",
+        "pd-night-20260921-d16o3-01-proxy",
+        "--label",
+        "io.serving-bench.run=pd-night-20260921-d16o3-01",
+        "--network",
+        "host",
+        "--cpuset-cpus",
+        "16-19",
+        "--cpuset-mems",
+        "1",
+        "-v",
+        "/home/enhui/llm-serving-benchmarks/src:/src:ro",
+        "-e",
+        "PYTHONPATH=/src",
+        "--entrypoint",
+        "python3",
+        "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+        "-m",
+        "serving_bench.pd_proxy",
+        "--port",
+        "31250",
+        "--timeout",
+        "600",
+        "--ordinary",
+        "http://10.90.1.46:31249",
+        "http://10.90.1.47:31249",
+        "http://10.90.1.48:31249",
+        "--ordinary-policy",
+        "least-inflight"
+      ],
+      "members": {
+        "r0": {
+          "host": "gpu-6000d-46",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16o3-01-r0",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16o3-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/c24e9aed189ae0fb5dcb:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.48",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "8192",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 34,
+          "warning_examples": [
+            "2026-09-20T22:57:00.818337690Z WARNING 2026-09-20 22:57:00 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T22:57:30.588474233Z (Worker pid=157) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.588521095Z (Worker pid=158) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.588524615Z (Worker pid=160) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.588527529Z (Worker pid=159) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        },
+        "r1": {
+          "host": "gpu-6000d-47",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16o3-01-r1",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16o3-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/37ab4eb3d68a43e3cf87:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.48",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "8192",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 30,
+          "warning_examples": [
+            "2026-09-20T22:57:01.954372533Z WARNING 2026-09-20 22:57:01 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T22:57:31.079167473Z (Worker pid=157) WARNING 2026-09-20 22:57:31 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:31.079222641Z (Worker pid=159) WARNING 2026-09-20 22:57:31 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:31.079227424Z (Worker pid=158) WARNING 2026-09-20 22:57:31 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:31.079231550Z (Worker pid=160) WARNING 2026-09-20 22:57:31 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        },
+        "r2": {
+          "host": "gpu-6000d-48",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16o3-01-r2",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16o3-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/6a9baa0cfe0638f4be69:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.48",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "8192",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 30,
+          "warning_examples": [
+            "2026-09-20T22:57:01.703086583Z WARNING 2026-09-20 22:57:01 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T22:57:30.681579150Z (Worker pid=160) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.681639821Z (Worker pid=159) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.681645583Z (Worker pid=158) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T22:57:30.681649976Z (Worker pid=157) WARNING 2026-09-20 22:57:30 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        }
+      },
+      "rounds": [
+        {
+          "path": "warmup-01",
+          "resources": {
+            "r0": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 13.052152262755733,
+              "service_cpu_busy_percent": 35.1978346480458,
+              "gpu_sm_mhz_mean": 2405.455882352941,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 239.1302205882353,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r1": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 11.555075951420225,
+              "service_cpu_busy_percent": 33.95045783411751,
+              "gpu_sm_mhz_mean": 2407.6617647058824,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 241.6327205882353,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r2": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 13.148115670592286,
+              "service_cpu_busy_percent": 32.94427210950042,
+              "gpu_sm_mhz_mean": 2407.1470588235293,
+              "gpu_temperature_max_c": 59.0,
+              "gpu_power_w_mean": 240.98441176470587,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "r0": {
+              "queue": {
+                "count": 88.0,
+                "sum_s": 399.1145350569859,
+                "mean_s": 4.5353924438293856
+              },
+              "prefill": {
+                "count": 88.0,
+                "sum_s": 264.30712470039725,
+                "mean_s": 3.0034900534136053
+              },
+              "decode": {
+                "count": 88.0,
+                "sum_s": 4242.815617904067,
+                "mean_s": 48.21381383981895
+              }
+            },
+            "r1": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 367.00255266949534,
+                "mean_s": 4.369078007970183
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 254.3035045126453,
+                "mean_s": 3.0274226727695868
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3993.2096526520327,
+                "mean_s": 47.538210150619435
+              }
+            },
+            "r2": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 368.0679355850443,
+                "mean_s": 4.381761137917194
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 254.4326292751357,
+                "mean_s": 3.028959872323044
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3990.6039852080867,
+                "mean_s": 47.50719030009627
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 1157.2433993177626,
+              "request_throughput": 1.1301205071462526,
+              "duration": 226.5245152009884,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 8254.625302565728,
+              "median_ttft_ms": 5380.777332058642,
+              "p95_ttft_ms": 27683.43918977189,
+              "p99_ttft_ms": 32815.243177401135,
+              "mean_tpot_ms": 46.67798164483604,
+              "p95_tpot_ms": 51.40607797846613,
+              "mean_itl_ms": 46.677982212432745,
+              "p95_itl_ms": 24.573626089841124,
+              "mean_e2el_ms": 56006.200525233,
+              "p95_e2el_ms": 78958.91472516814
+            }
+          },
+          "events": [
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.355048214Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.355216320Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.355328309Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.355411819Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.434988701Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.435094916Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.435176131Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:00:44.435201748Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:33.808121551Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:01:33 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:33.811772771Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:01:33 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:33.811936252Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:01:33 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:33.827095704Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:01:33 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:34.308848781Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:01:34 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:34.309657640Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:01:34 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:34.315391327Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:01:34 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r0",
+              "line": "2026-09-20T23:01:34.323638724Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:01:34 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.504859990Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.505770954Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.505928036Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.505978894Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.583510223Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.584279027Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.584362280Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:00:44.584380731Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:01:32.745966065Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:01:32.746071940Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:01:32.746099245Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r1",
+              "line": "2026-09-20T23:01:32.746177985Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.502162157Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.503315850Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.503378870Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.503507723Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=64, block_table_stride=128, global_topk_indices_stride=512, topk=512, topk_indices_stride=512}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 512), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 512), ('constexpr', 512), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.575284455Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.582996887Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.583060940Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:00:44.583083100Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:00:44 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=128, topk=128, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 128), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 128), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:01:32.745817046Z (Worker_TP2 pid=159) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=2, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:01:32.749293047Z (Worker_TP0 pid=157) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=0, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:01:32.749342434Z (Worker_TP1 pid=158) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=1, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            },
+            {
+              "role": "r2",
+              "line": "2026-09-20T23:01:32.751446298Z (Worker_TP3 pid=160) WARNING 2026-09-20 23:01:32 [vllm.utils.jit_monitor:138] Triton kernel JIT compilation during inference: _compute_global_topk_indices_and_lens_kernel (constexprs={TRITON_BLOCK_SIZE=1024, block_size=2, block_table_stride=128, global_topk_indices_stride=256, topk=256, topk_indices_stride=256}; signature={TRITON_BLOCK_SIZE='constexpr', block_size='constexpr', block_table_ptr='*i32', block_table_stride='constexpr', global_topk_indices_ptr='*i32', global_topk_indices_stride='constexpr', is_valid_token_ptr='*u1', token_to_req_indices_ptr='*i32', topk='constexpr', topk_indices_ptr='*i32', topk_indices_stride='constexpr', topk_lens_ptr='*i32'}; extra_compile_info={configs=[{(0,): [['tt.divisibility', 16]], (1,): [], (2,): [['tt.divisibility', 16]], (3,): [['tt.divisibility', 16]], (4,): ..., device=3, enable_fp_fusion=True, extern_libs=(('libdevice', '/usr/local/lib/python3.12/dist-packages/triton/backends/nvidia/lib/libdevice.10.bc'),), is_warmup=False, launch_cooperative_grid=False, num_ctas=1, num_stages=3, num_warps=4, specialization_data='{\"name\": \"vllm.models.deepseek_v4.common.ops.cache_utils._compute_global_topk_indices_and_lens_kernel\", \"signature\":...}; key=\"[('*i32', 'D'), ('constexpr', 256), ('*i32', 'D'), ('*i32', 'D'), ('constexpr', 256), ('constexpr', 256), ('*i32', '...). This causes a latency spike; consider extending warmup to cover this shape/config."
+            }
+          ],
+          "engine-counter-deltas": {
+            "r0": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1441792.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 88.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r1": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r2": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          }
+        },
+        {
+          "path": "measurement-01",
+          "resources": {
+            "r0": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 13.037090922690275,
+              "service_cpu_busy_percent": 32.32728722825758,
+              "gpu_sm_mhz_mean": 2418.8529411764707,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 243.9089705882353,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r1": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 11.533355484669938,
+              "service_cpu_busy_percent": 34.035267478474374,
+              "gpu_sm_mhz_mean": 2419.551470588235,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 243.32669117647058,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r2": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 12.99947409495481,
+              "service_cpu_busy_percent": 29.349263168580553,
+              "gpu_sm_mhz_mean": 2419.7132352941176,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 242.24941176470588,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "r0": {
+              "queue": {
+                "count": 88.0,
+                "sum_s": 396.632743219845,
+                "mean_s": 4.507190263861875
+              },
+              "prefill": {
+                "count": 88.0,
+                "sum_s": 264.0789955155924,
+                "mean_s": 3.0008976763135498
+              },
+              "decode": {
+                "count": 88.0,
+                "sum_s": 4245.230375984684,
+                "mean_s": 48.24125427255322
+              }
+            },
+            "r1": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.2491485122591,
+                "mean_s": 4.336299387050704
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 251.98293598555028,
+                "mean_s": 2.999796856970837
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3951.8267894303426,
+                "mean_s": 47.04555701702789
+              }
+            },
+            "r2": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.7318018367514,
+                "mean_s": 4.342045259961326
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 252.29641621839255,
+                "mean_s": 3.003528764504673
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3956.315367937088,
+                "mean_s": 47.09899247544153
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 1157.2906544122718,
+              "request_throughput": 1.1301666546994842,
+              "duration": 226.5152656340506,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 8198.190119017454,
+              "median_ttft_ms": 5383.4418640471995,
+              "p95_ttft_ms": 27486.97435448412,
+              "p99_ttft_ms": 32585.339621576713,
+              "mean_tpot_ms": 46.398239667863855,
+              "p95_tpot_ms": 51.376495339898824,
+              "mean_itl_ms": 46.39824034471061,
+              "p95_itl_ms": 24.57361299311742,
+              "mean_e2el_ms": 55663.58929924217,
+              "p95_e2el_ms": 78944.01295401622
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "r0": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1441792.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 88.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r1": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r2": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          }
+        },
+        {
+          "path": "measurement-02",
+          "resources": {
+            "r0": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 13.043344764143217,
+              "service_cpu_busy_percent": 29.701088202018155,
+              "gpu_sm_mhz_mean": 2419.125,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 244.49088235294118,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r1": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 11.538977617081436,
+              "service_cpu_busy_percent": 39.96320173780275,
+              "gpu_sm_mhz_mean": 2419.4779411764707,
+              "gpu_temperature_max_c": 59.0,
+              "gpu_power_w_mean": 242.60389705882352,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r2": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 12.96530225392437,
+              "service_cpu_busy_percent": 29.33457278614382,
+              "gpu_sm_mhz_mean": 2420.1838235294117,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 241.13066176470588,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "r0": {
+              "queue": {
+                "count": 88.0,
+                "sum_s": 396.0186038231477,
+                "mean_s": 4.500211407081224
+              },
+              "prefill": {
+                "count": 88.0,
+                "sum_s": 264.05114297103137,
+                "mean_s": 3.0005811701253564
+              },
+              "decode": {
+                "count": 88.0,
+                "sum_s": 4245.23774388805,
+                "mean_s": 48.24133799872784
+              }
+            },
+            "r1": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.4246037742123,
+                "mean_s": 4.338388140169194
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 251.98893349338323,
+                "mean_s": 2.99986825587361
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3956.3136003622785,
+                "mean_s": 47.09897143288427
+              }
+            },
+            "r2": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.7658950658515,
+                "mean_s": 4.342451131736327
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 252.20650160498917,
+                "mean_s": 3.0024583524403474
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3949.5767717547715,
+                "mean_s": 47.01877109231871
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 1157.4593587387108,
+              "request_throughput": 1.1303314050182722,
+              "duration": 226.4822501289891,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 8193.812751738278,
+              "median_ttft_ms": 5382.163172471337,
+              "p95_ttft_ms": 27468.56434099027,
+              "p99_ttft_ms": 32590.298315277323,
+              "mean_tpot_ms": 46.38974729210711,
+              "p95_tpot_ms": 51.42542774119789,
+              "mean_itl_ms": 46.38974788926151,
+              "p95_itl_ms": 24.596778611885384,
+              "mean_e2el_ms": 55650.524231563846,
+              "p95_e2el_ms": 78931.05509856832
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "r0": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1441792.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 88.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r1": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r2": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          }
+        },
+        {
+          "path": "measurement-03",
+          "resources": {
+            "r0": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 13.061675077274248,
+              "service_cpu_busy_percent": 29.002035577942355,
+              "gpu_sm_mhz_mean": 2418.875,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 240.4508088235294,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r1": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 11.525122367562545,
+              "service_cpu_busy_percent": 38.741946463444364,
+              "gpu_sm_mhz_mean": 2419.323529411765,
+              "gpu_temperature_max_c": 59.0,
+              "gpu_power_w_mean": 243.9881617647059,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "r2": {
+              "samples": 34,
+              "whole_cpu_busy_percent": 12.98167631351732,
+              "service_cpu_busy_percent": 29.343747884695347,
+              "gpu_sm_mhz_mean": 2419.154411764706,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 239.31551470588235,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "r0": {
+              "queue": {
+                "count": 88.0,
+                "sum_s": 396.1880834372714,
+                "mean_s": 4.502137311787175
+              },
+              "prefill": {
+                "count": 88.0,
+                "sum_s": 264.2719668485224,
+                "mean_s": 3.003090532369573
+              },
+              "decode": {
+                "count": 88.0,
+                "sum_s": 4248.593924477696,
+                "mean_s": 48.27947641451928
+              }
+            },
+            "r1": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.3671032525599,
+                "mean_s": 4.337703610149522
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 251.98212477192283,
+                "mean_s": 2.999787199665748
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3954.5457209283486,
+                "mean_s": 47.07792524914701
+              }
+            },
+            "r2": {
+              "queue": {
+                "count": 84.0,
+                "sum_s": 364.89265020377934,
+                "mean_s": 4.343960121473564
+              },
+              "prefill": {
+                "count": 84.0,
+                "sum_s": 252.2695884210989,
+                "mean_s": 3.003209385965463
+              },
+              "decode": {
+                "count": 84.0,
+                "sum_s": 3954.906151557341,
+                "mean_s": 47.08221608996835
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 1156.5931840049916,
+              "request_throughput": 1.1294855312548746,
+              "duration": 226.65186309698038,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 8192.579931063847,
+              "median_ttft_ms": 5387.340285466053,
+              "p95_ttft_ms": 27475.92104630894,
+              "p99_ttft_ms": 32567.918015061878,
+              "mean_tpot_ms": 46.415998796831964,
+              "p95_tpot_ms": 51.392783102397786,
+              "mean_itl_ms": 46.41599937527771,
+              "p95_itl_ms": 24.662640842143446,
+              "mean_e2el_ms": 55676.14670022295,
+              "p95_e2el_ms": 78838.7226582854
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "r0": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1441792.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 88.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r1": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "r2": {
+              "vllm:nixl_num_failed_transfers_total": 0,
+              "vllm:nixl_num_failed_notifications_total": 0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0,
+              "vllm:nixl_bytes_transferred_count": 0,
+              "vllm:nixl_bytes_transferred_sum": 0,
+              "vllm:nixl_xfer_time_seconds_count": 0,
+              "vllm:nixl_xfer_time_seconds_sum": 0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 1376256.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 84.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          }
+        }
+      ],
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 226.54979295334002,
+          "sd": 0.089923531740517
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 55663.42007700965,
+          "sd": 12.812072516561887
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 46.40132920308327,
+          "sd": 0.013395555757394957
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 46.40132858560097,
+          "sd": 0.01339557518995682
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 8194.860933939859,
+          "sd": 2.9483159031019834
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 5384.315107328196,
+          "sd": 2.696764748892245
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1157.1143990519913,
+          "sd": 0.4591994461604351
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 78904.59690362331,
+          "sd": 57.41549140764543
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 24.611010815715417,
+          "sd": 0.0461888102785187
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 51.398235394498165,
+          "sd": 0.02491767627777927
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 27477.15324726111,
+          "sd": 9.26665466070794
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 32581.185317305306,
+          "sd": 11.754281875893152
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.1299945303242103,
+          "sd": 0.0004484369591410499
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    }
+  }
+}
