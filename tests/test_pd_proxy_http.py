@@ -1,5 +1,6 @@
 """Run with aiohttp installed (the pinned client image provides it)."""
 import asyncio
+from contextlib import AsyncExitStack
 import unittest
 try:
     from aiohttp import web
@@ -78,5 +79,115 @@ class ProxyHTTPTests(unittest.IsolatedAsyncioTestCase):
                 r=await c.post('/v1/completions',json={'prompt':'x','max_tokens':1024,'stream':True})
                 self.assertEqual(r.status,200);self.assertIn('[DONE]',await r.text())
                 self.assertEqual(calls[0]['max_tokens'],1024);self.assertEqual(calls[0]['kv_transfer_params'],meta)
+
+    async def test_multiple_p_d_routes_and_reservation_lifetimes(self):
+        all_p = asyncio.Event(); release_p = asyncio.Event(); release_d = asyncio.Event()
+        p_calls = []; pairs = []
+        def prefill(index):
+            async def handler(request):
+                body = await request.json(); p_calls.append((index, body['prompt']))
+                self.assertEqual(body['max_tokens'], 1)
+                if len(p_calls) == 8: all_p.set()
+                await release_p.wait()
+                meta = dict(do_remote_prefill=True, remote_engine_id=f'p{index}',
+                            remote_request_id=body['prompt'], remote_host='host',
+                            remote_port=5600+index, remote_block_ids=[[index+1]])
+                return web.json_response({'kv_transfer_params': meta})
+            return handler
+        def decode(index):
+            async def handler(request):
+                body = await request.json()
+                self.assertEqual(body['max_tokens'], 1024)
+                meta = body['kv_transfer_params']
+                self.assertEqual(meta['remote_request_id'], body['prompt'])
+                pairs.append((meta['remote_engine_id'], index))
+                response = web.StreamResponse(headers={'Content-Type': 'text/event-stream'})
+                await response.prepare(request); await response.write(b'data: first\n\n')
+                await release_d.wait(); await response.write(b'data: [DONE]\n\n')
+                await response.write_eof(); return response
+            return handler
+        async with AsyncExitStack() as stack:
+            urls = []
+            for handler in [prefill(i) for i in range(4)] + [decode(i) for i in range(2)]:
+                app = web.Application(); app.router.add_post('/v1/completions', handler)
+                server = await stack.enter_async_context(TestServer(app, handler_cancellation=True))
+                urls.append(str(server.make_url('')).rstrip('/'))
+            app = make_app(urls[:4], urls[4:]); pool = app['pd_pool']
+            client = await stack.enter_async_context(TestClient(TestServer(app, handler_cancellation=True)))
+            tasks = [asyncio.create_task(client.post('/v1/completions', json=dict(prompt=str(i), max_tokens=1024, stream=True))) for i in range(8)]
+            try:
+                await asyncio.wait_for(all_p.wait(), 3)
+                self.assertEqual(list(pool.prefill.values()), [2]*4)
+                self.assertEqual(list(pool.decode.values()), [4]*2)
+                release_p.set()
+                responses = await asyncio.wait_for(asyncio.gather(*tasks), 3)
+                self.assertEqual(set(pairs), {(f'p{p}', d) for p in range(4) for d in range(2)})
+                self.assertEqual(list(pool.prefill.values()), [0]*4)
+                self.assertEqual(list(pool.decode.values()), [4]*2)
+                release_d.set()
+                bodies = await asyncio.gather(*(r.text() for r in responses))
+                self.assertTrue(all('[DONE]' in b for b in bodies))
+                self.assertEqual(list(pool.decode.values()), [0]*2)
+            finally:
+                release_p.set(); release_d.set()
+                for task in tasks:
+                    if not task.done(): task.cancel()
+                await asyncio.gather(*tasks, return_exceptions=True)
+
+    async def test_pd_http_errors_release_both_pools(self):
+        stage = 'p'; decoder_calls = []
+        async def prefill(request):
+            if stage == 'p': return web.Response(status=500)
+            return web.json_response({'kv_transfer_params': dict(do_remote_prefill=True,
+                remote_engine_id='p', remote_request_id='r', remote_host='host',
+                remote_port=5600, remote_block_ids=[[1]])})
+        async def decode(request):
+            decoder_calls.append(await request.json()); return web.Response(status=500)
+        pa=web.Application(); pa.router.add_post('/v1/completions',prefill)
+        da=web.Application(); da.router.add_post('/v1/completions',decode)
+        async with TestServer(pa) as ps, TestServer(da) as ds:
+            app=make_app(str(ps.make_url('')).rstrip('/'),str(ds.make_url('')).rstrip('/'))
+            async with TestClient(TestServer(app)) as client:
+                for stage in ['p','d','d']:
+                    response=await client.post('/v1/completions',json={'prompt':'x','max_tokens':1024})
+                    self.assertEqual(response.status,502); await response.read()
+                    self.assertFalse(any(app['pd_pool'].prefill.values()))
+                    self.assertFalse(any(app['pd_pool'].decode.values()))
+                self.assertEqual(len(decoder_calls),2)
+
+    async def test_disconnect_during_prefill_and_decode_releases_pools(self):
+        for stage in ['p','d']:
+            entered=asyncio.Event(); release=asyncio.Event()
+            async def prefill(request):
+                if stage == 'p': entered.set(); await release.wait()
+                return web.json_response({'kv_transfer_params':dict(do_remote_prefill=True,
+                    remote_engine_id='p',remote_request_id='r',remote_host='host',
+                    remote_port=5600,remote_block_ids=[[1]])})
+            async def decode(request):
+                response=web.StreamResponse(headers={'Content-Type':'text/event-stream'})
+                await response.prepare(request); await response.write(b'data: first\n\n')
+                entered.set(); await release.wait(); await response.write_eof(); return response
+            pa=web.Application(); pa.router.add_post('/v1/completions',prefill)
+            da=web.Application(); da.router.add_post('/v1/completions',decode)
+            async with TestServer(pa,handler_cancellation=True) as ps, TestServer(da,handler_cancellation=True) as ds:
+                app=make_app(str(ps.make_url('')).rstrip('/'),str(ds.make_url('')).rstrip('/'))
+                async with TestClient(TestServer(app,handler_cancellation=True)) as client:
+                    task=asyncio.create_task(client.post('/v1/completions',json={'prompt':'x','max_tokens':1024,'stream':True}))
+                    try:
+                        await asyncio.wait_for(entered.wait(),3)
+                        if stage == 'p':
+                            task.cancel()
+                            with self.assertRaises(asyncio.CancelledError): await task
+                        else:
+                            response=await asyncio.wait_for(task,3); response.close()
+                        for _ in range(100):
+                            if not any(app['pd_pool'].prefill.values()) and not any(app['pd_pool'].decode.values()): break
+                            await asyncio.sleep(.01)
+                        self.assertFalse(any(app['pd_pool'].prefill.values()))
+                        self.assertFalse(any(app['pd_pool'].decode.values()))
+                    finally:
+                        release.set()
+                        if not task.done(): task.cancel()
+                        await asyncio.gather(task,return_exceptions=True)
 
 if __name__=='__main__':unittest.main()
