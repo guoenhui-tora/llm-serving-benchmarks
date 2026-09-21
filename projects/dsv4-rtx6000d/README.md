@@ -166,9 +166,9 @@ P预算控制每次调度可处理的token量。8192→16384在8K输入下使PD�
 
 固定镜像内NIXL 1.3.2已完成DSV4 FP8、packed MLA、滑动窗口，以及8K／16K TP2×DP2 EP on DSpark K5路径的真实传输验收；完整生成质量与逐token数值等价尚未验证。其他拓扑与容量组合仍须分别验收。部署过程和时序图见[跨节点协同流程](reports/pd-cross-node-flow.md)。
 
-本轮四单元已完成。后续优先解释P供给和K5输入预算边界，再决定是否有必要用同资源普通对照验证更多P的配比；这些补测尚未启动，暂不扩大TP4比例矩阵。普通混合推理的最佳拓扑不能直接当作纯P或纯D最优，是否采用PD还需明确首token与尾延迟要求。
+12卡 C32/C64 以及16卡 3P1D、2P2D 配对均已完成。当前证据支持继续使用 2P1D／3P1D 作为吞吐—交互折中候选；2P2D 的完整窗口吞吐虽高，goodput 和联合 SLO 明显变差，因此暂不扩大 4P2D 矩阵。普通混合推理的最佳拓扑不能直接当作纯P或纯D最优，是否采用PD仍需明确首token与尾延迟要求。
 
-2026-09-22 夜间计划已完成 C64 核心配对。首个候选因47节点旧 seed 缓存缺少 DP profiling overlay 而触发 `16384 vs 160`；修正缓存准备后，普通三服务为 **1579.45±23.34 tok/s**，2P1D 为 **1942.67±26.41 tok/s（+23.00%）**，两组正式轮均0 JIT事件。完整 KV/NIXL 验收、TTFT、goodput 和后续 C32 计划见[计划执行记录](reports/pd-night-20260922-execution.md)。
+2026-09-22 夜间计划已完成 12卡 C32/C64 以及16卡 3P1D/2P2D 配对。首个候选因47节点旧 seed 缓存缺少 DP profiling overlay 而触发 `16384 vs 160`，16卡首次3P1D还取证了同节点 DP2 端口重叠；两者均已修正并保留失败证据。完整吞吐、TTFT、goodput、SLO 和 KV/NIXL 验收见[计划执行记录](reports/pd-night-20260922-execution.md)。
 
 历史筛选的完整命令与原始产物入口见[夜间总览](reports/pd-overnight-results-20260921.md)及[夜间执行计划](reports/pd-overnight-plan-20260921.md)。16K数据池备有1024条真实报告前缀，见[数据准备证据](data/govreport-16k-1024-preparation.json)。历史普通双TP4的1033结果及早期682失真参照见[分流校准](reports/pd-calibration-20260921.md)，不与上述配对混算。
 
