@@ -1,0 +1,46 @@
+{
+  "owner": "pd-night-20260922-n22o8",
+  "case_id": "N22O8",
+  "mode": "ordinary",
+  "ready_timeout_s": 1200,
+  "budget_s": 7200,
+  "members": [
+    {
+      "role": "r0",
+      "host": "gpu-6000d-46",
+      "url": "http://10.90.1.46:31249",
+      "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-dspark16k-c32c64/configs/campaigns/n22o8-r0.yaml"
+    },
+    {
+      "role": "r1",
+      "host": "gpu-6000d-47",
+      "url": "http://10.90.1.47:31249",
+      "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-dspark16k-c32c64/configs/campaigns/n22o8-r1.yaml"
+    },
+    {
+      "role": "r2",
+      "host": "gpu-6000d-48",
+      "url": "http://10.90.1.48:31249",
+      "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-dspark16k-c32c64/configs/campaigns/n22o8-r2.yaml"
+    },
+    {
+      "role": "r3",
+      "host": "gpu-6000d-46",
+      "url": "http://10.90.1.46:31250",
+      "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-dspark16k-c32c64/configs/campaigns/n22o8-r3.yaml"
+    }
+  ],
+  "workload": "dspark16k",
+  "concurrency": 64,
+  "requests": 256,
+  "group": "16k-k5-c64-16gpu",
+  "description": "2026-09-22 16GPU corrected-cache; 16K/K5 TP2xDP2 EP on; 4 services x4GPU=16GPU; ordinary C64 N256.",
+  "require_targeted_warmup": true,
+  "expected_dp_engines": 2,
+  "functional_requests": 24,
+  "require_dspark_warmup": true,
+  "require_input_kernel_warmup": true,
+  "concurrencies": [
+    64
+  ]
+}

@@ -62,13 +62,36 @@ N22O7/N22P7 保持 N22O6/N22P6 的 12 卡部署、真实 GovReport 精确 16,384
 - 普通正式协议：[N22O7 protocol.json](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22O7-01/benchmark/c32/protocol.json)
 - PD 正式协议：[N22P7 protocol.json](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P7-01/benchmark/c32/protocol.json)
 
+## 16 卡比例扩展
+
+在 C32/C64 两档 12 卡配对均显示 2P1D 吞吐领先后，继续测了 16K/C64、同 TP2×DP2 EP on、DSpark K5、每 DP engine `max-num-seqs=32` 和 `max-num-batched-tokens=16384` 的 16 卡组。普通为 4 个完整服务；3P1D 为 3 个 P＋1 个 D；2P2D 为 2 个 P＋2 个 D。三组均一轮 256 条完整预热＋三轮 256 条正式请求。
+
+| 部署 | 输出吞吐 tok/s | Mean TTFT，s | Mean TPOT，ms | Mean E2EL，s | goodput，req/s | 联合 SLO 达标率 | 相对普通吞吐 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 普通四服务，共16卡 | **1920.85 ± 10.87** | 4.223 | 27.931 | 32.796 | 1.639 | 87.37% | — |
+| 3P1D，共16卡 | **2048.31 ± 12.65** | 6.701 | 22.319 | 29.533 | 1.649 | 82.42% | **+6.64%** |
+| 2P2D，共16卡 | **2137.25 ± 1.93** | 12.438 | 15.439 | 28.232 | 0.579 | 27.73% | **+11.27%** |
+
+3P1D 的吞吐只比普通高 6.64%，goodput 仅高 0.60%，TTFT 增加 58.70%，联合 SLO 下降 4.95 个百分点；2P2D 的输出吞吐再高 11.27%，但 TTFT 增至 12.44 秒，goodput 反而比普通低约 64.68%，联合 SLO 仅 27.73%。因此在当前 16K/C64/SLO 条件下，增加 D 可以继续提高完整窗口吞吐，却不能按吞吐单指标选择比例；3P1D 已是较弱的交互折中，2P2D 不具备当前 goodput 价值。
+
+两组 PD 正式轮均 0 已知 JIT 事件、256/256 成功。3P1D 每轮三条 P→D 路由均有完成请求；2P2D 每轮四条 P→D 路由均有完成请求。两组 D 均 `request_prefill_kv_computed_tokens=0`，远端命中覆盖 4,194,304 输入 tokens；每个 D 服务的 NIXL 传输、失败计数和 KV 计数均通过验收。
+
+第一次 N22P8 启动未进入 READY，原因是 46 节点两套 DP2 服务的 NIXL 基端口配置重叠：DP2 会占用基端口及下一个端口，`26300` 与 `26301` 相交并报 `Address already in use`。该尝试无功能／性能请求，owner 容器已清理；修正第二服务基端口为 `26302` 后以 N22P8-02 完成正式测量。
+
+结果产物：
+
+- 普通四服务：[N22O8 结果](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22O8-01/)
+- 3P1D：[N22P8-02 结果](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P8-02/)
+- 2P2D：[N22P9 结果](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P9-01/)
+- 端口冲突日志：[N22P8-01 p0 server.log](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P8-01/p0/server.log)
+
 ## 今晚停止条件与后续分支
 
 继续把 16384 盲目改成其他值会混淆“16K budget”研究问题，也可能把旧的 8192 兼容路径误当成同一配置。N22O5 已停止取证；N22O6/N22P6 的 C64 和 N22O7/N22P7 的 C32 配对均已完成。
 
-C32 与 C64 都显示 2P1D 的完整窗口吞吐领先普通三服务，但 TTFT 和联合 SLO 变差；因此当前 gate 允许继续验证 P/D 比例，却不允许把 2P1D 宣布为无条件最优。下一步只在第四节点 GPU 空闲、缓存覆盖可复用且普通对照能保持同一条件时，测 16 卡 3P1D；若任一条件不满足，停止扩展并先分析 TTFT/SLO。
+C32 与 C64 的 12 卡配对、以及 16 卡的 3P1D／2P2D 均已完成。结果共同说明：PD 可以提高完整窗口 output tok/s，但 TTFT、goodput 和联合 SLO 可能同步恶化；当前不再扩展 4P2D 或更多比例矩阵，先以 2P1D／3P1D 的吞吐—交互折中作为候选结论。
 
-所有后续实验直接复用 N22O6/N22P6 的完整缓存准备方式；不要再从没有 overlay 的旧 seed 复制。任何新的 `AssertionError`、服务未 READY、功能请求失败、NIXL 失败或工作量错误立即停止。
+所有后续实验直接复用已通过的完整缓存准备方式；不要从没有 overlay 的旧 seed 复制。任何新的 `AssertionError`、服务未 READY、功能请求失败、NIXL 失败或工作量错误立即停止。
 
 ## 复现入口
 
