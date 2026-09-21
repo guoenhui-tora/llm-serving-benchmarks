@@ -1,0 +1,3365 @@
+{
+  "updated_beijing": "2026-09-21T11:21:28.160071",
+  "scope": "One overnight study; counts include failed attempts. Final artifact audit, not a new serving run.",
+  "status_counts": {
+    "COMPLETE": 23,
+    "FAILED_WITH_EVIDENCE": 3,
+    "COMPLETE_UNSTABLE": 1
+  },
+  "completed_performance_groups": 24,
+  "formal_rounds": 72,
+  "external_requests": 18734,
+  "external_request_cap": 18766,
+  "dataset": {
+    "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/data/govreport-16k-prefix-1024-v2.jsonl",
+    "sha256": "025246b18d8ba7e1bc4d98c1a20b32b570860bb06a0baf0cea4ae97403d982e7",
+    "count": 1024,
+    "input_tokens_per_request": 16384,
+    "output_budget": 1024
+  },
+  "cases": [
+    {
+      "case": "A1",
+      "status": "COMPLETE",
+      "started": 1789931408.1588457,
+      "ended": 1789932145.021893,
+      "clean": true,
+      "cv": 0.0014785963958361252,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/A1-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 127.65822466567624,
+          "sd": 0.18863293955892954
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 31730.457448991423,
+          "sd": 22.51252990087854
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 27.115056909461156,
+          "sd": 0.07904846909424931
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 27.115056326744725,
+          "sd": 0.07904846928713302
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3991.75482673157,
+          "sd": 59.2509251269148
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 3306.578414863907,
+          "sd": 429.5490420376985
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1026.7430183773138,
+          "sd": 1.5181385264226006
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 38159.64983459562,
+          "sd": 192.11319271509885
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 20.354052068432793,
+          "sd": 0.03585843309966143
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 29.73963522495512,
+          "sd": 0.1927905691913745
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 10011.083579468928,
+          "sd": 16.191698824320042
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 11623.007925417818,
+          "sd": 71.71051438509528
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.0026787288840955,
+          "sd": 0.001482557154709571
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "A2",
+      "status": "FAILED_WITH_EVIDENCE",
+      "started": 1789932213.6361709,
+      "ended": 1789932374.3944879,
+      "clean": null,
+      "cv": null,
+      "error": "RuntimeError('d0: vllm:nixl_num_failed_transfers_total delta 4.0')",
+      "formal_rounds": 0,
+      "formal_events": [],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/A2-01"
+    },
+    {
+      "case": "A2T",
+      "status": "COMPLETE",
+      "started": 1789932613.552584,
+      "ended": 1789933468.688472,
+      "clean": true,
+      "cv": 0.0014881934159703685,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/A2T-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 143.85306544132376,
+          "sd": 0.21389941621178274
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 33847.85726136639,
+          "sd": 23.647253598196265
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 28.90926033491353,
+          "sd": 0.0013306660340411476
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 28.909259715597127,
+          "sd": 0.0013306714535333522
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4273.684572310533,
+          "sd": 23.79026771757511
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 1272.7192806778476,
+          "sd": 11.678278378064068
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 911.1532865775939,
+          "sd": 1.3559723220245377
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 50883.27429739098,
+          "sd": 69.72384368153246
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 27.993645559763536,
+          "sd": 0.19487476357750674
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 30.34242880310077,
+          "sd": 0.024450478678284517
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 20167.45981137112,
+          "sd": 20.581215856802935
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 23280.497411305943,
+          "sd": 11.693308075709355
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.8897981314234316,
+          "sd": 0.0013241917207270876
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "A3",
+      "status": "COMPLETE",
+      "started": 1789933629.4050424,
+      "ended": 1789934367.4381032,
+      "clean": true,
+      "cv": 0.0032661548346058916,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/A3-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 127.41438173797603,
+          "sd": 0.41671420239200146
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 31690.878664549018,
+          "sd": 18.69267971993074
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 27.107107385895574,
+          "sd": 0.026528912136776443
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 27.10710679683017,
+          "sd": 0.026528911962404502
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3960.3084113917553,
+          "sd": 18.686466927957976
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 3291.3364489989667,
+          "sd": 420.045597415438
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1028.7138047844066,
+          "sd": 3.3599385669224113
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 37959.57892233273,
+          "sd": 226.67381368097446
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 20.3880474922092,
+          "sd": 0.04648154135708184
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 29.743194068142788,
+          "sd": 0.0792161718806912
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 9971.44423886978,
+          "sd": 9.063857625947579
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 11616.869558786275,
+          "sd": 81.13638832256842
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.0046033249847721,
+          "sd": 0.0032811900067601673
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "A4",
+      "status": "COMPLETE",
+      "started": 1789934400.4206202,
+      "ended": 1789935242.39304,
+      "clean": true,
+      "cv": 0.0021690308859796956,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/A4-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 143.36991070133323,
+          "sd": 0.31069923093596863
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 33749.21605357031,
+          "sd": 38.74406845932624
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 28.842803036788748,
+          "sd": 0.024463019563077445
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 28.84280243089606,
+          "sd": 0.024463020067815634
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4243.029166763638,
+          "sd": 17.44367650402275
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 1263.4783128354077,
+          "sd": 2.654762635353724
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 914.225377553355,
+          "sd": 1.982983080659675
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 50744.03538224869,
+          "sd": 80.03879820621323
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 27.962915739044547,
+          "sd": 0.06949276733274867
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 30.25260610103018,
+          "sd": 0.023164909845414357
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 19975.561527651727,
+          "sd": 3.401984726760562
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 23068.69807614518,
+          "sd": 13.161366026599422
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.8927982202669482,
+          "sd": 0.001936506914706714
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "B1",
+      "status": "COMPLETE",
+      "started": 1789935560.6684172,
+      "ended": 1789936408.4410348,
+      "clean": true,
+      "cv": 0.021447876030241238,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/B1-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 145.81757739834333,
+          "sd": 3.166192293052131
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 34236.8510666353,
+          "sd": 483.66777089600487
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 28.627636343841914,
+          "sd": 0.3632563003877135
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 28.627635673803628,
+          "sd": 0.3632562542188681
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4950.779772334196,
+          "sd": 854.3628257372694
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 2204.726746849095,
+          "sd": 443.88119501615614
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 899.1557046647386,
+          "sd": 19.284980085533515
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 50344.97251503828,
+          "sd": 160.75297076514263
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 27.794519598440576,
+          "sd": 0.04302247220721452
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 30.226223222893832,
+          "sd": 0.22461160750300588
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 19879.14991794774,
+          "sd": 24.434002742184774
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 22770.014031634593,
+          "sd": 33.99669624593896
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.8780817428366587,
+          "sd": 0.018832988364778824
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "B2",
+      "status": "COMPLETE",
+      "started": 1789936440.3311307,
+      "ended": 1789937405.7809205,
+      "clean": true,
+      "cv": 0.0006112917705371552,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/B2-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 176.86715720198117,
+          "sd": 0.10811566013122338
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 44151.80971938904,
+          "sd": 23.166508853410583
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 36.041842995391924,
+          "sd": 0.027850283253469808
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 36.04184238533109,
+          "sd": 0.027850280276009234
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 7281.004959195343,
+          "sd": 48.25226020084817
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 5385.5294056702405,
+          "sd": 2.665135773410134
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 741.0761541343442,
+          "sd": 0.45301375436364894
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 60036.34614098506,
+          "sd": 60.21279235591847
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 20.68023312992106,
+          "sd": 0.044293789594477426
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 40.707974204323286,
+          "sd": 0.009227531948690155
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 20872.937485711493,
+          "sd": 23.146673929341937
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 24543.727002554424,
+          "sd": 15.797448438520462
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.7237071817718205,
+          "sd": 0.0004423962444957509
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2097152.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "B3A",
+      "status": "COMPLETE",
+      "started": 1789937702.6872716,
+      "ended": 1789938840.037742,
+      "clean": true,
+      "cv": 0.00014738607467115346,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/B3A-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 213.02225974400062,
+          "sd": 0.031399062386284364
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 48647.086745270826,
+          "sd": 10.99718134952545
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 21.585859989631302,
+          "sd": 0.007744923623295664
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 21.585859319081518,
+          "sd": 0.0077449209803902
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 26564.752661850434,
+          "sd": 5.210533089590286
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 26464.16433149716,
+          "sd": 9.372191892145688
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 615.2972091077445,
+          "sd": 0.09068624040650636
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 62459.95611337904,
+          "sd": 50.18288113525829
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 21.5137082831158,
+          "sd": 0.0274379059472441
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 22.229348923431758,
+          "sd": 0.009330553235074767
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 39821.45319373423,
+          "sd": 3.1254870531494126
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 47613.48537328653,
+          "sd": 7.654705820969977
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.6008761807692817,
+          "sd": 8.856078164697886e-05
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2097152.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "B4",
+      "status": "COMPLETE",
+      "started": 1789938882.686717,
+      "ended": 1789939999.3546894,
+      "clean": true,
+      "cv": 0.00011738232742584141,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/B4-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 207.4435409316405,
+          "sd": 0.024350889725082262
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 47405.446003306984,
+          "sd": 3.4716613095405005
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 21.71761077198147,
+          "sd": 0.003219319193857302
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 21.71761007138724,
+          "sd": 0.0032193545685144692
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 25188.330900277837,
+          "sd": 4.8382335046863165
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 24903.51731314634,
+          "sd": 6.353339493528582
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 631.8442146493236,
+          "sd": 0.07416734448609053
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 61425.5916977534,
+          "sd": 16.757603679455535
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 21.446132343650486,
+          "sd": 0.08495705767276683
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 22.319794144936537,
+          "sd": 0.0020868239863123033
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 38675.58566961281,
+          "sd": 13.559652354030177
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 46231.914522505445,
+          "sd": 15.60329659397039
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.6170353658684801,
+          "sd": 7.242904734969778e-05
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2097152.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "C1",
+      "status": "COMPLETE",
+      "started": 1789940001.1534612,
+      "ended": 1789940949.0944533,
+      "clean": true,
+      "cv": 0.006201470552736547,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/C1-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 141.32152036201055,
+          "sd": 0.8766108006960459
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 34127.808039818774,
+          "sd": 254.125010763653
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 29.74889095109879,
+          "sd": 0.12085649553666307
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 29.748890538988633,
+          "sd": 0.12085648737361293
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3694.693018433403,
+          "sd": 226.46825559374864
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 2625.5135178022706,
+          "sd": 293.2535473890413
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 927.4975323258572,
+          "sd": 5.751848634454617
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 41473.405787921125,
+          "sd": 410.67118918816635
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 29.41149285179563,
+          "sd": 0.11627130394581026
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 31.003349612185303,
+          "sd": 0.35721431526471675
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 11126.09373027226,
+          "sd": 88.52801145404221
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 12978.919257875144,
+          "sd": 107.08598591483454
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.9057593089119699,
+          "sd": 0.005617039682084587
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "C2",
+      "status": "COMPLETE_UNSTABLE",
+      "started": 1789940949.2466192,
+      "ended": 1789941766.046983,
+      "clean": true,
+      "cv": 0.057293487542102145,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/C2-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 124.82770313004342,
+          "sd": 7.174009765757998
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 30298.1532812067,
+          "sd": 1385.55405639405
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 26.26664028792415,
+          "sd": 1.2053107776312852
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 26.26663980888212,
+          "sd": 1.2053107988799534
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3427.3807567202916,
+          "sd": 157.34579554680846
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 3138.5017428159094,
+          "sd": 29.84150794175765
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1052.3321002017005,
+          "sd": 60.29177607306032
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 36682.6044006176,
+          "sd": 4115.4798276579495
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 25.514435803052038,
+          "sd": 0.3108156688724341
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 32.952778781802515,
+          "sd": 4.042797240562725
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 6210.89716720744,
+          "sd": 364.3652480816604
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 7477.7997968633035,
+          "sd": 1419.6224201288505
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.0276680666032232,
+          "sd": 0.05887868757134797
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "C3",
+      "status": "FAILED_WITH_EVIDENCE",
+      "started": 1789942521.8233242,
+      "ended": 1789942875.0057275,
+      "clean": null,
+      "cv": null,
+      "error": "BenchError('Request count mismatch: completed=126, expected=128')",
+      "formal_rounds": 0,
+      "formal_events": [],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/C3-01"
+    },
+    {
+      "case": "C3H",
+      "status": "COMPLETE",
+      "started": 1789943195.5675175,
+      "ended": 1789943833.292904,
+      "clean": false,
+      "cv": 0.015560809747898753,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        4,
+        2,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/C3H-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 88.23127765437432,
+          "sd": 1.3807946365046826
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 20227.99941658559,
+          "sd": 295.863961286753
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 55.684342132127405,
+          "sd": 0.7598977845184062
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 15.952952629009529,
+          "sd": 0.379543067259136
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3908.1288771088416,
+          "sd": 107.00342765121262
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 2926.05956083086,
+          "sd": 141.52350847824374
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1485.7914984811694,
+          "sd": 23.120118832910876
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 27740.05296436565,
+          "sd": 731.8649558262409
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 170.59637691903234,
+          "sd": 0.8062209562128329
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 18.999399536400187,
+          "sd": 0.6706564544925278
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 11302.772127421727,
+          "sd": 46.1307649251794
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 13174.803986151628,
+          "sd": 40.6701556193924
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.450968260235517,
+          "sd": 0.022578241047764527
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "C4",
+      "status": "COMPLETE",
+      "started": 1789944063.0912795,
+      "ended": 1789944734.035342,
+      "clean": false,
+      "cv": 0.0038217143241629542,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        4,
+        0,
+        2
+      ],
+      "mode": "ordinary",
+      "concurrency": 32,
+      "requests_per_round": 128,
+      "api_services": 2,
+      "total_gpus": 8,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/C4-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 89.8704563479793,
+          "sd": 0.3442019644514176
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 21517.71141536968,
+          "sd": 150.41177662211518
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 67.33215631544088,
+          "sd": 0.608488169781822
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 19.27069006600743,
+          "sd": 0.09438828588004598
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 1803.795477844081,
+          "sd": 54.687098872576314
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 1014.4629566736209,
+          "sd": 229.51975516357655
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1458.4690491934164,
+          "sd": 5.573852056650804
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 29099.127868236974,
+          "sd": 573.6091417657924
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 141.74210880883024,
+          "sd": 5.175131491147528
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 25.8930802755802,
+          "sd": 0.42918459929919317
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 6077.6667783599505,
+          "sd": 60.341637460717884
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 6929.319761835118,
+          "sd": 146.7828452457957
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.4242861808529457,
+          "sd": 0.00544321489907305
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 1042149.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 131072.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16O3",
+      "status": "COMPLETE",
+      "started": 1789944992.957759,
+      "ended": 1789946280.8580601,
+      "clean": true,
+      "cv": 0.0003968487874117297,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16O3-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 226.54979295334002,
+          "sd": 0.089923531740517
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 55663.42007700965,
+          "sd": 12.812072516561887
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 46.40132920308327,
+          "sd": 0.013395555757394957
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 46.40132858560097,
+          "sd": 0.01339557518995682
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 8194.860933939859,
+          "sd": 2.9483159031019834
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 5384.315107328196,
+          "sd": 2.696764748892245
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1157.1143990519913,
+          "sd": 0.4591994461604351
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 78904.59690362331,
+          "sd": 57.41549140764543
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 24.611010815715417,
+          "sd": 0.0461888102785187
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 51.398235394498165,
+          "sd": 0.02491767627777927
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 27477.15324726111,
+          "sd": 9.26665466070794
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 32581.185317305306,
+          "sd": 11.754281875893152
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.1299945303242103,
+          "sd": 0.0004484369591410499
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16O4",
+      "status": "COMPLETE",
+      "started": 1789954113.0203571,
+      "ended": 1789955212.3797774,
+      "clean": true,
+      "cv": 0.0007465844439104316,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 4,
+      "total_gpus": 16,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16O4-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 176.96925538999494,
+          "sd": 0.1321641272101859
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 44111.755194933874,
+          "sd": 18.395844658027862
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 36.012340065748866,
+          "sd": 0.049784134116491074
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 36.01233949715095,
+          "sd": 0.04978414207878704
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 7271.131889348453,
+          "sd": 41.07040985132653
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 5396.133782982361,
+          "sd": 11.53665784189512
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1481.2973974699762,
+          "sd": 1.1059135937560918
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 60419.13211207915,
+          "sd": 41.253472200039745
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 20.51875801019681,
+          "sd": 0.027486889609927165
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 40.62899652806186,
+          "sd": 0.02055465899563095
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 20973.23362570023,
+          "sd": 14.602486600912652
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 24797.399001737358,
+          "sd": 6.556295272206919
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.4465794897167736,
+          "sd": 0.0010799937439024334
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16O6",
+      "status": "COMPLETE",
+      "started": 1789958694.996102,
+      "ended": 1789959654.3665931,
+      "clean": false,
+      "cv": 0.00014446922586477655,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        4,
+        4,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 6,
+      "total_gpus": 24,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16O6-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 139.67936932571078,
+          "sd": 0.020177993965854818
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 34393.78152552853,
+          "sd": 12.031927139026235
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 27.426997539452497,
+          "sd": 0.017902077532008415
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 27.426997026391394,
+          "sd": 0.01790206611600654
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 6335.963567530143,
+          "sd": 29.90344056017694
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 5468.388001162869,
+          "sd": 19.287215480748756
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1876.7553498613377,
+          "sd": 0.2711333925320453
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 44154.49187467069,
+          "sd": 34.80903264632484
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 18.348211942551035,
+          "sd": 0.005134581564750379
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 31.60481459234353,
+          "sd": 0.011916394372083663
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 14812.41748543107,
+          "sd": 5.92004512899288
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 17163.24954633213,
+          "sd": 4.730237925353489
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.8327688963489626,
+          "sd": 0.0002647787036445755
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      },
+      "manual_review": {
+        "label": "QUICK_COMPLETE_WITH_JIT_EVENTS",
+        "formal_events": [
+          4,
+          4,
+          0
+        ],
+        "kernel": "_compute_global_topk_indices_and_lens_kernel",
+        "observed_constexprs": {
+          "TRITON_BLOCK_SIZE": 1024,
+          "block_size": 2,
+          "block_table_stride": 128,
+          "global_topk_indices_stride": 256,
+          "topk": 256,
+          "topk_indices_stride": 256
+        },
+        "observed_is_valid_token_ptr": "*u1",
+        "events_by_round_role": {
+          "warmup-01": {
+            "r0": 16,
+            "r1": 16,
+            "r2": 16,
+            "r3": 16,
+            "r4": 12,
+            "r5": 12
+          },
+          "measurement-01": {
+            "r4": 4
+          },
+          "measurement-02": {
+            "r5": 4
+          },
+          "measurement-03": {}
+        },
+        "interpretation": "mHC coverage passed. Formal events on r4 then r5, each missing four observed warmup events compared with other roles, suggest per-process runtime coverage gap. Truncated specialization data cannot establish unique cause or actual CPU recompilation. All three quick rounds retained; no clean-baseline or steady-state gain claim for the paired PD comparison.",
+        "resource_review": "All rounds 256 successes, 0 failures, input4194304/output262144, all roles exercised; no server errors/preemption. Formal GPU means2417.8-2421.1MHz, max61C; service CPU sets27.2-39.1%busy. Controller all windows sampled, proxy<0.07CPU core mean, no cgroup throttling. Low-frequency sampling does not exclude transient interference.",
+        "cleanup_review": "Owner cleanup succeeded; frozen files and scripts unchanged."
+      }
+    },
+    {
+      "case": "D16P1D2",
+      "status": "COMPLETE",
+      "started": 1789947837.1756675,
+      "ended": 1789949876.6846137,
+      "clean": true,
+      "cv": 6.654223514003376e-05,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16P1D2-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 394.5967068070313,
+          "sd": 0.02625814490577278
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 87742.4178652647,
+          "sd": 53.314674255910994
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 15.94852112635104,
+          "sd": 0.1827240320592687
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 15.9485204850943,
+          "sd": 0.1827240285198722
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 71427.08140901323,
+          "sd": 144.536233631553
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 78660.30080996764,
+          "sd": 32.724977536148536
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 664.3339801161732,
+          "sd": 0.044206267916404904
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 98272.66139208223,
+          "sd": 223.75801736343575
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 16.45488540525548,
+          "sd": 0.1260411511656455
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 16.397403604261463,
+          "sd": 0.03362038705403353
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 81739.87185741619,
+          "sd": 273.02991482649816
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 91966.22688400868,
+          "sd": 18.149000760406686
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.6487636524572004,
+          "sd": 4.3170183512114164e-05
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16P2D1",
+      "status": "COMPLETE",
+      "started": 1789946327.3442795,
+      "ended": 1789947653.03889,
+      "clean": true,
+      "cv": 0.0006404012100741955,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16P2D1-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 220.20401951829749,
+          "sd": 0.1410167582085519
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 52064.10624617441,
+          "sd": 20.583185453390875
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 41.62692722358622,
+          "sd": 0.022564548908161654
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 41.62692673623368,
+          "sd": 0.022564548174084514
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 9479.760195007353,
+          "sd": 11.235873794387004
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 2689.1786421765573,
+          "sd": 24.42027934513319
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1190.4599754578906,
+          "sd": 0.7623720088281302
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 83957.67721525044,
+          "sd": 133.97601334651063
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 177.04868171713315,
+          "sd": 2.5183164398550124
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 44.79431715095492,
+          "sd": 0.021225437554391442
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 39368.83267184021,
+          "sd": 21.36247124142664
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 46879.06237869562,
+          "sd": 13.034819657751504
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.1625585697830962,
+          "sd": 0.0007445039148712209
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16P2D2H",
+      "status": "COMPLETE",
+      "started": 1789955255.209825,
+      "ended": 1789956581.4383492,
+      "clean": true,
+      "cv": 0.004783449310744482,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 4,
+      "total_gpus": 16,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16P2D2H-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 209.58207484132922,
+          "sd": 1.0052987138353393
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 47742.79938204851,
+          "sd": 199.52141353882604
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 22.3344833286536,
+          "sd": 1.1682344873685846
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 22.334482799682558,
+          "sd": 1.1682344862704044
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 24894.62347797326,
+          "sd": 996.202151148641
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 24618.102961006418,
+          "sd": 1223.3978532396823
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1250.8131248091524,
+          "sd": 5.983201179738492
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 63645.258298512395,
+          "sd": 2472.283987316059
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 22.798693634103984,
+          "sd": 1.9141281938340216
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 24.295627969152815,
+          "sd": 3.3599236165715647
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 39757.82272761959,
+          "sd": 627.5279248435249
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 46922.496374632465,
+          "sd": 28.592424114568697
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.221497192196438,
+          "sd": 0.005842969902088371
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D16P4D2H",
+      "status": "COMPLETE",
+      "started": 1789959779.6117003,
+      "ended": 1789960847.8251793,
+      "clean": true,
+      "cv": 0.00430005808886034,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 6,
+      "total_gpus": 24,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D16P4D2H-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 147.75322165099593,
+          "sd": 0.6365284825592419
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 34917.05806351032,
+          "sd": 58.18285562797126
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 29.258276873436362,
+          "sd": 0.0702127424422229
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 29.258276368031872,
+          "sd": 0.07021273950957517
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4985.8413390137075,
+          "sd": 15.497624446443474
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 2130.5072435061447,
+          "sd": 2.6829242926953247
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1774.2234961937472,
+          "sd": 7.629264096253995
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 51449.073231235765,
+          "sd": 173.70946063275224
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 29.81243970765111,
+          "sd": 0.04957311391746658
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 30.859759633038866,
+          "sd": 0.11360582861468368
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 20243.50134876052,
+          "sd": 38.085258487970194
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 24496.14832935622,
+          "sd": 7.811677105994037
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.7326401330017063,
+          "sd": 0.007450453218998042
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      },
+      "manual_review": {
+        "label": "QUICK_COMPLETE_ZERO_KNOWN_EVENTS_REFERENCE_CONTAINS_EVENTS",
+        "formal_events": [
+          0,
+          0,
+          0
+        ],
+        "paired_reference": "D16O6",
+        "paired_reference_formal_events": [
+          4,
+          4,
+          0
+        ],
+        "relative_percent": {
+          "output_throughput": -5.46325090668669,
+          "mean_ttft_ms": -21.30886982108602,
+          "mean_tpot_ms": 6.676922522281048,
+          "mean_e2el_ms": 1.5214277545881005,
+          "p95_ttft_ms": 36.66574931925366,
+          "p95_e2el_ms": 16.52058725365975
+        },
+        "interpretation": "All three quick rounds retained. Lower mean TTFT accompanies worse throughput, mean TPOT, and p95 TTFT/E2EL. Reference contains top-k JIT events, so comparison is not a confirmed steady-state result. Middle-window P queues0 and D~30running each are occupancy evidence, not proof of a unique bottleneck.",
+        "transport_review": "Functional32 covers eight API edges4each. All warmup/formal rounds256success,0failure,input4194304,output262144. Each D128requests512ranktransfers44130631680bytes2097152remotehits. D recompute/transfer failures/notification failures/expiry/preemption0. All formal API edges31-33requests each.",
+        "resources_review": "All six services have four completed startup worker coverage records and no ERROR/Traceback. Formal GPU means2421-2423MHz,max60C. P CPU sets45-53%busy,D58-65%busy; higher than ordinary27-39%, cpusets not exclusive. Controller proxy~0.08CPU mean, no cgroup throttle; no sustained thermal decline observed. NIXL rank means25-39ms are not pure wire time.",
+        "cleanup_review": "Owned cleanup succeeded; frozen scripts/files unchanged. Live four-node audit found no owned containers or GPU compute processes."
+      }
+    },
+    {
+      "case": "D8O3",
+      "status": "COMPLETE",
+      "started": 1789949919.1500938,
+      "ended": 1789950897.760954,
+      "clean": true,
+      "cv": 0.00046491934547955105,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8O3-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 158.80028054704113,
+          "sd": 0.073848381900488
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 39174.41311800727,
+          "sd": 15.29468458985645
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 33.83748590678119,
+          "sd": 0.03676626989347857
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 33.83748538329572,
+          "sd": 0.03676627196069495
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4558.665570895755,
+          "sd": 26.43976103695717
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 3790.6772443287387,
+          "sd": 2.2005900023178704
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1650.778177983462,
+          "sd": 0.767478710039997
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 49109.48176521924,
+          "sd": 57.50104430000737
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 24.206177931046113,
+          "sd": 0.05651451487827868
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 36.79457856152343,
+          "sd": 0.16941788771029495
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 13391.793690815879,
+          "sd": 280.49662984270265
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 15844.69717639925,
+          "sd": 195.18694844178157
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.6120880644369746,
+          "sd": 0.0007494909277734346
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2090525.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D8O4",
+      "status": "COMPLETE",
+      "started": 1789956612.8226376,
+      "ended": 1789957474.3183231,
+      "clean": true,
+      "cv": 0.00678023212999341,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "ordinary",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 4,
+      "total_gpus": 16,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8O4-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 128.35091684067933,
+          "sd": 0.8714676409957125
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 31794.673422384523,
+          "sd": 75.83851268501223
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 27.174633374514343,
+          "sd": 0.07421594395116617
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 27.174632804115806,
+          "sd": 0.07421595704943636
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 3995.0240637740535,
+          "sd": 21.43087145867904
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 3302.590342645999,
+          "sd": 246.98124574791095
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 2042.46336533075,
+          "sd": 13.84837573395002
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 38514.84738717166,
+          "sd": 247.60873307189695
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 20.374956758071978,
+          "sd": 0.007741126395651605
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 29.899819456909142,
+          "sd": 0.20424145739536814
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 10229.817905754317,
+          "sd": 41.60297954969901
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 12022.133095775884,
+          "sd": 94.27744943313681
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.9945931302058106,
+          "sd": 0.013523804427685566
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2090525.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D8P1D2",
+      "status": "COMPLETE",
+      "started": 1789950926.4667947,
+      "ended": 1789952186.0261052,
+      "clean": true,
+      "cv": 0.00012465927270628228,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8P1D2-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 210.74716199736577,
+          "sd": 0.026269896321080195
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 48010.95356934108,
+          "sd": 32.4108123142456
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 21.48188366339137,
+          "sd": 0.018803167346427112
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 21.481883134976727,
+          "sd": 0.018803190642741323
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 26034.98712225989,
+          "sd": 48.61979288434679
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 26154.993889368296,
+          "sd": 56.41651496718406
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1243.8791594209092,
+          "sd": 0.15506107134791228
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 61462.55705167035,
+          "sd": 221.0703977270907
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 21.286535121422883,
+          "sd": 0.04228495270353406
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 22.19187508512221,
+          "sd": 0.10094891356835045
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 38966.2779327385,
+          "sd": 233.68287054938415
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 46583.11341922186,
+          "sd": 346.2765690003855
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.2147257416219817,
+          "sd": 0.00015142682748819558
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2090525.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D8P2D1",
+      "status": "FAILED_WITH_EVIDENCE",
+      "started": 1789952218.5487792,
+      "ended": 1789952498.6481183,
+      "clean": null,
+      "cv": null,
+      "error": "RuntimeError('service controller exited')",
+      "formal_rounds": 0,
+      "formal_events": [],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8P2D1-01"
+    },
+    {
+      "case": "D8P2D1H",
+      "status": "COMPLETE",
+      "started": 1789952812.019877,
+      "ended": 1789953900.6952572,
+      "clean": true,
+      "cv": 0.0012305403462671627,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 3,
+      "total_gpus": 12,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8P2D1H-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 194.72378831969885,
+          "sd": 0.2395555396439296
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 47159.30592449543,
+          "sd": 88.86283449875486
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 41.84471843214746,
+          "sd": 0.08459529154269842
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 41.8447179562036,
+          "sd": 0.08459528813561677
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4352.15945529914,
+          "sd": 14.573854267735372
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 1470.5017464972723,
+          "sd": 16.318514664790765
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1346.236465646486,
+          "sd": 1.6565982865941082
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 64651.39756310964,
+          "sd": 264.9942813673962
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 171.68699046402855,
+          "sd": 0.14074465548174794
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 43.6597455578061,
+          "sd": 0.09138593707509159
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 20241.26460084032,
+          "sd": 8.414572185997054
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 24085.94160766612,
+          "sd": 21.889539633792577
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.3146840484828966,
+          "sd": 0.0016177717642520588
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2090525.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      }
+    },
+    {
+      "case": "D8P2D2H",
+      "status": "COMPLETE",
+      "started": 1789957527.377789,
+      "ended": 1789958582.2790303,
+      "clean": true,
+      "cv": 0.04791307880808373,
+      "error": null,
+      "formal_rounds": 3,
+      "formal_events": [
+        0,
+        0,
+        0
+      ],
+      "mode": "pd",
+      "concurrency": 64,
+      "requests_per_round": 256,
+      "api_services": 4,
+      "total_gpus": 16,
+      "original_run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/results/D8P2D2H-01",
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 149.00754715731213,
+          "sd": 7.335978830205701
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 34829.25360956688,
+          "sd": 1255.2456084786643
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 29.26159202012049,
+          "sd": 0.293052549545121
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 29.26159152019801,
+          "sd": 0.29305251628312545
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 4894.645484404312,
+          "sd": 955.9303380765265
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 1632.8567615128122,
+          "sd": 343.6135573408785
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 1762.037471052098,
+          "sd": 84.42464021331573
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 52083.87842506636,
+          "sd": 1855.808667452393
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 28.26080986026985,
+          "sd": 0.15291993850335775
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 32.3934623689628,
+          "sd": 3.248483893680516
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 21085.362357252354,
+          "sd": 1530.4531941968091
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 24852.749604658067,
+          "sd": 1415.2059671064876
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 1.7207397178243145,
+          "sd": 0.08244593770831614
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 2090525.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      },
+      "manual_review": {
+        "classification": "QUICK_COMPLETE_WITH_DRIFT",
+        "throughput_cv_percent": 4.791307880808373,
+        "formal_throughputs": [
+          1664.922615198189,
+          1803.243133578572,
+          1817.9466643795324
+        ],
+        "formal_jit_events": [
+          0,
+          0,
+          0
+        ],
+        "warning": "No known JIT is not proof of convergence. All three fixed quick rounds retained; do not treat last two as steady baseline.",
+        "warmup_d1_rank_transfer_mean_ms": 813.0953174999996,
+        "formal_d1_rank_transfer_mean_ms": [
+          45.219855468749074,
+          25.117401574804138,
+          28.212923828124794
+        ],
+        "cause": "Transfer timing, routing, and latency changed together; unique root cause not established.",
+        "followup": "No further expansion of this 8K configuration in this study; existing 24GPU16K ratio branch continues independently."
+      }
+    }
+  ],
+  "ledger": {
+    "updated_beijing": "2026-09-21T11:21:27.825366",
+    "scope": "External client commands with client.log; raw counts include failed attempts. Missing raw phases conservatively retain full submitted budget.",
+    "requests_with_saved_raw": 18734,
+    "cases": {
+      "A1-01": {
+        "requests": 512,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "A2-01": {
+        "requests": 1,
+        "phases": [
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "FAILED_WITH_EVIDENCE"
+      },
+      "A2T-01": {
+        "requests": 513,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "A3-01": {
+        "requests": 512,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "A4-01": {
+        "requests": 513,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "B1-01": {
+        "requests": 513,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "B2-01": {
+        "requests": 512,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "B3A-01": {
+        "requests": 513,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "B4-01": {
+        "requests": 513,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c1/raw.json",
+            "requests": 1,
+            "completed": 1,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "C1-01": {
+        "requests": 520,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c8/raw.json",
+            "requests": 8,
+            "completed": 8,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "C2-01": {
+        "requests": 512,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE_UNSTABLE"
+      },
+      "C3-01": {
+        "requests": 136,
+        "phases": [
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 126,
+            "failed": 2
+          },
+          {
+            "path": "functional-c8/raw.json",
+            "requests": 8,
+            "completed": 8,
+            "failed": 0
+          }
+        ],
+        "status": "FAILED_WITH_EVIDENCE"
+      },
+      "C3H-01": {
+        "requests": 520,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "functional-c8/raw.json",
+            "requests": 8,
+            "completed": 8,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "C4-01": {
+        "requests": 512,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 128,
+            "completed": 128,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16O3-01": {
+        "requests": 1024,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16O4-01": {
+        "requests": 1024,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16O6-01": {
+        "requests": 1024,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16P1D2-01": {
+        "requests": 1036,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c12/raw.json",
+            "requests": 12,
+            "completed": 12,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16P2D1-01": {
+        "requests": 1036,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c12/raw.json",
+            "requests": 12,
+            "completed": 12,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16P2D2H-01": {
+        "requests": 1056,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c32/raw.json",
+            "requests": 32,
+            "completed": 32,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D16P4D2H-01": {
+        "requests": 1056,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c32/raw.json",
+            "requests": 32,
+            "completed": 32,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D8O3-01": {
+        "requests": 1024,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D8O4-01": {
+        "requests": 1024,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D8P1D2-01": {
+        "requests": 1036,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c12/raw.json",
+            "requests": 12,
+            "completed": 12,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D8P2D1-01": {
+        "requests": 0,
+        "phases": [],
+        "status": "FAILED_WITH_EVIDENCE"
+      },
+      "D8P2D1H-01": {
+        "requests": 1036,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c12/raw.json",
+            "requests": 12,
+            "completed": 12,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      },
+      "D8P2D2H-01": {
+        "requests": 1056,
+        "phases": [
+          {
+            "path": "benchmark/measurement-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-02/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/measurement-03/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "benchmark/warmup-01/raw.json",
+            "requests": 256,
+            "completed": 256,
+            "failed": 0
+          },
+          {
+            "path": "functional-c32/raw.json",
+            "requests": 32,
+            "completed": 32,
+            "failed": 0
+          }
+        ],
+        "status": "COMPLETE"
+      }
+    },
+    "submitted_without_raw": [],
+    "total_submitted_budget": 18734
+  },
+  "limits": [
+    "Quick keeps all three formal rounds; JIT-containing groups, latency drift, and unstable results retain their labels.",
+    "Within-launch repeats are not independent restarts or full numerical quality validation.",
+    "Raw artifacts are local to controller45; cleanup live verification is saved separately."
+  ]
+}

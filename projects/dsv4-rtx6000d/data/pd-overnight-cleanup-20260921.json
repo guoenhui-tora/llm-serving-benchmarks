@@ -1,0 +1,28 @@
+{
+  "checked_beijing": "2026-09-21T11:21:29.474317",
+  "read_only": true,
+  "nodes": {
+    "gpu-6000d-45": {
+      "containers": "",
+      "compute_processes": "",
+      "remaining_owned": []
+    },
+    "gpu-6000d-46": {
+      "containers": "",
+      "compute_processes": "",
+      "remaining_owned": []
+    },
+    "gpu-6000d-47": {
+      "containers": "",
+      "compute_processes": "",
+      "remaining_owned": []
+    },
+    "gpu-6000d-48": {
+      "containers": "",
+      "compute_processes": "",
+      "remaining_owned": []
+    }
+  },
+  "remaining_owned": 0,
+  "scope": "Only ownership audit; no containers or processes removed by this script."
+}
