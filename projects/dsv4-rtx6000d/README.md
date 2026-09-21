@@ -4,6 +4,16 @@
 
 ## 性能测试先看：已验证的 JIT 处理方案
 
+**2026-09-21补充修复：top-k与DSpark草稿输入的覆盖缺口已处理。** 在原mHC适配之上增加[输入内核启动覆盖](patches/input-kernel-warmup/README.md)，DSpark 1P1D、DSpark普通双服务、16K普通六TP4共**9轮正式测量全部0已知编译事件**；40个worker全部通过两遍缓存回放和临时显存检查。新覆盖每worker约0.14–0.24秒（继承缓存），不改变forward、权重或日志规则。见[修复、失败回归与完整验收](reports/input-kernel-warmup-20260921.md)。
+
+| 本次复核场景 | 总GPU | 完整HTTP预热事件 | 固定三轮quick正式事件 |
+| --- | ---: | ---: | --- |
+| 近8K，1P1D，各TP2×DP2 EP on、DSpark K5，C32/N128 | 8 | 0（另8条功能请求有12条其他事件） | 0/0/0 |
+| 近8K，普通双TP2×DP2 EP on、DSpark K5，C32/N128 | 8 | 24（拒绝采样内核） | 0/0/0 |
+| 精确16K，普通六TP4、DSpark off，C64/N256 | 24 | 0 | 0/0/0 |
+
+**当前推荐：保留缓存→启用对应mHC扩展及新输入内核worker→一轮完整HTTP预热→固定三轮quick。** 当前精选baseline配置尚未自动启用这些模块，须按适配说明接入。上述三组prefill budget均8192；其他K、预算、并发或CP仍须验证。HTTP预热不可省略：其他内核仍有首次事件；0事件也不保证性能稳定，普通DSpark本轮吞吐CV为2.02%。
+
 **先补齐启动阶段的实际kernel分派覆盖，再做一轮完整负载HTTP预热；不要靠反复压测碰齐编译组合。** 固定vLLM 0.29.0的NVIDIA DSV4路径存在mHC预热入口遗漏。适配后，普通双TP4和1P1D各连续三轮无已知编译事件，吞吐CV分别为0.15%和0.18%。这是本项目后续性能测试的重要起点。
 
 为什么固定输入还会反复JIT：镜像原预热按`hc_pre/hc_post`属性找层，但当前NVIDIA层没有这些属性，预热提前返回；真实forward直接调用另一组mHC入口。运行时chunked prefill的批次token数又会改变`n_splits`等分派组合，相同请求并不保证相同kernel组合。这解释了本轮已定位的持续mHC事件，不能据此把历史所有JIT都归为同一个原因。
@@ -11,19 +21,19 @@
 推荐执行顺序：
 
 1. **保留并核对编译缓存。** 新recipe可能改变缓存目录指纹；需要继承时完整复制对应旧缓存并核对内容，不把新空目录当成热缓存，不清JIT缓存。
-2. **启用[项目启动预热适配](patches/mhc-startup-warmup/README.md)。** 通过`--worker-cls dsv4_mhc_worker.Worker`及对应模块挂载，在真实层参数上覆盖mHC分派，随后完整执行原启动预热和图捕获。核对固定源码哈希、每个worker的完成记录、第二遍缓存key不增加及覆盖检查。它不修改forward、权重或运行时分派算法。
-3. **单独保存一轮完整正式负载的HTTP预热，再用quick固定测三轮。** 本轮完整负载是GovReport前128条、总C32、每条输出1024 tokens；默认2C预热不能视作已验证替代。启动预热并不覆盖所有其他内核：普通路径HTTP预热仍出现16条其他Triton事件，正式三轮才全部为0。
-4. **保留每轮JIT标记、真实工作量和波动。** quick包含事件时仍保留三轮，不挑最快、不自动无限加轮；影响排序时另设有界诊断。当前实测协议是“一轮独立完整HTTP预热＋jit_clean”，均在最先三轮通过；据此推荐上述quick流程，但尚未证明所有配置都能同样收敛。
+2. **启用[项目启动预热适配](patches/mhc-startup-warmup/README.md)，扩展场景再组合[输入内核worker](patches/input-kernel-warmup/README.md)。** 仅启用mHC时用`--worker-cls dsv4_mhc_worker.Worker`；组合新输入覆盖时改用`--worker-cls dsv4_input_worker.Worker`并保留对应模块挂载。两者均保留原启动预热和图捕获。核对固定源码哈希、每个worker的完成记录、第二遍缓存key不增加及覆盖检查。它不修改forward、权重或运行时分派算法。
+3. **单独保存一轮完整正式负载的HTTP预热，再用quick固定测三轮。** 早期mHC验证负载是GovReport前128条、总C32、每条输出1024 tokens；本次16K/C64组则使用完整256条。默认2C预热不能视作已验证替代。启动预热并不覆盖所有其他内核：普通路径HTTP预热仍出现16条其他Triton事件，正式三轮才全部为0。
+4. **保留每轮JIT标记、真实工作量和波动。** quick包含事件时仍保留三轮，不挑最快、不自动无限加轮；影响排序时另设有界诊断。早期mHC实测协议是“一轮独立完整HTTP预热＋jit_clean”，均在最先三轮通过；据此推荐上述quick流程，但尚未证明所有配置都能同样收敛。
 
 **夜间DP复核进一步确认：没有JIT也不能省完整HTTP预热。** TP2×DP2 EP on的PD全负载预热仅733.26 tok/s且0已知事件，正式三轮才927.50±5.75；对应普通组正式也0事件，但CV5.73%。因此启动覆盖、完整HTTP预热和稳定性检查必须分开验收，见[DP实测与预热长尾](reports/pd-dp-off-20260921.md)。
 
-**已实测范围：固定镜像v0.29.0、RTX6000D、NVIDIA DSV4 Flash NVFP4、TP4/PP1/DP1、DSpark off、prefill budget=8192、GovReport总C32。** 预热模块允许的预算范围为≤8192。 当前精选`configs/recipes/tp4.yaml`尚未自动启用该worker，需要按适配说明接入；16K预算、其他拓扑、并发或DSpark须先验证新增覆盖和容量。
+**早期独立mHC模块的实测范围：固定镜像v0.29.0、RTX6000D、NVIDIA DSV4 Flash NVFP4、TP4/PP1/DP1、DSpark off、prefill budget=8192、GovReport总C32。** 预热模块允许的预算范围为≤8192。 当前精选`configs/recipes/tp4.yaml`尚未自动启用该worker，需要按适配说明接入；16K预算、其他拓扑、并发或DSpark须先验证新增覆盖和容量。
 
-夜间扩展模块另存为[16K预算／DP／DSpark启动覆盖快照](patches/mhc-startup-warmup-extended/README.md)，各目录明确标注实测范围，原TP4模块不变。**DSpark尚有另一类JIT缺口**：TP2×DP2 EP on、K5的PD/普通quick正式事件分别4/2/0及4/0/2，来自草稿输入准备`_prepare_dflash_inputs_kernel`；target/draft mHC覆盖通过不代表其他内核已穷尽。
+夜间扩展模块另存为[16K预算／DP／DSpark启动覆盖快照](patches/mhc-startup-warmup-extended/README.md)，各目录明确标注实测范围，原TP4模块不变。**夜间DSpark另发现一类JIT缺口（现已修复，见本节开头）**：TP2×DP2 EP on、K5的PD/普通quick正式事件分别4/2/0及4/0/2，来自草稿输入准备`_prepare_dflash_inputs_kernel`；target/draft mHC覆盖通过不代表其他内核已穷尽。
 
-**TP4扩展已完成12个C64配置：** 8K/16K三副本普通、1P2D、2P1D，8K/16K四副本普通及2P2D，再加16K六副本普通和4P2D。每组先完整N256 HTTP预热；其中11组、33轮正式测量均0已知事件。**但16K六副本普通（24卡）正式仍有4/4/0条top-k索引事件**，完整预热已有88条事件；即使吞吐CV仅0.014%，也不能称三轮无JIT参照。增加服务后仍可能遗漏各进程实际分派，不追加轮次或只选最后一轮。
+**TP4扩展已完成12个C64配置：** 8K/16K三副本普通、1P2D、2P1D，8K/16K四副本普通及2P2D，再加16K六副本普通和4P2D。每组先完整N256 HTTP预热；其中11组、33轮正式测量均0已知事件。**当时16K六副本普通（24卡）正式仍有4/4/0条top-k索引事件**，完整预热已有88条事件；即使吞吐CV仅0.014%，也不能称三轮无JIT参照。增加服务后仍可能遗漏各进程实际分派，不追加轮次或只选最后一轮。
 
-**0事件也不保证收敛：** 8K 2P2D三轮0事件，吞吐仍由1664.92升至1817.95，CV4.79%、TTFT CV约19.5%，预热另有NIXL传输长尾。DSpark草稿输入与普通top-k的覆盖缺口均未修复；当前mHC方案有效，但不能承诺所有quick都无JIT或已稳定。完整证据见[配比报告](reports/pd-ratios-c64-20260921.md)。
+**0事件也不保证收敛：** 8K 2P2D三轮0事件，吞吐仍由1664.92升至1817.95，CV4.79%、TTFT CV约19.5%，预热另有NIXL传输长尾。上述为修复前记录；DSpark草稿输入与普通top-k缺口现已通过本节开头的独立验证，历史结果不追改。当前组合方案仍不能承诺所有quick都无JIT或已稳定。完整证据见[配比报告](reports/pd-ratios-c64-20260921.md)。
 
 | 同八卡、同GovReport总C32 | 输出 tok/s，三轮均值±样本SD | 正式已知编译事件 |
 | --- | ---: | ---: |
