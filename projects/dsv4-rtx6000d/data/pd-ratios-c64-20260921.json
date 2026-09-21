@@ -1,11 +1,11 @@
 {
-  "updated_beijing": "2026-09-21T07:47:02.606509",
+  "updated_beijing": "2026-09-21T08:19:57.736872",
   "states": {
     "D16P3D1": "SKIPPED_PREDECLARED_D_PRESSURE_ALTERNATIVE",
     "D16O3": "COMPLETE",
     "D16P2D1": "COMPLETE",
-    "D16P1D2": "STARTING",
-    "D8O3": "NOT_RUN",
+    "D16P1D2": "COMPLETE",
+    "D8O3": "STARTING",
     "D8P1D2": "NOT_RUN",
     "D8P2D1": "NOT_RUN",
     "D16O4": "NOT_RUN",
@@ -1990,6 +1990,160 @@
           "n": 3,
           "mean": 262144.0,
           "sd": 0.0
+        }
+      },
+      "controller_resource_review": {
+        "warmup-01": {
+          "samples": 27,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.812743633070695,
+              "peak_sample_busy_percent": 7.620949258416143
+            },
+            "proxy": {
+              "mean_busy_percent": 1.4234296326077422,
+              "peak_sample_busy_percent": 3.486924034869243
+            },
+            "client": {
+              "mean_busy_percent": 5.114653645459333,
+              "peak_sample_busy_percent": 26.04477611940299
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.12345560861700688,
+              "peak_sample_busy_percent": 0.32378580323785267
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.10718729064982391,
+              "peak_sample_busy_percent": 0.4478726051256543
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16o3-01-client-warmup-01": {
+              "mean_cpu_cores": 0.1984059208168853,
+              "peak_sample_cpu_cores": 1.0371225797425372,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16o3-01-proxy": {
+              "mean_cpu_cores": 0.049664609024879756,
+              "peak_sample_cpu_cores": 0.13148661244124943,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-01": {
+          "samples": 27,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.820833055620234,
+              "peak_sample_busy_percent": 7.4552266650083965
+            },
+            "proxy": {
+              "mean_busy_percent": 1.5020103388856954,
+              "peak_sample_busy_percent": 3.455992043759326
+            },
+            "client": {
+              "mean_busy_percent": 4.963330333378013,
+              "peak_sample_busy_percent": 26.04477611940299
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.12445193283424638,
+              "peak_sample_busy_percent": 0.24906600249066102
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.12826403246802842,
+              "peak_sample_busy_percent": 0.32354405176704404
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16o3-01-client-measurement-01": {
+              "mean_cpu_cores": 0.19311863487620545,
+              "peak_sample_cpu_cores": 1.037510449574741,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16o3-01-proxy": {
+              "mean_cpu_cores": 0.05029875902771117,
+              "peak_sample_cpu_cores": 0.12711016418669424,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-02": {
+          "samples": 26,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.783571514291165,
+              "peak_sample_busy_percent": 7.3890132437978036
+            },
+            "proxy": {
+              "mean_busy_percent": 1.5275689347845622,
+              "peak_sample_busy_percent": 3.407960199004978
+            },
+            "client": {
+              "mean_busy_percent": 4.604156087263888,
+              "peak_sample_busy_percent": 26.163803833706744
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.16331408086038834,
+              "peak_sample_busy_percent": 0.37359900373599153
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.13441261686429895,
+              "peak_sample_busy_percent": 0.2737680438028911
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16o3-01-client-measurement-02": {
+              "mean_cpu_cores": 0.17806050137295737,
+              "peak_sample_cpu_cores": 1.037977088360595,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16o3-01-proxy": {
+              "mean_cpu_cores": 0.05225778538885107,
+              "peak_sample_cpu_cores": 0.12787560738770035,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-03": {
+          "samples": 27,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.804929886916311,
+              "peak_sample_busy_percent": 7.539016352670524
+            },
+            "proxy": {
+              "mean_busy_percent": 1.4791624780997825,
+              "peak_sample_busy_percent": 3.359880537580884
+            },
+            "client": {
+              "mean_busy_percent": 5.029778433137366,
+              "peak_sample_busy_percent": 26.039332835449336
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.1694298732626276,
+              "peak_sample_busy_percent": 0.34843205574912606
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.1407304580919977,
+              "peak_sample_busy_percent": 0.3486055776892427
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16o3-01-client-measurement-03": {
+              "mean_cpu_cores": 0.1966706520252913,
+              "peak_sample_cpu_cores": 1.0378867279685755,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16o3-01-proxy": {
+              "mean_cpu_cores": 0.0510722125831646,
+              "peak_sample_cpu_cores": 0.13039584730172632,
+              "throttled_usec": 0
+            }
+          }
         }
       }
     },
@@ -4076,6 +4230,2403 @@
                 "max": 1.0,
                 "samples": 14
               }
+            }
+          }
+        }
+      },
+      "controller_resource_review": {
+        "warmup-01": {
+          "samples": 26,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.849852394234512,
+              "peak_sample_busy_percent": 7.434242713696615
+            },
+            "proxy": {
+              "mean_busy_percent": 1.8603724728612714,
+              "peak_sample_busy_percent": 2.639442231075695
+            },
+            "client": {
+              "mean_busy_percent": 5.303663878932696,
+              "peak_sample_busy_percent": 25.963690624222835
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.12341501283914535,
+              "peak_sample_busy_percent": 0.1991535972118541
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.11944458269048663,
+              "peak_sample_busy_percent": 0.37369207772794955
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p2d1-01-client-warmup-01": {
+              "mean_cpu_cores": 0.20275938145111266,
+              "peak_sample_cpu_cores": 1.0375979972143425,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p2d1-01-proxy": {
+              "mean_cpu_cores": 0.06551049368346114,
+              "peak_sample_cpu_cores": 0.08448538216400546,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-01": {
+          "samples": 26,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.814318684725096,
+              "peak_sample_busy_percent": 7.420390334139082
+            },
+            "proxy": {
+              "mean_busy_percent": 1.8100538635390628,
+              "peak_sample_busy_percent": 2.4159402241594075
+            },
+            "client": {
+              "mean_busy_percent": 5.386699065867306,
+              "peak_sample_busy_percent": 26.138909634055263
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.17319981684617014,
+              "peak_sample_busy_percent": 0.32346354814630773
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.09655199872591336,
+              "peak_sample_busy_percent": 0.3983071944236971
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p2d1-01-client-measurement-01": {
+              "mean_cpu_cores": 0.20259758573100034,
+              "peak_sample_cpu_cores": 1.037600438203715,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p2d1-01-proxy": {
+              "mean_cpu_cores": 0.06536705552868259,
+              "peak_sample_cpu_cores": 0.08526342869315064,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-02": {
+          "samples": 26,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.824494953420734,
+              "peak_sample_busy_percent": 7.535231521426522
+            },
+            "proxy": {
+              "mean_busy_percent": 1.7752952187506277,
+              "peak_sample_busy_percent": 2.265936254980083
+            },
+            "client": {
+              "mean_busy_percent": 5.148420235322226,
+              "peak_sample_busy_percent": 25.98954443614638
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.1433820234788108,
+              "peak_sample_busy_percent": 0.37369207772794955
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.11747137879541958,
+              "peak_sample_busy_percent": 0.3984063745019917
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p2d1-01-client-measurement-02": {
+              "mean_cpu_cores": 0.20030425786379885,
+              "peak_sample_cpu_cores": 1.038269801681659,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p2d1-01-proxy": {
+              "mean_cpu_cores": 0.06576887865297663,
+              "peak_sample_cpu_cores": 0.08686881788121882,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-03": {
+          "samples": 26,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.832153519608363,
+              "peak_sample_busy_percent": 7.373737373737377
+            },
+            "proxy": {
+              "mean_busy_percent": 1.849398970232341,
+              "peak_sample_busy_percent": 2.490039840637448
+            },
+            "client": {
+              "mean_busy_percent": 5.072665737607007,
+              "peak_sample_busy_percent": 26.026374720079627
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.12943694927066707,
+              "peak_sample_busy_percent": 0.5970149253731294
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.1393950255889398,
+              "peak_sample_busy_percent": 0.2985817367504362
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p2d1-01-client-measurement-03": {
+              "mean_cpu_cores": 0.1993595214902822,
+              "peak_sample_cpu_cores": 1.0374712994225839,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p2d1-01-proxy": {
+              "mean_cpu_cores": 0.06517604780871726,
+              "peak_sample_cpu_cores": 0.08483996477497355,
+              "throttled_usec": 0
+            }
+          }
+        }
+      }
+    },
+    "D16P1D2": {
+      "case": "D16P1D2",
+      "status": "COMPLETE",
+      "clean": true,
+      "cv": 6.654223514003376e-05,
+      "spec": {
+        "owner": "pd-night-20260921-d16p1d2-01",
+        "case_id": "D16P1D2",
+        "mode": "pd",
+        "ready_timeout_s": 900,
+        "budget_s": 4200,
+        "members": [
+          {
+            "role": "p0",
+            "host": "gpu-6000d-46",
+            "url": "http://10.90.1.46:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16p1d2-p0.yaml"
+          },
+          {
+            "role": "d0",
+            "host": "gpu-6000d-47",
+            "url": "http://10.90.1.47:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16p1d2-d0.yaml"
+          },
+          {
+            "role": "d1",
+            "host": "gpu-6000d-48",
+            "url": "http://10.90.1.48:31249",
+            "campaign": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/configs/campaigns/d16p1d2-d1.yaml"
+          }
+        ],
+        "workload": "overnight-16k-c64-n256",
+        "concurrency": 64,
+        "requests": 256,
+        "group": "16k-c64-12gpu",
+        "description": "D16P1D2: 3 API services x4GPU=12GPU,TP4 off,16K,C64,N256,all-routes gate.",
+        "require_targeted_warmup": true,
+        "functional_requests": 12,
+        "require_all_api_routes": true,
+        "expected_transfers_per_request": {
+          "d0": 4,
+          "d1": 4
+        }
+      },
+      "controller": {
+        "status": "STOPPED",
+        "owner": "pd-night-20260921-d16p1d2-01",
+        "started": 1789947837.2775958,
+        "ready_at": 1789948043.042205,
+        "changed_files": [],
+        "cleanup_errors": [],
+        "ended": 1789949876.6050284
+      },
+      "revision": {
+        "commit": "2e11e772e169f418135ddb370216e5942748cbba",
+        "script_hashes": {
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/candidate.py": "ae0190bc53d428cdc1e0f52b438f949561d49c6ddbdfe6d3de26e8165b32fddd",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_a.py": "71236d0227139680afea8902657d44a49227011afa1de0122f1fb9d9d26b9a7a",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/run_case.py": "4e56d362f252a0c85e12753d048cf7c57d3dd07469ee5fb0e8245d74b60669aa",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_c_spec.py": "5edc18765af274525139127c3b5b9cea0d0a2116504d9e20e7ca793a4a5a5696",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_d.py": "f093e9ea24f12d654287b2f7d49e40bb7222abf55f38dd631503e370b2f8c814",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/test_runtime_gate.py": "d0c8e140dbe35dedc86366335081996a3c086365ecece1573d04e45ca380a02c",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_c_dp.py": "2fa154b4e16d09d4a85e075d4526bec140c498f5068b75d6d54ccebf5aba1b3c",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/scripts/prepare_b.py": "3932657fedb9520bdd34a1110fe4407da53dfcbb4807635065f98e076657aefe",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/dsv4_mhc_worker.py": "2d5862327ac8a0dfc65ea600d01be31e93ed07e8c7036e2fe6bdb77f273787c6",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesdp/__pycache__/dsv4_mhc_worker.cpython-312.pyc": "510aae6c1384cc494d88deae426d5edb81efecac92f24197a4114450d44635fa",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/dsv4_mhc_worker.py": "e1e13316d13070caf305ba078d1ffbce7cf77ce3130faa9686428fbf1f9017bb",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/pinned-source.json": "932116ee2076a004b1a84c1fcb47ff45005f2c86c5aba49f173b2780205528d2",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patchesspec/__pycache__/dsv4_mhc_worker.cpython-312.pyc": "333de7319d2520085cc422d5468c4f63fe8b60debdddf0228714923db908e405",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/warmup_plan.py": "47ca2f574bd6661cbd7e4c44e8b1c24c64b9010ad43671a3c848b5285e4a538b",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/test_warmup_plan.py": "cb4a934df9bd495f4adcfe458385a3743e49f9921d981cdde52b1095488a5b6a",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/dsv4_mhc_worker.py": "d1edf17e93d5b24a440f23dcea005ab71c4bafd68b6ef1e1ea478eb5241c42d3",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/warmup_plan.py": "fda911efe026f0951bf23b9c700d3add731b0e0c2bbf949329044e7f8adb8a27",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/test_warmup_plan.py": "63036600fcbc2d6d2ebfae0a83c997414a18de5ba135f4e65f00acd07eec2716",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/dsv4_mhc_worker.py": "d1edf17e93d5b24a440f23dcea005ab71c4bafd68b6ef1e1ea478eb5241c42d3",
+          "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-overnight/patches16k/pinned-source.json": "067933e394ea2c26f880648c6932ac7589af08f0677b3f74cd2ca81548e53bcf"
+        }
+      },
+      "proxy_command": [
+        "docker",
+        "run",
+        "-d",
+        "--pull",
+        "never",
+        "--name",
+        "pd-night-20260921-d16p1d2-01-proxy",
+        "--label",
+        "io.serving-bench.run=pd-night-20260921-d16p1d2-01",
+        "--network",
+        "host",
+        "--cpuset-cpus",
+        "16-19",
+        "--cpuset-mems",
+        "1",
+        "-v",
+        "/home/enhui/llm-serving-benchmarks/src:/src:ro",
+        "-e",
+        "PYTHONPATH=/src",
+        "--entrypoint",
+        "python3",
+        "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+        "-m",
+        "serving_bench.pd_proxy",
+        "--port",
+        "31250",
+        "--timeout",
+        "600",
+        "--prefill",
+        "http://10.90.1.46:31249",
+        "--decode",
+        "http://10.90.1.47:31249",
+        "http://10.90.1.48:31249"
+      ],
+      "members": {
+        "p0": {
+          "host": "gpu-6000d-46",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16p1d2-01-p0",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16p1d2-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/a546159f834c6b2bcfdc:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.46",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "16384",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--kv-transfer-config",
+            "{\"kv_connector\":\"NixlConnector\",\"kv_role\":\"kv_producer\",\"kv_buffer_device\":\"cuda\",\"kv_load_failure_policy\":\"fail\",\"kv_connector_extra_config\":{\"backends\":[\"UCX\"],\"enforce_handshake_compat\":true}}",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 23,
+          "warning_examples": [
+            "2026-09-20T23:44:25.286941557Z WARNING 2026-09-20 23:44:25 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T23:44:54.948914382Z (Worker pid=157) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.948956932Z (Worker pid=159) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.948965100Z (Worker pid=158) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.948976038Z (Worker pid=160) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        },
+        "d0": {
+          "host": "gpu-6000d-47",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16p1d2-01-d0",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16p1d2-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/969f75bfd55492da2441:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.47",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "8192",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--kv-transfer-config",
+            "{\"kv_connector\":\"NixlConnector\",\"kv_role\":\"kv_consumer\",\"kv_buffer_device\":\"cuda\",\"kv_load_failure_policy\":\"fail\",\"kv_connector_extra_config\":{\"backends\":[\"UCX\"],\"enforce_handshake_compat\":true}}",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 23,
+          "warning_examples": [
+            "2026-09-20T23:44:24.998576460Z WARNING 2026-09-20 23:44:24 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T23:44:54.796986358Z (Worker pid=187) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.797018913Z (Worker pid=189) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.797036111Z (Worker pid=190) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:54.797051979Z (Worker pid=188) WARNING 2026-09-20 23:44:54 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        },
+        "d1": {
+          "host": "gpu-6000d-48",
+          "gpus": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "binding": {
+            "cpus": "32-47",
+            "mems": "2"
+          },
+          "command": [
+            "docker",
+            "run",
+            "-d",
+            "--pull",
+            "never",
+            "--name",
+            "sb-pd-night-20260921-d16p1d2-01-d1",
+            "--label",
+            "io.serving-bench.run=pd-night-20260921-d16p1d2-01",
+            "--network",
+            "host",
+            "--ipc",
+            "host",
+            "--gpus",
+            "\"device=4,5,6,7\"",
+            "-v",
+            "/data/models/DeepSeek-V4-Flash-0731-NVFP4:/model:ro",
+            "-v",
+            "/home/enhui/.cache/serving-bench/vllm/6cd74a22eff6cc6b3aff:/root/.cache:rw",
+            "--cpuset-cpus",
+            "32-47",
+            "--cpuset-mems",
+            "2",
+            "--ulimit",
+            "memlock=-1:-1",
+            "--ulimit",
+            "stack=67108864:67108864",
+            "--cap-add",
+            "SYS_NICE",
+            "--device",
+            "/dev/infiniband",
+            "-e",
+            "HF_HUB_OFFLINE=1",
+            "-e",
+            "TRANSFORMERS_OFFLINE=1",
+            "-e",
+            "PYTHONPATH=/root/.cache/dsv4-mhc-warmup",
+            "-e",
+            "NCCL_DEBUG=WARN",
+            "-e",
+            "TRITON_CACHE_DIR=/root/.cache/triton",
+            "-e",
+            "TILELANG_CACHE_DIR=/root/.cache/tilelang",
+            "-e",
+            "VLLM_USE_V2_MODEL_RUNNER=1",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_HOST=10.90.1.48",
+            "-e",
+            "VLLM_NIXL_SIDE_CHANNEL_PORT=56300",
+            "-e",
+            "UCX_NET_DEVICES=all",
+            "-e",
+            "UCX_TLS=rc,tcp,cuda_copy,cuda_ipc,sm,self",
+            "-e",
+            "UCX_IB_GID_INDEX=3",
+            "-e",
+            "UCX_LOG_LEVEL=info",
+            "-e",
+            "NIXL_LOG_LEVEL=INFO",
+            "-e",
+            "VLLM_LOGGING_CONFIG_PATH=/root/.cache/pd-logging.json",
+            "--entrypoint",
+            "vllm",
+            "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+            "serve",
+            "/model",
+            "--served-model-name",
+            "deepseek-v4-flash",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "31249",
+            "--trust-remote-code",
+            "--enable-auto-tool-choice",
+            "--no-enable-prefix-caching",
+            "--no-enable-expert-parallel",
+            "--enable-chunked-prefill",
+            "--jit-monitor-verbose",
+            "--async-scheduling",
+            "--tensor-parallel-size",
+            "4",
+            "--pipeline-parallel-size",
+            "1",
+            "--data-parallel-size",
+            "1",
+            "--max-model-len",
+            "32768",
+            "--max-num-seqs",
+            "64",
+            "--max-num-batched-tokens",
+            "8192",
+            "--gpu-memory-utilization",
+            "0.9",
+            "--kv-cache-dtype",
+            "fp8_e4m3",
+            "--block-size",
+            "256",
+            "--attention-config",
+            "{\"use_fp4_indexer_cache\":false,\"backend\":\"FLASHINFER_MLA_SPARSE_DSV4\"}",
+            "--moe-backend",
+            "auto",
+            "--tokenizer-mode",
+            "deepseek_v4",
+            "--tool-call-parser",
+            "deepseek_v4",
+            "--reasoning-parser",
+            "deepseek_v4",
+            "--reasoning-config",
+            "{\"reasoning_parser\":\"deepseek_v4\",\"reasoning_start_str\":\"\",\"reasoning_end_str\":\"\"}",
+            "--kernel-config",
+            "{\"enable_flashinfer_autotune\":false}",
+            "--compilation-config",
+            "{\"cudagraph_mode\":\"FULL_DECODE_ONLY\",\"cudagraph_capture_sizes\":[1,2,4,8,12,16,24,32,48,64],\"max_cudagraph_capture_size\":64}",
+            "--seed",
+            "0",
+            "--distributed-executor-backend",
+            "mp",
+            "--kv-transfer-config",
+            "{\"kv_connector\":\"NixlConnector\",\"kv_role\":\"kv_consumer\",\"kv_buffer_device\":\"cuda\",\"kv_load_failure_policy\":\"fail\",\"kv_connector_extra_config\":{\"backends\":[\"UCX\"],\"enforce_handshake_compat\":true}}",
+            "--worker-cls",
+            "dsv4_mhc_worker.Worker"
+          ],
+          "errors": [],
+          "worker_coverage_complete": 4,
+          "warning_count": 23,
+          "warning_examples": [
+            "2026-09-20T23:44:24.733161351Z WARNING 2026-09-20 23:44:24 [vllm.config.attention:120] use_fp4_indexer_cache is deprecated and will be removed in v0.29. Use indexer_kv_dtype instead (True -> 'mxfp4').",
+            "2026-09-20T23:44:55.214522565Z (Worker pid=160) WARNING 2026-09-20 23:44:55 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:55.214566566Z (Worker pid=159) WARNING 2026-09-20 23:44:55 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:55.214572897Z (Worker pid=158) WARNING 2026-09-20 23:44:55 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available.",
+            "2026-09-20T23:44:55.214581203Z (Worker pid=157) WARNING 2026-09-20 23:44:55 [vllm.distributed.device_communicators.symm_mem:67] SymmMemCommunicator: Device capability 12.0 not supported, communicator is not available."
+          ]
+        }
+      },
+      "rounds": [
+        {
+          "path": "warmup-01",
+          "resources": {
+            "p0": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 16.210163149836244,
+              "service_cpu_busy_percent": 53.42916472113386,
+              "gpu_sm_mhz_mean": 2414.375,
+              "gpu_temperature_max_c": 61.0,
+              "gpu_power_w_mean": 247.5508482142857,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 22393122920,
+                  "port_rcv_data": 20412704
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 22392572048,
+                  "port_rcv_data": 19718504
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 22392917000,
+                  "port_rcv_data": 20262492
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 22392393820,
+                  "port_rcv_data": 19603248
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d0": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 14.639079702346091,
+              "service_cpu_busy_percent": 58.462262656963496,
+              "gpu_sm_mhz_mean": 2415.5625,
+              "gpu_temperature_max_c": 58.0,
+              "gpu_power_w_mean": 191.88727678571428,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10570104,
+                  "port_rcv_data": 11109507960
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 10344312,
+                  "port_rcv_data": 11109322208
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10512356,
+                  "port_rcv_data": 11109418524
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 10134188,
+                  "port_rcv_data": 11109058440
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d1": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 16.251803601590975,
+              "service_cpu_busy_percent": 59.60862109057086,
+              "gpu_sm_mhz_mean": 2414.191964285714,
+              "gpu_temperature_max_c": 58.0,
+              "gpu_power_w_mean": 204.77183035714285,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 9802780,
+                  "port_rcv_data": 11283651764
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 9374196,
+                  "port_rcv_data": 11283249836
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 9713960,
+                  "port_rcv_data": 11283540224
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 9469056,
+                  "port_rcv_data": 11283335376
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "p0": {
+              "queue": {
+                "count": 256.0,
+                "sum_s": 15645.903285940178,
+                "mean_s": 61.11680971070382
+              },
+              "prefill": {
+                "count": 256.0,
+                "sum_s": 759.3610339909792,
+                "mean_s": 2.9662540390272625
+              },
+              "decode": {
+                "count": 256.0,
+                "sum_s": 0.0,
+                "mean_s": 0.0
+              }
+            },
+            "d0": {
+              "queue": {
+                "count": 127.0,
+                "sum_s": 29.046231623739004,
+                "mean_s": 0.22871048522629137
+              },
+              "prefill": {
+                "count": 127.0,
+                "sum_s": 120.55138520803303,
+                "mean_s": 0.9492235055750632
+              },
+              "decode": {
+                "count": 127.0,
+                "sum_s": 3336.7621311005205,
+                "mean_s": 26.273717567720634
+              }
+            },
+            "d1": {
+              "queue": {
+                "count": 129.0,
+                "sum_s": 5.8960709273815155,
+                "mean_s": 0.04570597618125206
+              },
+              "prefill": {
+                "count": 129.0,
+                "sum_s": 26.897811139933765,
+                "mean_s": 0.20851016387545554
+              },
+              "decode": {
+                "count": 129.0,
+                "sum_s": 2250.237531094812,
+                "mean_s": 17.44370179143265
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 661.4439320529642,
+              "request_throughput": 0.6459413398954729,
+              "duration": 396.32081767893396,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 66390.55949909243,
+              "median_ttft_ms": 72271.10297750914,
+              "p95_ttft_ms": 81384.95956826955,
+              "p99_ttft_ms": 91943.55956953367,
+              "mean_tpot_ms": 21.32351087268438,
+              "p95_tpot_ms": 41.24627896510147,
+              "mean_itl_ms": 21.32676889556295,
+              "p95_itl_ms": 24.2112040577922,
+              "mean_e2el_ms": 88204.51112184855,
+              "p95_e2el_ms": 103580.30443376629
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "p0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 0.0,
+              "vllm:nixl_bytes_transferred_sum": 0.0,
+              "vllm:nixl_xfer_time_seconds_count": 0.0,
+              "vllm:nixl_xfer_time_seconds_sum": 0.0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 4194304.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 256.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 508.0,
+              "vllm:nixl_bytes_transferred_sum": 43785861120.0,
+              "vllm:nixl_xfer_time_seconds_count": 508.0,
+              "vllm:nixl_xfer_time_seconds_sum": 8.591052999999999,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2080768.0,
+              "vllm:request_success_total": 127.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d1": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 516.0,
+              "vllm:nixl_bytes_transferred_sum": 44475402240.0,
+              "vllm:nixl_xfer_time_seconds_count": 516.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.869928999999998,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2113536.0,
+              "vllm:request_success_total": 129.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          },
+          "api-route-coverage": {
+            "requests": 256,
+            "routed": 256,
+            "completed": 256,
+            "edges": [
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.47:31249",
+                "completed": 127
+              },
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.48:31249",
+                "completed": 129
+              }
+            ]
+          },
+          "pipeline": {
+            "mean_p_http_s": 65.26272204422958,
+            "mean_after_p_s": 22.91758686490357,
+            "completed": 256
+          }
+        },
+        {
+          "path": "measurement-01",
+          "resources": {
+            "p0": {
+              "samples": 55,
+              "whole_cpu_busy_percent": 16.352101369394067,
+              "service_cpu_busy_percent": 53.87893356643356,
+              "gpu_sm_mhz_mean": 2422.0636363636363,
+              "gpu_temperature_max_c": 60.0,
+              "gpu_power_w_mean": 248.7885,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 22393264624,
+                  "port_rcv_data": 20353124
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 22392584184,
+                  "port_rcv_data": 19532032
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 22393297904,
+                  "port_rcv_data": 20386832
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 22392598872,
+                  "port_rcv_data": 19555228
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d0": {
+              "samples": 55,
+              "whole_cpu_busy_percent": 14.958453349004031,
+              "service_cpu_busy_percent": 61.58084725669454,
+              "gpu_sm_mhz_mean": 2419.4454545454546,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 224.95204545454544,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10236268,
+                  "port_rcv_data": 11196748332
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 9971312,
+                  "port_rcv_data": 11196507464
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10425932,
+                  "port_rcv_data": 11196936568
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 9972160,
+                  "port_rcv_data": 11196511492
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d1": {
+              "samples": 55,
+              "whole_cpu_busy_percent": 16.45999075540373,
+              "service_cpu_busy_percent": 61.27414704611249,
+              "gpu_sm_mhz_mean": 2419.440909090909,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 221.44163636363638,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10074588,
+                  "port_rcv_data": 11196550908
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 9560716,
+                  "port_rcv_data": 11196076720
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 9922792,
+                  "port_rcv_data": 11196400628
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 9583072,
+                  "port_rcv_data": 11196087380
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "p0": {
+              "queue": {
+                "count": 256.0,
+                "sum_s": 17097.603888138197,
+                "mean_s": 66.78751518803983
+              },
+              "prefill": {
+                "count": 256.0,
+                "sum_s": 759.5566852688789,
+                "mean_s": 2.9670183018315583
+              },
+              "decode": {
+                "count": 256.0,
+                "sum_s": 0.0,
+                "mean_s": 0.0
+              }
+            },
+            "d0": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.809758368879557,
+                "mean_s": 0.045388737256871536
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.734754010103643,
+                "mean_s": 0.2088652657039347
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2115.6060144873336,
+                "mean_s": 16.528171988182294
+              }
+            },
+            "d1": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.836968912743032,
+                "mean_s": 0.04560131963080494
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.576731704175472,
+                "mean_s": 0.20763071643887088
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2115.7766450690106,
+                "mean_s": 16.529505039601645
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 664.3492691936261,
+              "request_throughput": 0.6487785831969005,
+              "duration": 394.587624546024,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 71282.34479643562,
+              "median_ttft_ms": 78622.58711294271,
+              "p95_ttft_ms": 81424.6258335479,
+              "p99_ttft_ms": 91965.97354004624,
+              "mean_tpot_ms": 16.1485234019886,
+              "p95_tpot_ms": 16.436098659560603,
+              "mean_itl_ms": 16.14852404651407,
+              "p95_itl_ms": 16.59398638876155,
+              "mean_e2el_ms": 87802.28423666995,
+              "p95_e2el_ms": 98170.0013364898
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "p0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 0.0,
+              "vllm:nixl_bytes_transferred_sum": 0.0,
+              "vllm:nixl_xfer_time_seconds_count": 0.0,
+              "vllm:nixl_xfer_time_seconds_sum": 0.0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 4194304.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 256.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.713504000000011,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d1": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.830697000000008,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          },
+          "api-route-coverage": {
+            "requests": 256,
+            "routed": 256,
+            "completed": 256,
+            "edges": [
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.47:31249",
+                "completed": 128
+              },
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.48:31249",
+                "completed": 128
+              }
+            ]
+          },
+          "pipeline": {
+            "mean_p_http_s": 70.92412964243704,
+            "mean_after_p_s": 16.85593127179891,
+            "completed": 256
+          }
+        },
+        {
+          "path": "measurement-02",
+          "resources": {
+            "p0": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 16.31288754896998,
+              "service_cpu_busy_percent": 53.36590544226863,
+              "gpu_sm_mhz_mean": 2422.0,
+              "gpu_temperature_max_c": 62.0,
+              "gpu_power_w_mean": 244.7929017857143,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 22393785540,
+                  "port_rcv_data": 20869696
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 22393077816,
+                  "port_rcv_data": 20027736
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 22393660220,
+                  "port_rcv_data": 20748784
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 22392993316,
+                  "port_rcv_data": 19950712
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d0": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 14.90573841141627,
+              "service_cpu_busy_percent": 61.24083070938256,
+              "gpu_sm_mhz_mean": 2420.4776785714284,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 218.4803125,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10421860,
+                  "port_rcv_data": 11196916216
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 10141788,
+                  "port_rcv_data": 11196667932
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10557408,
+                  "port_rcv_data": 11197065848
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 10115748,
+                  "port_rcv_data": 11196645960
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d1": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 16.425416793382098,
+              "service_cpu_busy_percent": 60.260756799506865,
+              "gpu_sm_mhz_mean": 2419.808035714286,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 217.36107142857142,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10411588,
+                  "port_rcv_data": 11196907508
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 9885952,
+                  "port_rcv_data": 11196409884
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10154860,
+                  "port_rcv_data": 11196639316
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 9834964,
+                  "port_rcv_data": 11196347356
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "p0": {
+              "queue": {
+                "count": 256.0,
+                "sum_s": 17141.874375252984,
+                "mean_s": 66.96044677833197
+              },
+              "prefill": {
+                "count": 256.0,
+                "sum_s": 759.548581677489,
+                "mean_s": 2.9669866471776913
+              },
+              "decode": {
+                "count": 256.0,
+                "sum_s": 0.0,
+                "mean_s": 0.0
+              }
+            },
+            "d0": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.646528131328523,
+                "mean_s": 0.04411350102600409
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.731738155707717,
+                "mean_s": 0.20884170434146654
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2059.6646092208102,
+                "mean_s": 16.09112975953758
+              }
+            },
+            "d1": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.820411521941423,
+                "mean_s": 0.04547196501516737
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.59436724241823,
+                "mean_s": 0.20776849408139242
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2108.395357963629,
+                "mean_s": 16.471838734090852
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 664.3685123151829,
+              "request_throughput": 0.6487973753077958,
+              "duration": 394.5761955010239,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 71427.48300378161,
+              "median_ttft_ms": 78677.11267748382,
+              "p95_ttft_ms": 81900.70309574367,
+              "p99_ttft_ms": 91984.50123053043,
+              "mean_tpot_ms": 15.906718644548464,
+              "p95_tpot_ms": 16.375344998005435,
+              "mean_itl_ms": 15.906719286858422,
+              "p95_itl_ms": 16.422409960068762,
+              "mean_e2el_ms": 87700.05617715469,
+              "p95_e2el_ms": 98529.32854529354
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "p0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 0.0,
+              "vllm:nixl_bytes_transferred_sum": 0.0,
+              "vllm:nixl_xfer_time_seconds_count": 0.0,
+              "vllm:nixl_xfer_time_seconds_sum": 0.0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 4194304.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 256.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.494050999999979,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d1": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.886656000000016,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          },
+          "api-route-coverage": {
+            "requests": 256,
+            "routed": 256,
+            "completed": 256,
+            "edges": [
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.47:31249",
+                "completed": 128
+              },
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.48:31249",
+                "completed": 128
+              }
+            ]
+          },
+          "pipeline": {
+            "mean_p_http_s": 71.06972330591361,
+            "mean_after_p_s": 16.608424769714475,
+            "completed": 256
+          }
+        },
+        {
+          "path": "measurement-03",
+          "resources": {
+            "p0": {
+              "samples": 56,
+              "whole_cpu_busy_percent": 16.328407986471227,
+              "service_cpu_busy_percent": 53.408853258975256,
+              "gpu_sm_mhz_mean": 2422.1071428571427,
+              "gpu_temperature_max_c": 62.0,
+              "gpu_power_w_mean": 246.77915178571428,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 22393828572,
+                  "port_rcv_data": 20966056
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 22393127368,
+                  "port_rcv_data": 20122096
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 22393750312,
+                  "port_rcv_data": 20885244
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 22393021680,
+                  "port_rcv_data": 20017444
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d0": {
+              "samples": 55,
+              "whole_cpu_busy_percent": 14.954492401602248,
+              "service_cpu_busy_percent": 61.62648358871561,
+              "gpu_sm_mhz_mean": 2420.85,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 220.7285909090909,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10543156,
+                  "port_rcv_data": 11196995464
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 10303864,
+                  "port_rcv_data": 11196789748
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10545912,
+                  "port_rcv_data": 11197016004
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 10088476,
+                  "port_rcv_data": 11196584352
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            },
+            "d1": {
+              "samples": 55,
+              "whole_cpu_busy_percent": 16.43364555729715,
+              "service_cpu_busy_percent": 55.1624832329161,
+              "gpu_sm_mhz_mean": 2419.5318181818184,
+              "gpu_temperature_max_c": 57.0,
+              "gpu_power_w_mean": 222.16331818181817,
+              "window": "protocol start/end, includes client initialization",
+              "nic_bytes": {
+                "mlx5_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_1": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_2": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_3": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_4": {
+                  "port_xmit_data": 10384792,
+                  "port_rcv_data": 11196867720
+                },
+                "mlx5_5": {
+                  "port_xmit_data": 9818232,
+                  "port_rcv_data": 11196337620
+                },
+                "mlx5_6": {
+                  "port_xmit_data": 10300964,
+                  "port_rcv_data": 11196774380
+                },
+                "mlx5_7": {
+                  "port_xmit_data": 9928968,
+                  "port_rcv_data": 11196437328
+                },
+                "mlx5_8": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_9": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                },
+                "mlx5_bond_0": {
+                  "port_xmit_data": 0,
+                  "port_rcv_data": 0
+                }
+              }
+            }
+          },
+          "service_times": {
+            "p0": {
+              "queue": {
+                "count": 256.0,
+                "sum_s": 17200.470700030215,
+                "mean_s": 67.18933867199303
+              },
+              "prefill": {
+                "count": 256.0,
+                "sum_s": 759.6323031680658,
+                "mean_s": 2.967313684250257
+              },
+              "decode": {
+                "count": 256.0,
+                "sum_s": 0.0,
+                "mean_s": 0.0
+              }
+            },
+            "d0": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.572780038230121,
+                "mean_s": 0.04353734404867282
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.74803076405078,
+                "mean_s": 0.20896899034414673
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2020.5096748368815,
+                "mean_s": 15.785231834663136
+              }
+            },
+            "d1": {
+              "queue": {
+                "count": 128.0,
+                "sum_s": 5.811544883064926,
+                "mean_s": 0.04540269439894473
+              },
+              "prefill": {
+                "count": 128.0,
+                "sum_s": 26.594425935298204,
+                "mean_s": 0.20776895261951722
+              },
+              "decode": {
+                "count": 128.0,
+                "sum_s": 2117.0470314938575,
+                "mean_s": 16.53942993354576
+              }
+            }
+          },
+          "metrics": {
+            "schema_version": 1,
+            "completed": 256,
+            "failed": 0,
+            "failure_count_inferred": false,
+            "metrics": {
+              "output_throughput": 664.2841588397104,
+              "request_throughput": 0.6487149988669046,
+              "duration": 394.62630037404597,
+              "total_input_tokens": 4194304,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 71571.41642682246,
+              "median_ttft_ms": 78681.2026394764,
+              "p95_ttft_ms": 81894.28664295701,
+              "p99_ttft_ms": 91948.20588144938,
+              "mean_tpot_ms": 15.790319408745832,
+              "p95_tpot_ms": 16.38076715521835,
+              "mean_itl_ms": 15.790320045680623,
+              "p95_itl_ms": 16.348259866936132,
+              "mean_e2el_ms": 87724.91318196944,
+              "p95_e2el_ms": 98118.65429446334
+            }
+          },
+          "events": [],
+          "engine-counter-deltas": {
+            "p0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 0.0,
+              "vllm:nixl_bytes_transferred_sum": 0.0,
+              "vllm:nixl_xfer_time_seconds_count": 0.0,
+              "vllm:nixl_xfer_time_seconds_sum": 0.0,
+              "vllm:request_prefill_kv_computed_tokens_sum": 4194304.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 0.0,
+              "vllm:request_success_total": 256.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d0": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.467445999999978,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            },
+            "d1": {
+              "vllm:nixl_num_failed_transfers_total": 0.0,
+              "vllm:nixl_num_failed_notifications_total": 0.0,
+              "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+              "vllm:nixl_bytes_transferred_count": 512.0,
+              "vllm:nixl_bytes_transferred_sum": 44130631680.0,
+              "vllm:nixl_xfer_time_seconds_count": 512.0,
+              "vllm:nixl_xfer_time_seconds_sum": 6.743093000000012,
+              "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+              "vllm:num_preemptions_total": 0.0,
+              "vllm:external_prefix_cache_hits_total": 2097152.0,
+              "vllm:request_success_total": 128.0,
+              "vllm:spec_decode_num_drafts_total": 0,
+              "vllm:spec_decode_num_draft_tokens_total": 0,
+              "vllm:spec_decode_num_accepted_tokens_total": 0
+            }
+          },
+          "api-route-coverage": {
+            "requests": 256,
+            "routed": 256,
+            "completed": 256,
+            "edges": [
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.47:31249",
+                "completed": 128
+              },
+              {
+                "prefill": "http://10.90.1.46:31249",
+                "decode": "http://10.90.1.48:31249",
+                "completed": 128
+              }
+            ]
+          },
+          "pipeline": {
+            "mean_p_http_s": 71.21417127822724,
+            "mean_after_p_s": 16.489340061321855,
+            "completed": 256
+          }
+        }
+      ],
+      "statistics": {
+        "duration": {
+          "n": 3,
+          "mean": 394.5967068070313,
+          "sd": 0.02625814490577278
+        },
+        "mean_e2el_ms": {
+          "n": 3,
+          "mean": 87742.4178652647,
+          "sd": 53.314674255910994
+        },
+        "mean_itl_ms": {
+          "n": 3,
+          "mean": 15.94852112635104,
+          "sd": 0.1827240320592687
+        },
+        "mean_tpot_ms": {
+          "n": 3,
+          "mean": 15.9485204850943,
+          "sd": 0.1827240285198722
+        },
+        "mean_ttft_ms": {
+          "n": 3,
+          "mean": 71427.08140901323,
+          "sd": 144.536233631553
+        },
+        "median_ttft_ms": {
+          "n": 3,
+          "mean": 78660.30080996764,
+          "sd": 32.724977536148536
+        },
+        "output_throughput": {
+          "n": 3,
+          "mean": 664.3339801161732,
+          "sd": 0.044206267916404904
+        },
+        "p95_e2el_ms": {
+          "n": 3,
+          "mean": 98272.66139208223,
+          "sd": 223.75801736343575
+        },
+        "p95_itl_ms": {
+          "n": 3,
+          "mean": 16.45488540525548,
+          "sd": 0.1260411511656455
+        },
+        "p95_tpot_ms": {
+          "n": 3,
+          "mean": 16.397403604261463,
+          "sd": 0.03362038705403353
+        },
+        "p95_ttft_ms": {
+          "n": 3,
+          "mean": 81739.87185741619,
+          "sd": 273.02991482649816
+        },
+        "p99_ttft_ms": {
+          "n": 3,
+          "mean": 91966.22688400868,
+          "sd": 18.149000760406686
+        },
+        "request_throughput": {
+          "n": 3,
+          "mean": 0.6487636524572004,
+          "sd": 4.3170183512114164e-05
+        },
+        "total_input_tokens": {
+          "n": 3,
+          "mean": 4194304.0,
+          "sd": 0.0
+        },
+        "total_output_tokens": {
+          "n": 3,
+          "mean": 262144.0,
+          "sd": 0.0
+        }
+      },
+      "middle_window_occupancy_diagnostic": {
+        "measurement-01": {
+          "window": "middle50% of client request interval; diagnostic only, not replacement performance statistics",
+          "start": 1789948691.4773233,
+          "end": 1789948888.747447,
+          "services": {
+            "p0": {
+              "num_requests_running": {
+                "mean": 1.0,
+                "max": 1.0,
+                "samples": 26
+              },
+              "num_requests_waiting": {
+                "mean": 50.0,
+                "max": 50.0,
+                "samples": 26
+              }
+            },
+            "d0": {
+              "num_requests_running": {
+                "mean": 5.769230769230769,
+                "max": 7.0,
+                "samples": 26
+              },
+              "num_requests_waiting": {
+                "mean": 0.07692307692307693,
+                "max": 1.0,
+                "samples": 26
+              }
+            },
+            "d1": {
+              "num_requests_running": {
+                "mean": 5.68,
+                "max": 6.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.04,
+                "max": 1.0,
+                "samples": 25
+              }
+            }
+          }
+        },
+        "measurement-02": {
+          "window": "middle50% of client request interval; diagnostic only, not replacement performance statistics",
+          "start": 1789949127.176199,
+          "end": 1789949324.439342,
+          "services": {
+            "p0": {
+              "num_requests_running": {
+                "mean": 1.0,
+                "max": 1.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 50.16,
+                "max": 51.0,
+                "samples": 25
+              }
+            },
+            "d0": {
+              "num_requests_running": {
+                "mean": 5.52,
+                "max": 6.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.0,
+                "max": 0.0,
+                "samples": 25
+              }
+            },
+            "d1": {
+              "num_requests_running": {
+                "mean": 5.6,
+                "max": 6.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.04,
+                "max": 1.0,
+                "samples": 25
+              }
+            }
+          }
+        },
+        "measurement-03": {
+          "window": "middle50% of client request interval; diagnostic only, not replacement performance statistics",
+          "start": 1789949562.169958,
+          "end": 1789949759.4592547,
+          "services": {
+            "p0": {
+              "num_requests_running": {
+                "mean": 1.0,
+                "max": 1.0,
+                "samples": 26
+              },
+              "num_requests_waiting": {
+                "mean": 50.30769230769231,
+                "max": 51.0,
+                "samples": 26
+              }
+            },
+            "d0": {
+              "num_requests_running": {
+                "mean": 5.346153846153846,
+                "max": 6.0,
+                "samples": 26
+              },
+              "num_requests_waiting": {
+                "mean": 0.038461538461538464,
+                "max": 1.0,
+                "samples": 26
+              }
+            },
+            "d1": {
+              "num_requests_running": {
+                "mean": 5.64,
+                "max": 6.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.04,
+                "max": 1.0,
+                "samples": 25
+              }
+            }
+          }
+        },
+        "warmup-01": {
+          "window": "middle50% of client request interval; diagnostic only, not replacement performance statistics",
+          "start": 1789948254.0886307,
+          "end": 1789948452.225256,
+          "services": {
+            "p0": {
+              "num_requests_running": {
+                "mean": 1.0,
+                "max": 1.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 46.68,
+                "max": 51.0,
+                "samples": 25
+              }
+            },
+            "d0": {
+              "num_requests_running": {
+                "mean": 8.28,
+                "max": 20.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.2,
+                "max": 5.0,
+                "samples": 25
+              }
+            },
+            "d1": {
+              "num_requests_running": {
+                "mean": 5.96,
+                "max": 13.0,
+                "samples": 25
+              },
+              "num_requests_waiting": {
+                "mean": 0.0,
+                "max": 0.0,
+                "samples": 25
+              }
+            }
+          }
+        }
+      },
+      "controller_resource_review": {
+        "warmup-01": {
+          "samples": 43,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.766318464437049,
+              "peak_sample_busy_percent": 7.455254490087626
+            },
+            "proxy": {
+              "mean_busy_percent": 1.3741752280905573,
+              "peak_sample_busy_percent": 2.5609149676777743
+            },
+            "client": {
+              "mean_busy_percent": 3.459947125700935,
+              "peak_sample_busy_percent": 26.007964161274266
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.145203254923576,
+              "peak_sample_busy_percent": 0.4237288135593209
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.1706980245259837,
+              "peak_sample_busy_percent": 0.4239401496259343
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p1d2-01-client-warmup-01": {
+              "mean_cpu_cores": 0.13359027632920184,
+              "peak_sample_cpu_cores": 1.037859067912838,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p1d2-01-proxy": {
+              "mean_cpu_cores": 0.04802319715454697,
+              "peak_sample_cpu_cores": 0.0726724842300907,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-01": {
+          "samples": 44,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.7856501470852315,
+              "peak_sample_busy_percent": 7.620075804647697
+            },
+            "proxy": {
+              "mean_busy_percent": 1.3565857810355908,
+              "peak_sample_busy_percent": 1.741293532338306
+            },
+            "client": {
+              "mean_busy_percent": 3.7688544049101047,
+              "peak_sample_busy_percent": 26.04477611940299
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.14527480668611314,
+              "peak_sample_busy_percent": 0.37369207772794955
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.13427169182331777,
+              "peak_sample_busy_percent": 0.3984063745019917
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p1d2-01-client-measurement-01": {
+              "mean_cpu_cores": 0.14801213134291316,
+              "peak_sample_cpu_cores": 1.0372870958305749,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p1d2-01-proxy": {
+              "mean_cpu_cores": 0.04957649942187457,
+              "peak_sample_cpu_cores": 0.05708993496815388,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-02": {
+          "samples": 43,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.829407727132287,
+              "peak_sample_busy_percent": 7.613838540007611
+            },
+            "proxy": {
+              "mean_busy_percent": 1.421337254808952,
+              "peak_sample_busy_percent": 1.7679282868525936
+            },
+            "client": {
+              "mean_busy_percent": 3.4786732667397846,
+              "peak_sample_busy_percent": 26.05774016923843
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.10250151086041992,
+              "peak_sample_busy_percent": 0.19930244145490716
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.13747414952683945,
+              "peak_sample_busy_percent": 0.49813200498132204
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p1d2-01-client-measurement-02": {
+              "mean_cpu_cores": 0.13393325235739265,
+              "peak_sample_cpu_cores": 1.0383110056687817,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p1d2-01-proxy": {
+              "mean_cpu_cores": 0.05088586856683275,
+              "peak_sample_cpu_cores": 0.057048069857746804,
+              "throttled_usec": 0
+            }
+          }
+        },
+        "measurement-03": {
+          "samples": 43,
+          "window": "protocol start/end including client initialization",
+          "groups": {
+            "whole": {
+              "mean_busy_percent": 6.810473125778705,
+              "peak_sample_busy_percent": 7.409393261220942
+            },
+            "proxy": {
+              "mean_busy_percent": 1.532569321341548,
+              "peak_sample_busy_percent": 6.480558325024921
+            },
+            "client": {
+              "mean_busy_percent": 3.6414084223132637,
+              "peak_sample_busy_percent": 26.04477611940299
+            },
+            "proxy_smt": {
+              "mean_busy_percent": 0.14101363921837917,
+              "peak_sample_busy_percent": 0.4234122042341193
+            },
+            "client_smt": {
+              "mean_busy_percent": 0.21689017416399725,
+              "peak_sample_busy_percent": 0.6965174129353269
+            }
+          },
+          "cgroups": {
+            "/pd-night-20260921-d16p1d2-01-client-measurement-03": {
+              "mean_cpu_cores": 0.14069711545598937,
+              "peak_sample_cpu_cores": 1.0380369210766376,
+              "throttled_usec": 0
+            },
+            "/pd-night-20260921-d16p1d2-01-proxy": {
+              "mean_cpu_cores": 0.05067168375489034,
+              "peak_sample_cpu_cores": 0.056898126062572295,
+              "throttled_usec": 0
             }
           }
         }
