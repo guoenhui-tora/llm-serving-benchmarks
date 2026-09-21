@@ -243,7 +243,7 @@ vLLM target可选`listen_address`（IP，默认127.0.0.1）和`devices`（显式
 
 实验入口`python3 -m serving_bench.pd_pair DEPLOYMENT --run-root NEW_DIRECTORY`读取显式的SSH host、角色、campaign和HTTP URL，保存resolved/command、模型和镜像身份、日志/遥测，在STOP文件或期限到达时只清理匹配run label的容器。它不发送测量请求，也不替代原benchmark协议。配套`pd_proxy`实现NIXL pull completions及普通副本路由；缺失传输元数据直接失败，无重试回退。代理运行依赖aiohttp，使用固定客户端镜像已有版本。当前属于有预算的实验工具，不是生产编排器。
 
-`pd_proxy --prefill P_URL_1 P_URL_2 --decode D_URL_1 D_URL_2`接受P/D URL列表，单URL调用仍兼容。每请求在两池分别按最少在途数选择，平局优先使用较少的P/D组合；P计数保留到合法KV元数据返回，D计数保留到整个输出流结束。错误或客户端取消时释放计数，P实际返回的source metadata原样送给所选D。上游POST使用独立新连接，避免复用已被对端关闭的空闲连接，不重试模型请求。`pd_route`、`prefill_done`、`done`、`pd_release`记录实际路径；这些日志仍须与真实NIXL字节、失败及D重算计数共同验收。多池HTTP行为已做CPU测试，当前真实多P链路验证为三节点2P1D，性能范围见[项目配比报告](../projects/dsv4-rtx6000d/reports/pd-ratios-c64-20260921.md)。
+`pd_proxy --prefill P_URL_1 P_URL_2 --decode D_URL_1 D_URL_2`接受P/D URL列表，单URL调用仍兼容。每请求在两池分别按最少在途数选择，平局优先使用较少的P/D组合；P计数保留到合法KV元数据返回，D计数保留到整个输出流结束。错误或客户端取消时释放计数，P实际返回的source metadata原样送给所选D。上游POST使用独立新连接，避免复用已被对端关闭的空闲连接，不重试模型请求。代理连接池不额外限制并发（`limit=0`），由压测客户端控制全系统在途请求量，避免aiohttp默认100连接截断C128等负载。`pd_route`、`prefill_done`、`done`、`pd_release`记录实际路径；这些日志仍须与真实NIXL字节、失败及D重算计数共同验收。多池HTTP行为已做CPU测试，当前真实多P链路验证为三节点2P1D，性能范围见[项目配比报告](../projects/dsv4-rtx6000d/reports/pd-ratios-c64-20260921.md)。
 
 ### 实验性PD代理的普通副本对照
 

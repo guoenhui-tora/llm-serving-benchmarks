@@ -3,7 +3,7 @@ import asyncio
 from contextlib import AsyncExitStack
 import unittest
 try:
-    from aiohttp import web
+    from aiohttp import web, TCPConnector
     from aiohttp.test_utils import TestClient, TestServer
 except ImportError:
     web = None
@@ -72,6 +72,57 @@ class ProxyHTTPTests(unittest.IsolatedAsyncioTestCase):
                     await response.read()
                 self.assertEqual(len(transports), 4)
                 self.assertEqual(len(set(transports)), 4)
+
+    async def test_more_than_100_requests_reach_upstreams(self):
+        # Hold all streams open: a hidden pool cap must not serialize C128.
+        count = 128
+        for mode in ('ordinary', 'pd'):
+            with self.subTest(mode=mode):
+                p_calls = []; d_calls = []
+                all_p = asyncio.Event(); all_d = asyncio.Event()
+                release_p = asyncio.Event(); release_d = asyncio.Event()
+                async def prefill(request):
+                    body = await request.json(); p_calls.append(body['prompt'])
+                    if len(p_calls) == count: all_p.set()
+                    await release_p.wait()
+                    return web.json_response({'kv_transfer_params': dict(
+                        do_remote_prefill=True, remote_engine_id='p',
+                        remote_request_id=body['prompt'], remote_host='host',
+                        remote_port=5600, remote_block_ids=[[1]])})
+                async def stream(request):
+                    body = await request.json(); d_calls.append(body['prompt'])
+                    if len(d_calls) == count: all_d.set()
+                    response = web.StreamResponse(headers={'Content-Type': 'text/event-stream'})
+                    await response.prepare(request); await response.write(b'data: first\n\n')
+                    await release_d.wait(); await response.write(b'data: [DONE]\n\n')
+                    await response.write_eof(); return response
+                pa = web.Application(); pa.router.add_post('/v1/completions', prefill)
+                da = web.Application(); da.router.add_post('/v1/completions', stream)
+                async with TestServer(pa) as ps, TestServer(da) as ds:
+                    pu = str(ps.make_url('')).rstrip('/')
+                    du = str(ds.make_url('')).rstrip('/')
+                    app = make_app(pu, du) if mode == 'pd' else make_app(None, None, [du])
+                    async with TestClient(TestServer(app), connector=TCPConnector(limit=0)) as client:
+                        async def request(index):
+                            response = await client.post('/v1/completions', json={
+                                'prompt': str(index), 'max_tokens': 1024, 'stream': True})
+                            self.assertEqual(response.status, 200)
+                            return await response.text()
+                        tasks = [asyncio.create_task(request(i)) for i in range(count)]
+                        try:
+                            if mode == 'pd':
+                                await asyncio.wait_for(all_p.wait(), 5)
+                                release_p.set()
+                            await asyncio.wait_for(all_d.wait(), 5)
+                            self.assertEqual(len(set(d_calls)), count)
+                        finally:
+                            release_p.set(); release_d.set()
+                            bodies = await asyncio.wait_for(asyncio.gather(*tasks), 10)
+                        self.assertTrue(all('[DONE]' in body for body in bodies))
+                        if mode == 'pd':
+                            self.assertEqual(len(set(p_calls)), count)
+                            self.assertFalse(any(app['pd_pool'].prefill.values()))
+                            self.assertFalse(any(app['pd_pool'].decode.values()))
 
     async def test_missing_metadata_never_reaches_decoder(self):
         calls=[]

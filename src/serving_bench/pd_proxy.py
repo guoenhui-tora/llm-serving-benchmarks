@@ -81,9 +81,10 @@ def make_app(prefill, decode, ordinary=(), timeout=180, ordinary_policy='round-r
     async def lifecycle(app):
         # Each upstream POST gets a fresh connection: an idle peer may close
         # a pooled socket while P and D have very different service times.
+        # Client concurrency controls load; avoid a second, hidden 100-connection cap.
         # Never retry a non-idempotent model request after a disconnect.
         app['client'] = ClientSession(timeout=ClientTimeout(total=timeout),
-                                      connector=TCPConnector(force_close=True), trust_env=False)
+                                      connector=TCPConnector(force_close=True, limit=0), trust_env=False)
         yield
         await app['client'].close()
     app.cleanup_ctx.append(lifecycle)
