@@ -65,6 +65,17 @@ D两档中段平均均约19条运行，单DP引擎最大12条，容量等待为0
 
 3P1D 的 output tok/s 只比普通高 6.64%，goodput 基本持平；2P2D 虽有更高完整窗口吞吐，TTFT 超过 10 秒，goodput 和联合 SLO 明显恶化。当前比例选择应同时看吞吐、goodput、TTFT 和 SLO，不能按 output tok/s 单指标宣布 2P2D 最优。两组 PD 均通过双向路由、远端 KV 命中和 D 零整段重算验收。首次 3P1D 启动的同节点 DP2 端口重叠已单独取证并修正，详见[夜间执行报告](reports/pd-night-20260922-execution.md)。
 
+### 16卡 C96 容量对照：3P1D、D=64 与 D=96
+
+为验证 C96 下 D 的运行容量是否限制吞吐，固定真实 GovReport 16,384／1,024、TP2×DP2 EP on、DSpark K5、3P1D 和16卡，只改变 D 每个 DP engine 的 `max-num-seqs`。两组均使用768条完整预热、三轮768条quick。
+
+| D 每个 DP engine `max-num-seqs` | D 服务合计容量 | 输出 tok/s | Mean TTFT／TPOT | Mean E2EL | goodput | 联合 SLO |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 32 | 约64 | **2441.70±3.82** | 13.812s／24.23ms | 38.604s | 0.202 req/s | 8.46% |
+| 48 | 约96 | 1567.52±23.21 | **5.284s／54.67ms** | 61.209s | **0.292 req/s** | 19.40% |
+
+D=64 组两个 DP engine 都达到 `running=32`，每个 engine 有2.76–4.38条平均 `capacity` waiting、峰值11–14；D=96 组 capacity waiting 降为0–0.06，running均值约37、峰值48。两组KV峰值仅17%／19%，每轮NIXL 1536次传输全部成功，D端输入KV命中12,582,912 tokens且computed-prefill为0。扩大D容量减少了序列上限等待，却使实际decode batch变大，TPOT超过50ms并令完整窗口吞吐下降；因此当前负载保留D=64，不把D=96的较低TTFT单独视为更优。完整证据见[16K C96容量报告](reports/pd-16k-c96-3p1d-capacity.md)。
+
 ## 跨节点PD研究
 
 **PD收益依赖负载、并发和延迟目标，尚无跨负载通用最优。** 本轮16K K5配对见上方，以下按各批固定条件保留TP4与8K证据。TP4 2P1D在C64／N256曾领先普通2.88%，C128／N512则落后6.24%；8K K5 1P1D曾领先5.43%。这些结果均是单次启动内重复，不宜外推到其他容量或直接扩规模。
