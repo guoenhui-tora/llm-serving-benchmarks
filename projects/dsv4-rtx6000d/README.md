@@ -69,12 +69,14 @@ D两档中段平均均约19条运行，单DP引擎最大12条，容量等待为0
 
 为验证 C96 下 D 的运行容量是否限制吞吐，固定真实 GovReport 16,384／1,024、TP2×DP2 EP on、DSpark K5、3P1D 和16卡，只改变 D 每个 DP engine 的 `max-num-seqs`。两组均使用768条完整预热、三轮768条quick。
 
-| D 每个 DP engine `max-num-seqs` | D 服务合计容量 | 输出 tok/s | Mean TTFT／TPOT | Mean E2EL | goodput | 联合 SLO |
-| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 32 | 约64 | **2441.70±3.82** | 13.812s／24.23ms | 38.604s | 0.202 req/s | 8.46% |
-| 48 | 约96 | 1567.52±23.21 | **5.284s／54.67ms** | 61.209s | **0.292 req/s** | 19.40% |
+| 客户端 C | D 每个 DP engine `max-num-seqs` | D 服务合计容量 | 输出 tok/s | Mean TTFT／TPOT | Mean E2EL | goodput | 联合 SLO |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 64 | 32 | 约64 | 2048.31±12.65 | 6.701s／22.32ms | 29.533s | 1.649 req/s | 82.42% |
+| 80 | 32 | 约64 | **2447.57±4.93** | **7.788s／24.06ms** | **32.400s** | **2.103 req/s** | **87.97%** |
+| 96 | 32 | 约64 | 2441.70±3.82 | 13.812s／24.23ms | 38.604s | 0.202 req/s | 8.46% |
+| 96 | 48 | 约96 | 1567.52±23.21 | 5.284s／54.67ms | 61.209s | 0.292 req/s | 19.40% |
 
-D=64 组两个 DP engine 都达到 `running=32`，每个 engine 有2.76–4.38条平均 `capacity` waiting、峰值11–14；D=96 组 capacity waiting 降为0–0.06，running均值约37、峰值48。两组KV峰值仅17%／19%，每轮NIXL 1536次传输全部成功，D端输入KV命中12,582,912 tokens且computed-prefill为0。扩大D容量减少了序列上限等待，却使实际decode batch变大，TPOT超过50ms并令完整窗口吞吐下降；因此当前负载保留D=64，不把D=96的较低TTFT单独视为更优。完整证据见[16K C96容量报告](reports/pd-16k-c96-3p1d-capacity.md)。
+D=64/C96 组两个 DP engine 都达到 `running=32`，每个 engine 有2.76–4.38条平均 `capacity` waiting、峰值11–14；C80 时降为约0.69–1.52条、峰值4–6。D=96 组 capacity waiting 降为0–0.06，running均值约37、峰值48。两组KV峰值仅17%／19%，每轮NIXL 1536次传输全部成功，D端输入KV命中12,582,912 tokens且computed-prefill为0。C80 在几乎不牺牲吞吐的情况下显著降低了 C96 的排队和 TTFT；按当前 TTFT≤10s、TPOT≤50ms 目标，C80 是目前最合适的并发候选。扩大D容量减少了序列上限等待，却使实际decode batch变大，TPOT超过50ms并令完整窗口吞吐下降；因此当前负载保留D=64。完整证据见[16K C96容量报告](reports/pd-16k-c96-3p1d-capacity.md)。
 
 ## 跨节点PD研究
 
