@@ -49,4 +49,3 @@ P 三个服务的 running 仍只有约 0.7–1.0（每 engine），但都有少�
 
 - [N22P12-01（D=64）](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P12-01/benchmark/c96/protocol.json)
 - [N22P13-01（D=96）](../../../experiments/dsv4-pd-dspark16k-c32c64/results/N22P13-01/benchmark/c96/protocol.json)
-- [本轮计划](pd-16k-c96-3p1d-plan.md)
