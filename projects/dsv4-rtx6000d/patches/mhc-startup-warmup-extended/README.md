@@ -2,13 +2,13 @@
 
 这些是夜间实测实际使用的独立worker快照，保留原[TP4/8192模块](../mhc-startup-warmup/README.md)。只覆盖启动阶段mHC调用，不替换forward、权重或精度；仍需要完整HTTP预热及逐轮事件检查。
 
-| 目录 | 已实测范围 | 结果边界 |
+| 目录 | 初期实测范围 | 当时的结果边界 |
 | --- | --- | --- |
 | tp4-off | TP4/DP1/PP1、DSpark off；8K/16K真实输入，P预算≤16384；C32及8K/16K C64 | B1/B2/B3A/B4三轮0事件；C64共12组，其中11组三轮0事件，16K六副本普通正式4/4/0条top-k事件 |
 | dp-off | TP2×DP2 EP on、PP1、DSpark off；8K、C32 | C1 PD三轮0事件；C2普通0事件但CV5.73% |
 | dspark | TP2×DP2 EP on、PP1、K5对称P/D或普通；8K、C32 | C3H/C4完成quick，正式仍有草稿输入准备Triton事件；不是无JIT基线 |
 
-代码允许的其他参数（例如TP4 K3、16K DSpark、DP off的16K预算）不等于已经GPU实测。DSpark两个模式每次八个worker均完成target/draft覆盖，三层draft SWA cache均完成PD注册检查；真实KV和各DP引擎draft/accepted在客户端协议中另验收。该检查不是完整模型质量证明。
+后续组合输入内核覆盖后，已完成16K、TP2×DP2 EP on K5、每DP引擎S96（服务容量192）的启动和HTTP验证：target上限576、anchor草稿480，七档21轮正式0已知JIT。详见[16K D192扫描](../../reports/decode-16k-d192-20260923.md)。表外拓扑、K值或更大容量仍须分别GPU验收，不能只凭代码接受参数认定支持。早期DSpark 1P1D与普通双服务各有八个worker，均完成target/draft覆盖；其中PD路径的三层draft SWA cache完成注册检查。真实KV和各DP引擎draft/accepted在客户端协议中另验收。该检查不是完整模型质量证明。
 
 将选定子目录中的`dsv4_mhc_worker.py`、`warmup_plan.py`和`pinned-source.json`完整复制到该服务独立缓存的`dsv4-mhc-warmup/`，设置`PYTHONPATH=/root/.cache/dsv4-mhc-warmup`、`--worker-cls dsv4_mhc_worker.Worker`。DSpark还必须按[原兼容补丁](../../reports/dspark-compatibility.md)加载native MXFP4分派及DP profiling回移，PYTHONPATH同时包含两模块目录。固定镜像image ID仍为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；worker核对固定物理源码SHA，任何不匹配直接失败。
 

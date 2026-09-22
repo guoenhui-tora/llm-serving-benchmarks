@@ -6,11 +6,13 @@
 - DSpark从实际speculator读取K、anchor模式、token ID和三组draft表参数，调用原`prepare_dflash_inputs`，覆盖每个BLOCK_SIZE区间的首尾跨度，包括64/128。检查拒绝后上下文、空块/SWA slot、query及sample位置、context上限及padding。
 - 两遍相同覆盖要求Triton进程内cache key集合不变、临时allocated显存归零，再执行原mHC预热、Graph捕获和RNG重置。源码SHA不匹配或实际模式超出范围直接停止。
 
+2026-09-23新增每DP引擎S96、budget16384、K5的GPU输入测试，并完成四卡D192完整启动与七档21轮正式测量，均0已知正式JIT，见[大容量验收](../../reports/decode-16k-d192-20260923.md)。扩大序列容量还必须另核对Graph覆盖；输入内核覆盖通过不代表Graph尺寸足够。
+
 小型GPU测试通过独立整数参考检查输出，并用额外区间内部跨度回放确认无新key；不替代模型质量验证或完整HTTP验收。范围为PP1、上下文16384/32768，现有TP4/off或TP2DP2 EP on K5；helper另做K3合成检查，不能据此称K3完整服务已实测。不支持CP扩展。
 
 接入时保留[原mHC扩展模块](../mhc-startup-warmup-extended/README.md)，将本目录Python/JSON文件放入该服务缓存的`dsv4-input-warmup/`，在原PYTHONPATH前添加`/root/.cache/dsv4-input-warmup`，改`--worker-cls dsv4_input_worker.Worker`。原DSpark量化/DP profiling补丁仍必须保留。每worker必须有`DSV4_INPUT_KERNEL_WARMUP ... COMPLETE`记录。
 
-保留原缓存；新recipe复制原缓存并核对完整哈希，再放入模块。之后一轮完整HTTP预热+固定三轮quick，记录全部事件与真实KV传输，不追加轮次或挑最后一轮。报告分别标记GPU内核测试、完整服务验证及未验证范围。
+保留原缓存；新recipe复制原缓存并核对完整哈希，再放入模块。之后按该次协议执行完整输入/输出长度的HTTP预热，再固定三轮quick，记录全部事件与真实KV传输，不追加轮次或挑最后一轮。本轮为2C条完整生成预热、每轮正式4C条；历史报告中的完整N预热另按原协议解释。报告分别标记GPU内核测试、完整服务验证及未验证范围。
 
 ## 内核测试复测入口
 

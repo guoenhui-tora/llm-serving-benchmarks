@@ -55,7 +55,7 @@ TP2×DP2 EP on在同八卡C32有如下独立对照，不能与TP4直接混算：
 
 - **启动覆盖加完整HTTP预热有效，但不能把无事件等同于已预热或已稳定。** TP2DP2 off预热仅733.26 tok/s且0事件，正式才927.50；8K TP4 1P2D预热1184.29且0事件，正式1243.88。普通四副本预热有64条top-k事件，正式三轮全部0。
 - **C64的12组中11组、33轮正式0事件；24卡普通另有4/4/0条top-k事件。** 后者完整HTTP预热已有88条事件，正式残留位于47/48前四卡各进程；截断日志不能证明实际CPU重编译。它与mHC遗漏是不同覆盖缺口，未追加轮次或只选末轮。
-- DSpark残留事件来自`_prepare_dflash_inputs_kernel`的64/128跨度分派，已定位后续覆盖入口，尚未修复。mHC覆盖通过不代表其他内核均穷尽。见[README醒目说明](../README.md#性能测试先看已验证的-jit-处理方案)与[扩展worker快照](../patches/mhc-startup-warmup-extended/README.md)。
+- DSpark残留事件来自`_prepare_dflash_inputs_kernel`的64/128跨度分派，已定位后续覆盖入口，尚未修复。mHC覆盖通过不代表其他内核均穷尽。见[README醒目说明](../README.md#性能测试先看jit预热与graph覆盖)与[扩展worker快照](../patches/mhc-startup-warmup-extended/README.md)。
 - **1024条16K真实报告前缀已准备好且唯一，每条精确16384输入tokens。** 1024是储备池，C32当前用前128、C64用前256；另一套完整近16K报告有815条，不与前缀池混称。见[数据证据](../data/govreport-16k-1024-preparation.json)。
 - A2原同节点UCX路径有“HTTP成功且remote hit为正，但零传输字节、rank传输失败”的反例。修正后A2T通过，但有NIC活动，不能称零通信开销或纯CUDA IPC。
 - C3首次DSpark完整预热因2次HTTP断开失败（126/128成功），[一次新连接修正](pd-dspark-http-failure-20260921.md)后C3H/C4完整通过；没有POST重试，部分预热不进入性能表。

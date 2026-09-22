@@ -1,6 +1,6 @@
 # D96 decode扫描：Graph覆盖遗漏与单轮修正验证
 
-**8K共享前缀下，D96/C80扩展Graph后，Mean TPOT从35.86降到10.06ms，完整批次吞吐从约1984升到6181 output tok/s。** 固定镜像源码和实际配置表明，旧192-token上限未覆盖K5大batch的目标验证与草稿形状。结果强烈支持Graph覆盖遗漏是本次拐点的主要原因，不能据此认定GPU存在64请求的固有性能上限。修正后只测了C80一轮；真实16K PD的恢复幅度尚未验证。
+**8K共享前缀下，D96/C80扩展Graph后，Mean TPOT从35.86降到10.06ms，完整批次吞吐从约1984升到6181 output tok/s。** 固定镜像源码和实际配置表明，旧192-token上限未覆盖K5大batch的目标验证与草稿形状。结果强烈支持Graph覆盖遗漏是本次拐点的主要原因，不能据此认定GPU存在64请求的固有性能上限。本报告修正后只测了C80一轮；后续已完成[真实16K同协议Graph对照](pd-16k-graph-capacity-20260923.md)，支持同一问题影响历史PD结果。
 
 ## 结果与适用范围
 
@@ -66,4 +66,4 @@
 - [Graph288单轮报告](../../../experiments/dsv4-decode-graph288-c80/report.md)、[正式逐请求结果](../../../experiments/dsv4-decode-graph288-c80/results/measurement/summary.json)、[完整服务日志](../../../experiments/dsv4-decode-graph288-c80/server.log)。
 - 原共享前缀池、客户端及日志配置也只在工作区，命令快照不能脱离这些依赖直接复现。
 
-两次实验容器均已清理，JIT缓存保留。修正后的本地C64/C96及真实16K PD未测；下一步优先验证补齐Graph的16K 3P1D、D96/C96，再评估D容量与配比。
+两次实验容器均已清理，JIT缓存保留。本报告未测修正后的8K C64/C96；后续转向16K，已完成[固定D192七档扫描](decode-16k-d192-20260923.md)及[3P1D同协议Graph、容量与普通对照](pd-16k-graph-capacity-20260923.md)。旧样本保留原协议，不与新批次混算。

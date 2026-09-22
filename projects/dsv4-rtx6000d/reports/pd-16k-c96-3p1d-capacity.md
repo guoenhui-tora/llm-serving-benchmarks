@@ -2,7 +2,7 @@
 
 ## 结论
 
-> 2026-09-23修正：本报告D96使用的Graph上限仍为192，未覆盖每引擎48条K5请求的288-token目标验证与240-token草稿形状。本地8K/C80补齐Graph后TPOT由35.86降至10.06ms，见[Graph核查与验证](decode-graph-coverage-20260923.md)。以下历史数字保留，但容量建议仅适用于当时Graph配置，不能认定D96有固有性能劣势；修正后的16K PD尚未复测。
+> 2026-09-23修正：本报告D96使用的Graph上限仍为192，未覆盖每引擎48条K5请求的288-token目标验证与240-token草稿形状。本地8K/C80补齐Graph后TPOT由35.86降至10.06ms，见[Graph核查与验证](decode-graph-coverage-20260923.md)。以下历史数字保留，但容量建议仅适用于当时Graph配置，不能认定D96有固有性能劣势；修正后的16K PD现已完成[同协议Graph及容量复测](pd-16k-graph-capacity-20260923.md)，本报告仍保留原测量协议和数据。
 
 在真实 GovReport 16,384 输入／1,024 输出、TP2×DP2、EP on、DSpark K5、16 卡 3P1D、客户端 C96 下，D 每个 DP engine 的 `max-num-seqs=32`（服务合计约 64）是一个真实容量限制：两个 D engine 都达到 running=32，并出现 `capacity` waiting。
 

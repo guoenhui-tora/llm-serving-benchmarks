@@ -1,0 +1,3906 @@
+{
+  "preparation_commit": "c210a41c4b75176c7871d86637957be3caaead11",
+  "frozen_files": 700,
+  "changed": [],
+  "preparation_protocol": {
+    "commit": "c210a41c4b75176c7871d86637957be3caaead11",
+    "decode": {
+      "capacity": 192,
+      "per_dp_seqs": 96,
+      "graph": 576,
+      "concurrency": [
+        32,
+        64,
+        80,
+        96,
+        128,
+        144,
+        192
+      ],
+      "input": 16384,
+      "output": 1024,
+      "shared_prefix": true,
+      "reset_prime_each_round": true
+    },
+    "pd": {
+      "services": "3P1D",
+      "gpus_per_service": 4,
+      "total_gpus": 16,
+      "cases": [
+        96,
+        128,
+        144
+      ],
+      "p_seqs_per_dp": 32,
+      "budget": 16384,
+      "independent_govreport": true
+    },
+    "protocol": {
+      "warmup_requests": "2C",
+      "formal_rounds": 3,
+      "formal_requests": "4C",
+      "continuous_refill": true,
+      "retries": 0
+    },
+    "checkpoint": "2026-09-23T09:30:00+08:00",
+    "continue_main_after_checkpoint": true
+  },
+  "kernel_test_summary": [
+    "Ran 3 tests in 0.176s",
+    "OK",
+    "Ran 2 tests in 28.858s",
+    "OK"
+  ],
+  "graph_control_config_differences": [
+    {
+      "role": "p0",
+      "option_changes": {}
+    },
+    {
+      "role": "p1",
+      "option_changes": {}
+    },
+    {
+      "role": "p2",
+      "option_changes": {}
+    },
+    {
+      "role": "d0",
+      "option_changes": {
+        "compilation-config": [
+          {
+            "cudagraph_mode": "FULL_DECODE_ONLY",
+            "cudagraph_capture_sizes": [
+              5,
+              6,
+              10,
+              12,
+              20,
+              24,
+              40,
+              48,
+              60,
+              72,
+              80,
+              96,
+              120,
+              144,
+              160,
+              192,
+              200,
+              240,
+              288
+            ],
+            "max_cudagraph_capture_size": 288
+          },
+          {
+            "cudagraph_mode": "FULL_DECODE_ONLY",
+            "cudagraph_capture_sizes": [
+              5,
+              6,
+              10,
+              12,
+              20,
+              24,
+              40,
+              48,
+              60,
+              72,
+              80,
+              96,
+              120,
+              144,
+              160,
+              192
+            ],
+            "max_cudagraph_capture_size": 192
+          }
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "group": "pd",
+      "case": "P128",
+      "status": "COMPLETE",
+      "started": 1790103617.6303864,
+      "ended": 1790104664.0849953,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P128-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P128-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P128-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P128-01/d0"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 170.0,
+              "computed_input": 2785280.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 98.12044700000008,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 777890.0,
+              "accepted_tokens": 369607.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 170.0,
+              "computed_input": 2785280.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 81.76379599999996,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 781830.0,
+              "accepted_tokens": 368691.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 170.0,
+              "computed_input": 2785280.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 171.0,
+              "computed_input": 2801664.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 95.46261199999987,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 772535.0,
+              "accepted_tokens": 370692.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 256,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4194304,
+          "output_tokens": 262144,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 85.0,
+              "computed_input": 1392640.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 86.0,
+              "computed_input": 1409024.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 85.0,
+              "computed_input": 1392640.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 256.0,
+              "computed_input": 0.0,
+              "remote_hits": 4194304.0,
+              "nixl_bytes": 44130631680.0,
+              "nixl_transfers": 512.0,
+              "nixl_xfer_time_seconds_sum": 54.727940999999994,
+              "nixl_xfer_time_seconds_count": 512.0,
+              "draft_tokens": 388580.0,
+              "accepted_tokens": 184857.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "pd",
+      "case": "P144",
+      "status": "COMPLETE",
+      "started": 1790104711.9429145,
+      "ended": 1790105829.5321214,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P144-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P144-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P144-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P144-01/d0"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 191.0,
+              "computed_input": 3129344.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 192.0,
+              "computed_input": 3145728.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 193.0,
+              "computed_input": 3162112.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 92.60958300000001,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 878425.0,
+              "accepted_tokens": 415117.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 191.0,
+              "computed_input": 3129344.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 192.0,
+              "computed_input": 3145728.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 193.0,
+              "computed_input": 3162112.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 118.84594699999991,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 874505.0,
+              "accepted_tokens": 415851.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 192.0,
+              "computed_input": 3145728.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 192.0,
+              "computed_input": 3145728.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 192.0,
+              "computed_input": 3145728.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 120.12750700000026,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 875825.0,
+              "accepted_tokens": 415598.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 288,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4718592,
+          "output_tokens": 294912,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 97.0,
+              "computed_input": 1589248.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 95.0,
+              "computed_input": 1556480.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 288.0,
+              "computed_input": 0.0,
+              "remote_hits": 4718592.0,
+              "nixl_bytes": 49646960640.0,
+              "nixl_transfers": 576.0,
+              "nixl_xfer_time_seconds_sum": 70.76693399999999,
+              "nixl_xfer_time_seconds_count": 576.0,
+              "draft_tokens": 438715.0,
+              "accepted_tokens": 207609.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "pd",
+      "case": "P96",
+      "status": "COMPLETE",
+      "started": 1790102660.4526443,
+      "ended": 1790103601.1105466,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P96-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P96-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P96-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/pd/results/P96-01/d0"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 130.0,
+              "computed_input": 2129920.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 81.33834299999998,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 586245.0,
+              "accepted_tokens": 276590.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 126.0,
+              "computed_input": 2064384.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 130.0,
+              "computed_input": 2129920.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 76.10601800000006,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 588480.0,
+              "accepted_tokens": 276216.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 70.05200700000017,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 583955.0,
+              "accepted_tokens": 277034.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 192,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 3145728,
+          "output_tokens": 196608,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 192.0,
+              "computed_input": 0.0,
+              "remote_hits": 3145728.0,
+              "nixl_bytes": 33097973760.0,
+              "nixl_transfers": 384.0,
+              "nixl_xfer_time_seconds_sum": 46.669513,
+              "nixl_xfer_time_seconds_count": 384.0,
+              "draft_tokens": 292225.0,
+              "accepted_tokens": 138468.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ordinary",
+      "case": "O128",
+      "status": "COMPLETE",
+      "started": 1790106955.4479885,
+      "ended": 1790108135.562864,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "r0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O128-01/r0"
+        },
+        {
+          "role": "r1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O128-01/r1"
+        },
+        {
+          "role": "r2",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O128-01/r2"
+        },
+        {
+          "role": "r3",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O128-01/r3"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 126.0,
+              "computed_input": 2064384.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 194830.0,
+              "accepted_tokens": 90124.0
+            },
+            {
+              "role": "r1",
+              "success": 130.0,
+              "computed_input": 2129920.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 196295.0,
+              "accepted_tokens": 93950.0
+            },
+            {
+              "role": "r2",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 191310.0,
+              "accepted_tokens": 92891.0
+            },
+            {
+              "role": "r3",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 192185.0,
+              "accepted_tokens": 92708.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 198115.0,
+              "accepted_tokens": 91484.0
+            },
+            {
+              "role": "r1",
+              "success": 130.0,
+              "computed_input": 2129920.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 194045.0,
+              "accepted_tokens": 94413.0
+            },
+            {
+              "role": "r2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 193395.0,
+              "accepted_tokens": 91443.0
+            },
+            {
+              "role": "r3",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 191510.0,
+              "accepted_tokens": 91838.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 196635.0,
+              "accepted_tokens": 92850.0
+            },
+            {
+              "role": "r1",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 192385.0,
+              "accepted_tokens": 92679.0
+            },
+            {
+              "role": "r2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 190295.0,
+              "accepted_tokens": 92072.0
+            },
+            {
+              "role": "r3",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 195460.0,
+              "accepted_tokens": 92043.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 256,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4194304,
+          "output_tokens": 262144,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 97770.0,
+              "accepted_tokens": 46022.0
+            },
+            {
+              "role": "r1",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 97200.0,
+              "accepted_tokens": 46135.0
+            },
+            {
+              "role": "r2",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 96930.0,
+              "accepted_tokens": 46172.0
+            },
+            {
+              "role": "r3",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 97765.0,
+              "accepted_tokens": 46046.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ordinary",
+      "case": "O144",
+      "status": "COMPLETE",
+      "started": 1790108167.9970348,
+      "ended": 1790109452.2257347,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "r0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O144-01/r0"
+        },
+        {
+          "role": "r1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O144-01/r1"
+        },
+        {
+          "role": "r2",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O144-01/r2"
+        },
+        {
+          "role": "r3",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O144-01/r3"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 217530.0,
+              "accepted_tokens": 104013.0
+            },
+            {
+              "role": "r1",
+              "success": 145.0,
+              "computed_input": 2375680.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 217115.0,
+              "accepted_tokens": 105123.0
+            },
+            {
+              "role": "r2",
+              "success": 143.0,
+              "computed_input": 2342912.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 218315.0,
+              "accepted_tokens": 102869.0
+            },
+            {
+              "role": "r3",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 218775.0,
+              "accepted_tokens": 103795.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 220590.0,
+              "accepted_tokens": 103411.0
+            },
+            {
+              "role": "r1",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 218290.0,
+              "accepted_tokens": 103853.0
+            },
+            {
+              "role": "r2",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 216970.0,
+              "accepted_tokens": 104142.0
+            },
+            {
+              "role": "r3",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 216550.0,
+              "accepted_tokens": 104222.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 216320.0,
+              "accepted_tokens": 104296.0
+            },
+            {
+              "role": "r1",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 219950.0,
+              "accepted_tokens": 103551.0
+            },
+            {
+              "role": "r2",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 215855.0,
+              "accepted_tokens": 104364.0
+            },
+            {
+              "role": "r3",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 219310.0,
+              "accepted_tokens": 103686.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 288,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4718592,
+          "output_tokens": 294912,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 110780.0,
+              "accepted_tokens": 51627.0
+            },
+            {
+              "role": "r1",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 108650.0,
+              "accepted_tokens": 52020.0
+            },
+            {
+              "role": "r2",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 111750.0,
+              "accepted_tokens": 51396.0
+            },
+            {
+              "role": "r3",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 110090.0,
+              "accepted_tokens": 51761.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ordinary",
+      "case": "O96",
+      "status": "COMPLETE",
+      "started": 1790105879.5015461,
+      "ended": 1790106904.472178,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "r0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O96-01/r0"
+        },
+        {
+          "role": "r1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O96-01/r1"
+        },
+        {
+          "role": "r2",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O96-01/r2"
+        },
+        {
+          "role": "r3",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ordinary/results/O96-01/r3"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 143895.0,
+              "accepted_tokens": 69592.0
+            },
+            {
+              "role": "r1",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 145850.0,
+              "accepted_tokens": 69212.0
+            },
+            {
+              "role": "r2",
+              "success": 95.0,
+              "computed_input": 1556480.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 143160.0,
+              "accepted_tokens": 68711.0
+            },
+            {
+              "role": "r3",
+              "success": 97.0,
+              "computed_input": 1589248.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 150340.0,
+              "accepted_tokens": 69340.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 97.0,
+              "computed_input": 1589248.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 146575.0,
+              "accepted_tokens": 70077.0
+            },
+            {
+              "role": "r1",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 146035.0,
+              "accepted_tokens": 69147.0
+            },
+            {
+              "role": "r2",
+              "success": 95.0,
+              "computed_input": 1556480.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 144995.0,
+              "accepted_tokens": 68337.0
+            },
+            {
+              "role": "r3",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 144300.0,
+              "accepted_tokens": 69514.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 144115.0,
+              "accepted_tokens": 69516.0
+            },
+            {
+              "role": "r1",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 145140.0,
+              "accepted_tokens": 69334.0
+            },
+            {
+              "role": "r2",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 147430.0,
+              "accepted_tokens": 68873.0
+            },
+            {
+              "role": "r3",
+              "success": 96.0,
+              "computed_input": 1572864.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 144445.0,
+              "accepted_tokens": 69493.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 192,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 3145728,
+          "output_tokens": 196608,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 48.0,
+              "computed_input": 786432.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 72880.0,
+              "accepted_tokens": 34613.0
+            },
+            {
+              "role": "r1",
+              "success": 48.0,
+              "computed_input": 786432.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 71575.0,
+              "accepted_tokens": 34862.0
+            },
+            {
+              "role": "r2",
+              "success": 48.0,
+              "computed_input": 786432.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 72830.0,
+              "accepted_tokens": 34614.0
+            },
+            {
+              "role": "r3",
+              "success": 48.0,
+              "computed_input": 786432.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 72925.0,
+              "accepted_tokens": 34589.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "graph-control",
+      "case": "G96",
+      "status": "COMPLETE",
+      "started": 1790109472.261885,
+      "ended": 1790110817.867613,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/graph-control/results/G96-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/graph-control/results/G96-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/graph-control/results/G96-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/graph-control/results/G96-01/d0"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 149.481364,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 588065.0,
+              "accepted_tokens": 276255.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 143.93541500000003,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 588610.0,
+              "accepted_tokens": 276077.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 384,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 6291456,
+          "output_tokens": 393216,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 384.0,
+              "computed_input": 0.0,
+              "remote_hits": 6291456.0,
+              "nixl_bytes": 66195947520.0,
+              "nixl_transfers": 768.0,
+              "nixl_xfer_time_seconds_sum": 133.09086900000005,
+              "nixl_xfer_time_seconds_count": 768.0,
+              "draft_tokens": 587700.0,
+              "accepted_tokens": 276281.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 192,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 3145728,
+          "output_tokens": 196608,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 192.0,
+              "computed_input": 0.0,
+              "remote_hits": 3145728.0,
+              "nixl_bytes": 33097973760.0,
+              "nixl_transfers": 384.0,
+              "nixl_xfer_time_seconds_sum": 72.03798599999999,
+              "nixl_xfer_time_seconds_count": 384.0,
+              "draft_tokens": 291255.0,
+              "accepted_tokens": 138696.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ratio20",
+      "case": "O5C144",
+      "status": "COMPLETE",
+      "started": 1790111956.884156,
+      "ended": 1790113118.3109758,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "r0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/O5C144-01/r0"
+        },
+        {
+          "role": "r1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/O5C144-01/r1"
+        },
+        {
+          "role": "r2",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/O5C144-01/r2"
+        },
+        {
+          "role": "r3",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/O5C144-01/r3"
+        },
+        {
+          "role": "r4",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/O5C144-01/r4"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 115.0,
+              "computed_input": 1884160.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 174965.0,
+              "accepted_tokens": 82830.0
+            },
+            {
+              "role": "r1",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 177020.0,
+              "accepted_tokens": 83431.0
+            },
+            {
+              "role": "r2",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 176395.0,
+              "accepted_tokens": 83565.0
+            },
+            {
+              "role": "r3",
+              "success": 115.0,
+              "computed_input": 1884160.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 174330.0,
+              "accepted_tokens": 82965.0
+            },
+            {
+              "role": "r4",
+              "success": 114.0,
+              "computed_input": 1867776.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 172845.0,
+              "accepted_tokens": 82246.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 115.0,
+              "computed_input": 1884160.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175560.0,
+              "accepted_tokens": 82727.0
+            },
+            {
+              "role": "r1",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175510.0,
+              "accepted_tokens": 83757.0
+            },
+            {
+              "role": "r2",
+              "success": 115.0,
+              "computed_input": 1884160.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175705.0,
+              "accepted_tokens": 82694.0
+            },
+            {
+              "role": "r3",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175795.0,
+              "accepted_tokens": 83685.0
+            },
+            {
+              "role": "r4",
+              "success": 114.0,
+              "computed_input": 1867776.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 173540.0,
+              "accepted_tokens": 82098.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175950.0,
+              "accepted_tokens": 83686.0
+            },
+            {
+              "role": "r1",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175785.0,
+              "accepted_tokens": 83690.0
+            },
+            {
+              "role": "r2",
+              "success": 116.0,
+              "computed_input": 1900544.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 174425.0,
+              "accepted_tokens": 83982.0
+            },
+            {
+              "role": "r3",
+              "success": 115.0,
+              "computed_input": 1884160.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 175735.0,
+              "accepted_tokens": 82661.0
+            },
+            {
+              "role": "r4",
+              "success": 113.0,
+              "computed_input": 1851392.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 172020.0,
+              "accepted_tokens": 81346.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 288,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4718592,
+          "output_tokens": 294912,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 58.0,
+              "computed_input": 950272.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 86220.0,
+              "accepted_tokens": 42174.0
+            },
+            {
+              "role": "r1",
+              "success": 58.0,
+              "computed_input": 950272.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 90150.0,
+              "accepted_tokens": 41402.0
+            },
+            {
+              "role": "r2",
+              "success": 58.0,
+              "computed_input": 950272.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 85670.0,
+              "accepted_tokens": 42299.0
+            },
+            {
+              "role": "r3",
+              "success": 58.0,
+              "computed_input": 950272.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 89625.0,
+              "accepted_tokens": 41516.0
+            },
+            {
+              "role": "r4",
+              "success": 56.0,
+              "computed_input": 917504.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 84445.0,
+              "accepted_tokens": 40477.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ratio20",
+      "case": "P4C144",
+      "status": "COMPLETE",
+      "started": 1790110848.3006687,
+      "ended": 1790111936.2893536,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/P4C144-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/P4C144-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/P4C144-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/P4C144-01/d0"
+        },
+        {
+          "role": "p3",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20/results/P4C144-01/p3"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 140.0,
+              "computed_input": 2293760.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 109.77567900000011,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 877325.0,
+              "accepted_tokens": 415237.0
+            },
+            {
+              "role": "p3",
+              "success": 148.0,
+              "computed_input": 2424832.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 149.0,
+              "computed_input": 2441216.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 142.0,
+              "computed_input": 2326528.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 139.80354299999988,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 872345.0,
+              "accepted_tokens": 416292.0
+            },
+            {
+              "role": "p3",
+              "success": 141.0,
+              "computed_input": 2310144.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 576,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 9437184,
+          "output_tokens": 589824,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 142.0,
+              "computed_input": 2326528.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 146.0,
+              "computed_input": 2392064.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 576.0,
+              "computed_input": 0.0,
+              "remote_hits": 9437184.0,
+              "nixl_bytes": 99293921280.0,
+              "nixl_transfers": 1152.0,
+              "nixl_xfer_time_seconds_sum": 121.69002100000017,
+              "nixl_xfer_time_seconds_count": 1152.0,
+              "draft_tokens": 877275.0,
+              "accepted_tokens": 415288.0
+            },
+            {
+              "role": "p3",
+              "success": 144.0,
+              "computed_input": 2359296.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 288,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4718592,
+          "output_tokens": 294912,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 74.0,
+              "computed_input": 1212416.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 72.0,
+              "computed_input": 1179648.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 288.0,
+              "computed_input": 0.0,
+              "remote_hits": 4718592.0,
+              "nixl_bytes": 49646960640.0,
+              "nixl_transfers": 576.0,
+              "nixl_xfer_time_seconds_sum": 57.95933599999998,
+              "nixl_xfer_time_seconds_count": 576.0,
+              "draft_tokens": 438740.0,
+              "accepted_tokens": 207627.0
+            },
+            {
+              "role": "p3",
+              "success": 70.0,
+              "computed_input": 1146880.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ratio20-c128",
+      "case": "O5C128",
+      "status": "COMPLETE",
+      "started": 1790114219.2239523,
+      "ended": 1790115311.5085886,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "r0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/O5C128-01/r0"
+        },
+        {
+          "role": "r1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/O5C128-01/r1"
+        },
+        {
+          "role": "r2",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/O5C128-01/r2"
+        },
+        {
+          "role": "r3",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/O5C128-01/r3"
+        },
+        {
+          "role": "r4",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/O5C128-01/r4"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 158850.0,
+              "accepted_tokens": 74784.0
+            },
+            {
+              "role": "r1",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 157840.0,
+              "accepted_tokens": 74970.0
+            },
+            {
+              "role": "r2",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 157955.0,
+              "accepted_tokens": 74965.0
+            },
+            {
+              "role": "r3",
+              "success": 100.0,
+              "computed_input": 1638400.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 153340.0,
+              "accepted_tokens": 71761.0
+            },
+            {
+              "role": "r4",
+              "success": 100.0,
+              "computed_input": 1638400.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 153155.0,
+              "accepted_tokens": 71786.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 103.0,
+              "computed_input": 1687552.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 153235.0,
+              "accepted_tokens": 74908.0
+            },
+            {
+              "role": "r1",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 158595.0,
+              "accepted_tokens": 74837.0
+            },
+            {
+              "role": "r2",
+              "success": 103.0,
+              "computed_input": 1687552.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 156945.0,
+              "accepted_tokens": 74165.0
+            },
+            {
+              "role": "r3",
+              "success": 102.0,
+              "computed_input": 1671168.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 153525.0,
+              "accepted_tokens": 73806.0
+            },
+            {
+              "role": "r4",
+              "success": 100.0,
+              "computed_input": 1638400.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 154295.0,
+              "accepted_tokens": 71584.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 103.0,
+              "computed_input": 1687552.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 156515.0,
+              "accepted_tokens": 74251.0
+            },
+            {
+              "role": "r1",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 156085.0,
+              "accepted_tokens": 75341.0
+            },
+            {
+              "role": "r2",
+              "success": 104.0,
+              "computed_input": 1703936.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 157540.0,
+              "accepted_tokens": 75056.0
+            },
+            {
+              "role": "r3",
+              "success": 100.0,
+              "computed_input": 1638400.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 153730.0,
+              "accepted_tokens": 71726.0
+            },
+            {
+              "role": "r4",
+              "success": 101.0,
+              "computed_input": 1654784.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 152845.0,
+              "accepted_tokens": 72923.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 256,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4194304,
+          "output_tokens": 262144,
+          "counters": [
+            {
+              "role": "r0",
+              "success": 52.0,
+              "computed_input": 851968.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 79490.0,
+              "accepted_tokens": 37397.0
+            },
+            {
+              "role": "r1",
+              "success": 52.0,
+              "computed_input": 851968.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 79760.0,
+              "accepted_tokens": 37324.0
+            },
+            {
+              "role": "r2",
+              "success": 52.0,
+              "computed_input": 851968.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 78560.0,
+              "accepted_tokens": 37569.0
+            },
+            {
+              "role": "r3",
+              "success": 50.0,
+              "computed_input": 819200.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 75805.0,
+              "accepted_tokens": 36077.0
+            },
+            {
+              "role": "r4",
+              "success": 50.0,
+              "computed_input": 819200.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0,
+              "nixl_transfers": 0,
+              "nixl_xfer_time_seconds_sum": 0,
+              "nixl_xfer_time_seconds_count": 0,
+              "draft_tokens": 77220.0,
+              "accepted_tokens": 35768.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "ratio20-c128",
+      "case": "P4C128",
+      "status": "COMPLETE",
+      "started": 1790113160.286485,
+      "ended": 1790114197.5592613,
+      "changed_files": [],
+      "changed_scripts": [],
+      "cleanup_errors": [],
+      "workers": [
+        {
+          "role": "p0",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/P4C128-01/p0"
+        },
+        {
+          "role": "p1",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/P4C128-01/p1"
+        },
+        {
+          "role": "p2",
+          "host": "gpu-6000d-46",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/P4C128-01/p2"
+        },
+        {
+          "role": "d0",
+          "host": "gpu-6000d-48",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/P4C128-01/d0"
+        },
+        {
+          "role": "p3",
+          "host": "gpu-6000d-47",
+          "target_complete": 4,
+          "draft_complete": 4,
+          "input_complete": 4,
+          "input_allocated_delta_zero": true,
+          "input_cache_keys_unchanged": true,
+          "raw_local_path": "experiments/dsv4-night-20260923/ratio20-c128/results/P4C128-01/p3"
+        }
+      ],
+      "phases": [
+        {
+          "name": "measurement-01",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 110.245607,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 781600.0,
+              "accepted_tokens": 368824.0
+            },
+            {
+              "role": "p3",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-02",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 118.49726600000008,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 776615.0,
+              "accepted_tokens": 369781.0
+            },
+            {
+              "role": "p3",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "measurement-03",
+          "requests": 512,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 8388608,
+          "output_tokens": 524288,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 127.0,
+              "computed_input": 2080768.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 129.0,
+              "computed_input": 2113536.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 512.0,
+              "computed_input": 0.0,
+              "remote_hits": 8388608.0,
+              "nixl_bytes": 88261263360.0,
+              "nixl_transfers": 1024.0,
+              "nixl_xfer_time_seconds_sum": 104.22780600000016,
+              "nixl_xfer_time_seconds_count": 1024.0,
+              "draft_tokens": 776225.0,
+              "accepted_tokens": 369845.0
+            },
+            {
+              "role": "p3",
+              "success": 128.0,
+              "computed_input": 2097152.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        },
+        {
+          "name": "warmup-01",
+          "requests": 256,
+          "failed": 0,
+          "jit_events": 0,
+          "input_tokens": 4194304,
+          "output_tokens": 262144,
+          "counters": [
+            {
+              "role": "p0",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p1",
+              "success": 64.0,
+              "computed_input": 1048576.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "p2",
+              "success": 65.0,
+              "computed_input": 1064960.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            },
+            {
+              "role": "d0",
+              "success": 256.0,
+              "computed_input": 0.0,
+              "remote_hits": 4194304.0,
+              "nixl_bytes": 44130631680.0,
+              "nixl_transfers": 512.0,
+              "nixl_xfer_time_seconds_sum": 51.91783599999999,
+              "nixl_xfer_time_seconds_count": 512.0,
+              "draft_tokens": 391925.0,
+              "accepted_tokens": 184144.0
+            },
+            {
+              "role": "p3",
+              "success": 63.0,
+              "computed_input": 1032192.0,
+              "remote_hits": 0.0,
+              "nixl_bytes": 0.0,
+              "nixl_transfers": 0.0,
+              "nixl_xfer_time_seconds_sum": 0.0,
+              "nixl_xfer_time_seconds_count": 0.0,
+              "draft_tokens": 0.0,
+              "accepted_tokens": 0.0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "final_cleanup_audit": {
+    "time": 1790115347.6533613,
+    "cases": [
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/graph-control/reports/G96-01-status.json",
+        "case": "G96",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-g96-01",
+          "started": 1790109472.3634386,
+          "ready_at": 1790109617.564588,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790110817.7992265
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ordinary/reports/O128-01-status.json",
+        "case": "O128",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-o128-01",
+          "started": 1790106955.5515132,
+          "ready_at": 1790107093.2048013,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790108135.491653
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ordinary/reports/O144-01-status.json",
+        "case": "O144",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-o144-01",
+          "started": 1790108168.099732,
+          "ready_at": 1790108312.389874,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790109452.1681652
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ordinary/reports/O96-01-status.json",
+        "case": "O96",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-o96-01",
+          "started": 1790105879.603722,
+          "ready_at": 1790106023.6535537,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790106904.4311893
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/pd/reports/P128-01-status.json",
+        "case": "P128",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-p128-01",
+          "started": 1790103617.7328022,
+          "ready_at": 1790103763.1795897,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790104664.027686
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/pd/reports/P144-01-status.json",
+        "case": "P144",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-p144-01",
+          "started": 1790104712.0449495,
+          "ready_at": 1790104857.1565378,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790105829.442098
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/pd/reports/P96-01-status.json",
+        "case": "P96",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-p96-01",
+          "started": 1790102660.5540087,
+          "ready_at": 1790102805.4470253,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790103601.0674055
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ratio20/reports/O5C144-01-status.json",
+        "case": "O5C144",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-o5c144-01",
+          "started": 1790111956.986386,
+          "ready_at": 1790112099.929818,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790113118.2539847
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ratio20/reports/P4C144-01-status.json",
+        "case": "P4C144",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-p4c144-01",
+          "started": 1790110848.4025128,
+          "ready_at": 1790111001.080586,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790111936.2143843
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ratio20-c128/reports/O5C128-01-status.json",
+        "case": "O5C128",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-o5c128-01",
+          "started": 1790114219.325964,
+          "ready_at": 1790114361.4125059,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790115311.438248
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      },
+      {
+        "path": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-night-20260923/ratio20-c128/reports/P4C128-01-status.json",
+        "case": "P4C128",
+        "status": "COMPLETE",
+        "controller": {
+          "status": "STOPPED",
+          "owner": "n23-p4c128-01",
+          "started": 1790113160.3883476,
+          "ready_at": 1790113314.362633,
+          "changed_files": [],
+          "cleanup_errors": [],
+          "ended": 1790114197.4960933
+        },
+        "changed_scripts": [],
+        "cleanup_errors": []
+      }
+    ],
+    "remaining_n23_containers": [],
+    "commands": [
+      {
+        "host": "gpu-6000d-45",
+        "check": "containers",
+        "command": [
+          "docker",
+          "ps",
+          "-a",
+          "--format",
+          "{{json .}}"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-45",
+        "check": "gpu_processes",
+        "command": [
+          "nvidia-smi",
+          "--query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory",
+          "--format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-45",
+        "check": "gpu_state",
+        "command": [
+          "nvidia-smi",
+          "--query-gpu=index,uuid,memory.used,utilization.gpu",
+          "--format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "0, GPU-7c272c00-4f0a-17f2-40b9-7e3cc7aec6d7, 0 MiB, 0 %\n1, GPU-586f18dd-51ff-7602-fc5f-9e54990ab72d, 0 MiB, 0 %\n2, GPU-eda56eb1-d65a-882d-c811-37630047d119, 0 MiB, 0 %\n3, GPU-48321ce6-843b-21f3-6a3b-3f0d0975f237, 0 MiB, 0 %\n4, GPU-0746a1ae-2d1d-d9c6-6b87-1bc483a4904d, 0 MiB, 0 %\n5, GPU-c9e7abcc-67ab-a9e7-9b8a-1ed92b8fd849, 0 MiB, 0 %\n6, GPU-a0967fd3-2612-9eb8-cafc-79710c95d5d0, 0 MiB, 0 %\n7, GPU-80fab853-8a19-27cb-3b65-381c363df6b8, 0 MiB, 0 %\n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-46",
+        "check": "containers",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-46",
+          "docker ps -a --format '{{json .}}'"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-46",
+        "check": "gpu_processes",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-46",
+          "nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-46",
+        "check": "gpu_state",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-46",
+          "nvidia-smi --query-gpu=index,uuid,memory.used,utilization.gpu --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "0, GPU-464fd2db-9ce2-54d3-252b-8fc0c0ebf673, 0 MiB, 0 %\n1, GPU-f140bc42-0c58-1573-5255-799c876c19b3, 0 MiB, 0 %\n2, GPU-4f5f87e9-d413-e0a9-8a0d-9382268eadca, 0 MiB, 0 %\n3, GPU-56ddace6-b59d-88af-5284-ebc2890d58a7, 0 MiB, 0 %\n4, GPU-24b11572-d1a9-c217-5fcc-9af477ff51fe, 0 MiB, 0 %\n5, GPU-752ef1cc-2f4b-5fb0-a5ac-b191ceed95ec, 0 MiB, 0 %\n6, GPU-6a7041a2-a7c0-18a3-e4e2-48692f2ba921, 0 MiB, 0 %\n7, GPU-adebe758-75fb-c247-9c5a-51a5cb8c4e0a, 0 MiB, 0 %\n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-47",
+        "check": "containers",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-47",
+          "docker ps -a --format '{{json .}}'"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-47",
+        "check": "gpu_processes",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-47",
+          "nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-47",
+        "check": "gpu_state",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-47",
+          "nvidia-smi --query-gpu=index,uuid,memory.used,utilization.gpu --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "0, GPU-87860a32-9b13-20c7-90e8-2eaf3e32ce49, 0 MiB, 0 %\n1, GPU-3bee6b47-2cfd-7b18-c97b-a4b7fadd2ace, 0 MiB, 0 %\n2, GPU-7a6e9f54-80fe-6948-edcc-2041aa20e339, 0 MiB, 0 %\n3, GPU-de026c0b-7d08-8743-5c6f-c116e3151333, 0 MiB, 0 %\n4, GPU-5fb39d7c-6d70-d841-7515-03e0ee6980c2, 0 MiB, 0 %\n5, GPU-75e89e06-baa4-f4e4-ebff-937ffbe45528, 0 MiB, 0 %\n6, GPU-11147f1e-62d7-1ead-8181-f69ccf6dd08b, 0 MiB, 0 %\n7, GPU-a19a9804-68c0-d49a-22fc-b2e544947619, 0 MiB, 0 %\n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-48",
+        "check": "containers",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-48",
+          "docker ps -a --format '{{json .}}'"
+        ],
+        "returncode": 0,
+        "stdout": "{\"Command\":\"\\\"sglang serve --mode\u2026\\\"\",\"CreatedAt\":\"2026-09-14 11:19:34 +0800 CST\",\"ID\":\"58d91471fa86\",\"Image\":\"lmsysorg/sglang:v0.5.19-cu130\",\"Labels\":\"ai.sglang.build.commit=0bcd822377da7b5718e674eaf9c870d349424dd1,ai.sglang.build.url=https://github.com/sgl-project/sglang/actions/runs/33912440803,ai.sglang.image.tag=lmsysorg/sglang:v0.5.19,com.nvidia.cudnn.version=9.14.0.64-1,maintainer=NVIDIA CORPORATION \\u003ccudatools@nvidia.com\\u003e,org.opencontainers.image.revision=0bcd822377da7b5718e674eaf9c870d349424dd1,org.opencontainers.image.source=https://github.com/sgl-project/sglang,org.opencontainers.image.url=https://github.com/sgl-project/sglang/actions/runs/33912440803,org.opencontainers.image.version=lmsysorg/sglang:v0.5.19\",\"LocalVolumes\":\"0\",\"Mounts\":\"/data/models/D\u2026,/home/enhui/te\u2026\",\"Names\":\"test-sglang-dsv4-20260914\",\"Networks\":\"host\",\"Platform\":{\"architecture\":\"amd64\",\"os\":\"linux\"},\"Ports\":\"\",\"RunningFor\":\"8 days ago\",\"Size\":\"250MB (virtual 37.4GB)\",\"State\":\"exited\",\"Status\":\"Exited (0) 8 days ago\"}\n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-48",
+        "check": "gpu_processes",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-48",
+          "nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_gpu_memory --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-48",
+        "check": "gpu_state",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-48",
+          "nvidia-smi --query-gpu=index,uuid,memory.used,utilization.gpu --format=csv,noheader"
+        ],
+        "returncode": 0,
+        "stdout": "0, GPU-65bcc425-8c5d-aa18-e23e-d01b9f2f3aeb, 0 MiB, 0 %\n1, GPU-e092398d-8557-4046-4e3c-b350296d0699, 0 MiB, 0 %\n2, GPU-dec5ee07-6af5-c8d7-09b2-df82f98b8aa0, 0 MiB, 0 %\n3, GPU-09795353-321a-7156-e60a-7ff11121fc38, 0 MiB, 0 %\n4, GPU-ab6b5627-c439-dd0b-067b-d9289c2db75c, 0 MiB, 0 %\n5, GPU-15e9b833-eda9-2573-feb0-db7ad57532ba, 0 MiB, 0 %\n6, GPU-de073e55-8715-c379-5b73-fb28fcfce939, 0 MiB, 0 %\n7, GPU-e852f7fc-0fd1-ff43-b6d8-9dd4cc7c14db, 0 MiB, 0 %\n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-48",
+        "check": "rdma_links",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-48",
+          "rdma link show"
+        ],
+        "returncode": 0,
+        "stdout": "link mlx5_0/1 state ACTIVE physical_state LINK_UP netdev eth_r0 \nlink mlx5_1/1 state ACTIVE physical_state LINK_UP netdev eth_r1 \nlink mlx5_2/1 state ACTIVE physical_state LINK_UP netdev eth_r2 \nlink mlx5_3/1 state ACTIVE physical_state LINK_UP netdev eth_r3 \nlink mlx5_4/1 state ACTIVE physical_state LINK_UP netdev eth_r4 \nlink mlx5_5/1 state ACTIVE physical_state LINK_UP netdev eth_r5 \nlink mlx5_6/1 state ACTIVE physical_state LINK_UP netdev eth_r6 \nlink mlx5_7/1 state ACTIVE physical_state LINK_UP netdev eth_r7 \nlink mlx5_8/1 state ACTIVE physical_state LINK_UP netdev ens11f0np0 \nlink mlx5_9/1 state ACTIVE physical_state LINK_UP netdev ens11f1np1 \nlink mlx5_bond_0/1 state ACTIVE physical_state LINK_UP netdev eno5np0 \n",
+        "stderr": ""
+      },
+      {
+        "host": "gpu-6000d-48",
+        "check": "nic_sysfs",
+        "command": [
+          "ssh",
+          "-o",
+          "BatchMode=yes",
+          "-o",
+          "ConnectTimeout=10",
+          "gpu-6000d-48",
+          "python3 -c 'import glob,json\nout={}\nfor p in glob.glob('\"'\"'/sys/class/infiniband/*/ports/*/state'\"'\"')+glob.glob('\"'\"'/sys/class/infiniband/*/ports/*/phys_state'\"'\"')+glob.glob('\"'\"'/sys/class/infiniband/*/ports/*/counters/*'\"'\"'):\n try:\n  with open(p) as f:out[p]=f.read().strip()\n except OSError as e:out[p]=repr(e)\nprint(json.dumps(out,indent=2))\n'"
+        ],
+        "returncode": 0,
+        "stdout": "{\n  \"/sys/class/infiniband/mlx5_2/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/state\": \"4: ACTIVE\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/phys_state\": \"5: LinkUp\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/unicast_rcv_packets\": \"74028862628\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_xmit_data\": \"45403823509763\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_packets\": \"74028862628\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/unicast_xmit_packets\": \"56936228131\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_data\": \"62429931002631\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/port_xmit_packets\": \"56936228131\",\n  \"/sys/class/infiniband/mlx5_2/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/unicast_rcv_packets\": \"77202454620\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_xmit_data\": \"48009461725080\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_packets\": \"77202454620\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/unicast_xmit_packets\": \"59707592591\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_data\": \"65414510446977\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/port_xmit_packets\": \"59707592591\",\n  \"/sys/class/infiniband/mlx5_0/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/unicast_rcv_packets\": \"632859\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_xmit_data\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_packets\": \"632859\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/unicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_data\": \"166101284\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/port_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_9/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/unicast_rcv_packets\": \"74157395327\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_xmit_data\": \"45283750922075\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_packets\": \"74157395327\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/unicast_xmit_packets\": \"56731174118\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_data\": \"62703297756906\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/port_xmit_packets\": \"56731174118\",\n  \"/sys/class/infiniband/mlx5_7/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/unicast_rcv_packets\": \"74881077254\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_xmit_data\": \"45910373115484\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_packets\": \"74881077254\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/unicast_xmit_packets\": \"57445849714\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_data\": \"63412588130144\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/port_xmit_packets\": \"57445849714\",\n  \"/sys/class/infiniband/mlx5_5/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/unicast_rcv_packets\": \"73875373415\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_xmit_data\": \"45381866496551\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_packets\": \"73875373415\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/unicast_xmit_packets\": \"56881950161\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_data\": \"62317832278434\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/port_xmit_packets\": \"56881950161\",\n  \"/sys/class/infiniband/mlx5_3/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/unicast_rcv_packets\": \"74098385287\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_xmit_data\": \"45494287671502\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_packets\": \"74098385287\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/unicast_xmit_packets\": \"56936486703\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_data\": \"62525076960251\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/port_xmit_packets\": \"56936486703\",\n  \"/sys/class/infiniband/mlx5_1/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/unicast_rcv_packets\": \"5340\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_xmit_data\": \"123079\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_packets\": \"5340\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/unicast_xmit_packets\": \"5202\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_data\": \"132078\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/port_xmit_packets\": \"5202\",\n  \"/sys/class/infiniband/mlx5_bond_0/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/unicast_rcv_packets\": \"21793\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_xmit_data\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_packets\": \"21793\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/unicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_data\": \"5731387\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/port_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_8/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/unicast_rcv_packets\": \"74447549916\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_xmit_data\": \"45424919996902\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_packets\": \"74447549916\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/unicast_xmit_packets\": \"56934563130\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_data\": \"62952915976517\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/port_xmit_packets\": \"56934563130\",\n  \"/sys/class/infiniband/mlx5_6/ports/1/counters/symbol_error\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/unicast_rcv_packets\": \"74571412160\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_xmit_data\": \"45461079134388\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_xmit_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/VL15_dropped\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_xmit_wait\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/link_error_recovery\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/multicast_rcv_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/multicast_xmit_packets\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_remote_physical_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_packets\": \"74571412160\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/unicast_xmit_packets\": \"57050585154\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/excessive_buffer_overrun_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_data\": \"63030886294066\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_constraint_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/link_downed\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/local_link_integrity_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_xmit_discards\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_rcv_switch_relay_errors\": \"0\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/port_xmit_packets\": \"57050585154\",\n  \"/sys/class/infiniband/mlx5_4/ports/1/counters/symbol_error\": \"0\"\n}\n",
+        "stderr": ""
+      }
+    ],
+    "all_cases_clean": true
+  },
+  "cpu_observer_cleanup": {
+    "checked_at": 1790115508.5439277,
+    "stop_file_present": true,
+    "observer_processes": []
+  }
+}
