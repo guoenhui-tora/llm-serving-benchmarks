@@ -33,7 +33,8 @@ class InputWarmupTest(unittest.TestCase):
         torch.cuda.set_device(device)
         geometries = [(512,512,64,64),(128,128,64,2),
                       (512,512,128,64),(128,256,128,2),(256,256,128,2)]
-        drafts = [(16,8192,16384,5,5,0,64,256), (32,16384,32768,3,3,0,128,256)]
+        drafts = [(16,8192,16384,5,5,0,64,256), (32,16384,32768,3,3,0,128,256),
+                  (96,16384,32768,5,5,0,128,256)]
         record = run_coverage(geometries,drafts,device,budget_s=450)
         before = (cache_keys(topk),cache_keys(draft))
         # Replay different interior spans, arbitrary sliced mixed-token offsets,

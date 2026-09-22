@@ -14,7 +14,7 @@
 
 每服务复制原缓存并核对原文件哈希，保留来源，不能从空缓存开始却称为热缓存。不将所有子目录同时加进PYTHONPATH，以免导入同名模块。实际命令由每次报告command.json导出；这些快照尚未自动应用到精选baseline recipe。
 
-target覆盖使用实际SM数、prefill预算、Graph capture sizes，逐worker两遍、有限值和cache key检查。DSpark另用真实三层draft及target auxiliary ids40/41/42，覆盖1..max(max-num-seqs×(K+1),maxcapture)（上限512）；两遍不新增cache key、临时allocated显存回到原值，再完整执行原worker预热、Graph捕获和RNG重置。
+target覆盖使用实际SM数、prefill预算、Graph capture sizes，逐worker两遍、有限值和cache key检查。DSpark另用真实三层draft及target auxiliary ids40/41/42，覆盖1..max(max-num-seqs×(K+1),maxcapture)（上限576，对应DP2服务容量192、每引擎96条、K5目标验证576 tokens）；两遍不新增cache key、临时allocated显存回到原值，再完整执行原worker预热、Graph捕获和RNG重置。
 
 **不能承诺quick必然无JIT。** TP4扩展在16K六副本普通中完整HTTP预热88条top-k事件，正式仍4/4/0，来自`_compute_global_topk_indices_and_lens_kernel`；每进程实际分派可能覆盖不足，未修改规则或追加轮次。8K 2P2D三轮0事件但吞吐/TTFT漂移，不能据此称性能已稳定。 C3H正式事件4/2/0，C4为4/0/2，均来自`_prepare_dflash_inputs_kernel`；mHC覆盖通过未覆盖这一不同内核。普通DP off预热无事件但吞吐明显更低的反例也说明，0事件不能替代完整预热或稳定性验收。详见[DP报告](../../reports/pd-dp-off-20260921.md)、[HTTP失败与有界修正](../../reports/pd-dspark-http-failure-20260921.md)及[持续结果总览](../../reports/pd-overnight-results-20260921.md)。
 

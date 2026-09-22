@@ -8,7 +8,7 @@ import os
 import time
 from pathlib import Path
 
-from warmup_plan import coverage
+from warmup_plan import coverage, draft_query_bound
 
 
 def verify_source():
@@ -143,9 +143,7 @@ class Worker(BaseWorker):
             raise RuntimeError('Uncovered draft geometry')
         k = self.vllm_config.speculative_config.num_speculative_tokens
         captures = self.vllm_config.compilation_config.cudagraph_capture_sizes or []
-        bound = max(self.scheduler_config.max_num_seqs * (k + 1), max(captures, default=1))
-        if not 1 <= bound <= 512:
-            raise RuntimeError('Draft query coverage exceeds bounded scope')
+        bound = draft_query_bound(self.scheduler_config.max_num_seqs, k, captures)
         device = layer.hc_attn_fn.device
         names = draft.get_draft_kv_cache_layer_names()
         group_map = self.model_runner.kv_cache_config.transfer_group_index_by_layer

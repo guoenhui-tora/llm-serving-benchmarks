@@ -24,3 +24,11 @@ def coverage(max_tokens, hidden, hc_mult, sms, captures=()):
                    | {n for n in captures if 1 <= n <= max_tokens})
     return sizes, [{'signature': list(k), 'first': v[0], 'last': v[-1]}
                    for k, v in groups.items()]
+
+
+def draft_query_bound(max_num_seqs, speculative_tokens, captures):
+    """Bound startup scratch work to DP-engine S96 / K5 (576 queries)."""
+    bound = max(max_num_seqs * (speculative_tokens + 1), max(captures, default=1))
+    if not 1 <= bound <= 576:
+        raise RuntimeError('Draft query coverage exceeds bounded scope (576)')
+    return bound

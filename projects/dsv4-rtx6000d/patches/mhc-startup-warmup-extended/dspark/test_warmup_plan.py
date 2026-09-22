@@ -3,7 +3,7 @@ from functools import cache
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
-from warmup_plan import coverage, split_for
+from warmup_plan import coverage, split_for, draft_query_bound
 
 class CoverageTests(unittest.TestCase):
     def test_matches_pinned_split_dispatch_for_every_token_count(self):
@@ -25,6 +25,14 @@ class CoverageTests(unittest.TestCase):
                     self.assertEqual(split_for(n,hidden,sms),env['compute_num_split'](64,hidden,(n+63)//64))
             self.assertIn(1,sizes); self.assertIn(8,sizes); self.assertIn(16,sizes); self.assertIn(17,sizes)
             self.assertIn(16384,sizes)
+
+    def test_draft_capacity_and_graph_bound(self):
+        self.assertEqual(draft_query_bound(96, 5, [480, 576]), 576)
+        self.assertEqual(draft_query_bound(48, 5, [192]), 288)
+        self.assertEqual(draft_query_bound(32, 5, [288]), 288)
+        for seqs, captures in [(97, []), (96, [577])]:
+            with self.assertRaises(RuntimeError):
+                draft_query_bound(seqs, 5, captures)
 
     def test_rejects_out_of_scope_model_and_budget(self):
         for params in [(16385,4096,4,156),(16384,16384,4,156),(16384,4096,8,156),(0,4096,4,156)]:
