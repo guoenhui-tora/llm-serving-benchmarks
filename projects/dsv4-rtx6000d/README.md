@@ -2,6 +2,8 @@
 
 本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，已完成单机拓扑、DSpark及跨节点PD对照；当前重点是16K输入下PD能否在同GPU资源下取得吞吐与延迟收益。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
 
+精确输入数据与制备脚本见 [GovReport 8K／16K／24K 数据集](datasets/README.md)。
+
 ## 性能测试先看：JIT预热与Graph覆盖
 
 **扩容要同时核对启动内核覆盖和CUDA Graph；0 JIT不代表Graph覆盖充分。** K5每条请求的目标验证需6个tokens、anchor草稿需5个queries，Graph尺寸按**每个DP引擎**计算。例如四卡TP2×DP2服务D192是每rank96条，目标上限576、草稿480，不是1152。此前D96沿用Graph192时大batch变慢，不能把它解释成GPU在64条之后必然失速。
