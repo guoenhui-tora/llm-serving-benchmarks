@@ -1,0 +1,484 @@
+{
+  "ordinary": {
+    "rounds": [
+      {
+        "round": "measurement-01",
+        "requests": 416,
+        "throughput": 2263.579614924281,
+        "ttft_s": 5.458119480954338,
+        "tpot_ms": 39.18862970461098,
+        "goodput": 1.5356785905412342,
+        "slo": 0.6947115384615384,
+        "good_requests": 289,
+        "ttft_fail": 72,
+        "tpot_fail": 63,
+        "both_fail": 8,
+        "events": 0,
+        "duration": 188.19042069092393,
+        "total_input_tokens": 6815744,
+        "total_output_tokens": 425984,
+        "per_service": {
+          "r0": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31961.0,
+            "vllm:spec_decode_num_draft_tokens_total": 159805.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74608.0
+          },
+          "r1": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31531.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157655.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 75057.0
+          },
+          "r2": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1687552.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 103.0,
+            "vllm:spec_decode_num_drafts_total": 31527.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157635.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74011.0
+          },
+          "r3": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1720320.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 105.0,
+            "vllm:spec_decode_num_drafts_total": 31479.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157395.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 76119.0
+          }
+        }
+      },
+      {
+        "round": "measurement-02",
+        "requests": 416,
+        "throughput": 2271.471648079673,
+        "ttft_s": 5.479094585767318,
+        "tpot_ms": 38.8222180844033,
+        "goodput": 1.557029656605094,
+        "slo": 0.7019230769230769,
+        "good_requests": 292,
+        "ttft_fail": 72,
+        "tpot_fail": 56,
+        "both_fail": 4,
+        "events": 0,
+        "duration": 187.53656923701055,
+        "total_input_tokens": 6815744,
+        "total_output_tokens": 425984,
+        "per_service": {
+          "r0": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31538.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157690.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 75051.0
+          },
+          "r1": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31867.0,
+            "vllm:spec_decode_num_draft_tokens_total": 159335.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74695.0
+          },
+          "r2": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31795.0,
+            "vllm:spec_decode_num_draft_tokens_total": 158975.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74747.0
+          },
+          "r3": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31374.0,
+            "vllm:spec_decode_num_draft_tokens_total": 156870.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 75213.0
+          }
+        }
+      },
+      {
+        "round": "measurement-03",
+        "requests": 416,
+        "throughput": 2234.774882149385,
+        "ttft_s": 5.523201038893603,
+        "tpot_ms": 39.616921418303534,
+        "goodput": 1.4479367006113615,
+        "slo": 0.6634615384615384,
+        "good_requests": 276,
+        "ttft_fail": 72,
+        "tpot_fail": 77,
+        "both_fail": 9,
+        "events": 0,
+        "duration": 190.61606759706046,
+        "total_input_tokens": 6815744,
+        "total_output_tokens": 425984,
+        "per_service": {
+          "r0": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1687552.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 103.0,
+            "vllm:spec_decode_num_drafts_total": 31059.0,
+            "vllm:spec_decode_num_draft_tokens_total": 155295.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74475.0
+          },
+          "r1": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31743.0,
+            "vllm:spec_decode_num_draft_tokens_total": 158715.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74816.0
+          },
+          "r2": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1703936.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 104.0,
+            "vllm:spec_decode_num_drafts_total": 31595.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157975.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 74941.0
+          },
+          "r3": {
+            "vllm:nixl_num_failed_transfers_total": 0,
+            "vllm:nixl_num_failed_notifications_total": 0,
+            "vllm:nixl_num_kv_expired_reqs_total": 0,
+            "vllm:nixl_bytes_transferred_count": 0,
+            "vllm:nixl_bytes_transferred_sum": 0,
+            "vllm:nixl_xfer_time_seconds_count": 0,
+            "vllm:nixl_xfer_time_seconds_sum": 0,
+            "vllm:request_prefill_kv_computed_tokens_sum": 1720320.0,
+            "vllm:num_preemptions_total": 0.0,
+            "vllm:external_prefix_cache_hits_total": 0.0,
+            "vllm:request_success_total": 105.0,
+            "vllm:spec_decode_num_drafts_total": 31421.0,
+            "vllm:spec_decode_num_draft_tokens_total": 157105.0,
+            "vllm:spec_decode_num_accepted_tokens_total": 76162.0
+          }
+        }
+      }
+    ],
+    "summary": {
+      "throughput": {
+        "mean": 2256.608715051113,
+        "sd": 19.316009971442906
+      },
+      "ttft_s": {
+        "mean": 5.486805035205086,
+        "sd": 0.03321882852916072
+      },
+      "tpot_ms": {
+        "mean": 39.20925640243927,
+        "sd": 0.39775299210126625
+      },
+      "goodput": {
+        "mean": 1.51354831591923,
+        "sd": 0.05781548281383296
+      },
+      "slo": {
+        "mean": 0.686698717948718,
+        "sd": 0.020444472471431198
+      }
+    }
+  },
+  "pd": {
+    "rounds": [
+      {
+        "case": "P104D112",
+        "C": 104,
+        "D": 112,
+        "GPUs": 16,
+        "requests": 416,
+        "round": "measurement-01",
+        "throughput": 2699.228528974153,
+        "ttft_s": 9.51580075138946,
+        "tpot_ms": 26.130014148085372,
+        "goodput": 2.078357303334215,
+        "slo": 0.7884615384615384,
+        "good_requests": 328,
+        "ttft_fail": 88,
+        "tpot_fail": 0,
+        "events": 0,
+        "initial_C_ttft": 18.925807089511252,
+        "remaining_3C_ttft": 6.379131972015528,
+        "duration": 157.81694488902576,
+        "D_transfer": {
+          "vllm:nixl_num_failed_transfers_total": 0.0,
+          "vllm:nixl_num_failed_notifications_total": 0.0,
+          "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+          "vllm:nixl_bytes_transferred_count": 832.0,
+          "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+          "vllm:nixl_xfer_time_seconds_count": 832.0,
+          "vllm:nixl_xfer_time_seconds_sum": 71.80439100000002,
+          "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+          "vllm:num_preemptions_total": 0.0,
+          "vllm:external_prefix_cache_hits_total": 6815744.0,
+          "vllm:request_success_total": 416.0,
+          "vllm:spec_decode_num_drafts_total": 127222.0,
+          "vllm:spec_decode_num_draft_tokens_total": 636110.0,
+          "vllm:spec_decode_num_accepted_tokens_total": 299441.0
+        }
+      },
+      {
+        "case": "P104D112",
+        "C": 104,
+        "D": 112,
+        "GPUs": 16,
+        "requests": 416,
+        "round": "measurement-02",
+        "throughput": 2756.681971482815,
+        "ttft_s": 9.27508126777684,
+        "tpot_ms": 26.245132207694958,
+        "goodput": 2.1225954182466085,
+        "slo": 0.7884615384615384,
+        "good_requests": 328,
+        "ttft_fail": 88,
+        "tpot_fail": 0,
+        "events": 0,
+        "initial_C_ttft": 18.915940766165686,
+        "remaining_3C_ttft": 6.061461434980559,
+        "duration": 154.527799871983,
+        "D_transfer": {
+          "vllm:nixl_num_failed_transfers_total": 0.0,
+          "vllm:nixl_num_failed_notifications_total": 0.0,
+          "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+          "vllm:nixl_bytes_transferred_count": 832.0,
+          "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+          "vllm:nixl_xfer_time_seconds_count": 832.0,
+          "vllm:nixl_xfer_time_seconds_sum": 69.57826199999997,
+          "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+          "vllm:num_preemptions_total": 0.0,
+          "vllm:external_prefix_cache_hits_total": 6815744.0,
+          "vllm:request_success_total": 416.0,
+          "vllm:spec_decode_num_drafts_total": 126725.0,
+          "vllm:spec_decode_num_draft_tokens_total": 633625.0,
+          "vllm:spec_decode_num_accepted_tokens_total": 299926.0
+        }
+      },
+      {
+        "case": "P104D112",
+        "C": 104,
+        "D": 112,
+        "GPUs": 16,
+        "requests": 416,
+        "round": "measurement-03",
+        "throughput": 2708.8322587827743,
+        "ttft_s": 9.605680169213043,
+        "tpot_ms": 26.51907936436502,
+        "goodput": 2.0730340021296207,
+        "slo": 0.7836538461538461,
+        "good_requests": 326,
+        "ttft_fail": 90,
+        "tpot_fail": 0,
+        "events": 0,
+        "initial_C_ttft": 18.934986550171743,
+        "remaining_3C_ttft": 6.495911375560144,
+        "duration": 157.257430252037,
+        "D_transfer": {
+          "vllm:nixl_num_failed_transfers_total": 0.0,
+          "vllm:nixl_num_failed_notifications_total": 0.0,
+          "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+          "vllm:nixl_bytes_transferred_count": 832.0,
+          "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+          "vllm:nixl_xfer_time_seconds_count": 832.0,
+          "vllm:nixl_xfer_time_seconds_sum": 74.55078300000005,
+          "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+          "vllm:num_preemptions_total": 0.0,
+          "vllm:external_prefix_cache_hits_total": 6815744.0,
+          "vllm:request_success_total": 416.0,
+          "vllm:spec_decode_num_drafts_total": 126272.0,
+          "vllm:spec_decode_num_draft_tokens_total": 631360.0,
+          "vllm:spec_decode_num_accepted_tokens_total": 300374.0
+        }
+      }
+    ],
+    "summary": {
+      "throughput": {
+        "mean": 2721.5809197465805,
+        "sd": 30.77532747675622
+      },
+      "ttft_s": {
+        "mean": 9.465520729459781,
+        "sd": 0.17093849438216852
+      },
+      "tpot_ms": {
+        "mean": 26.29807524004845,
+        "sd": 0.1998628508146757
+      },
+      "goodput": {
+        "mean": 2.0913289079034816,
+        "sd": 0.027208094121168452
+      },
+      "slo": {
+        "mean": 0.7868589743589743,
+        "sd": 0.002775722448027037
+      }
+    }
+  },
+  "startup": {
+    "r0": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "r1": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "r2": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "r3": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    }
+  },
+  "cleanup": {
+    "gpu-6000d-46": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-47": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-48": {
+      "gpus": "",
+      "owned": ""
+    },
+    "local_owned": ""
+  }
+}
