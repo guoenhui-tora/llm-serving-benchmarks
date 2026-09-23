@@ -1,0 +1,336 @@
+{
+  "summary": [
+    {
+      "C": 96,
+      "N": 384,
+      "D": 96,
+      "graph": 288,
+      "output_tok_s": {
+        "mean": 2582.567693918244,
+        "sd": 22.282659299549774
+      },
+      "ttft_s": {
+        "mean": 8.790325744089285,
+        "sd": 0.17459196005817978
+      },
+      "tpot_ms": {
+        "mean": 26.131651701591316,
+        "sd": 0.35195625761766636
+      },
+      "goodput_req_s": {
+        "mean": 2.0010019915916595,
+        "sd": 0.019220072586658206
+      },
+      "joint_slo": {
+        "mean": 0.7934027777777778,
+        "sd": 0.0015035163260146932
+      }
+    },
+    {
+      "C": 112,
+      "N": 448,
+      "D": 112,
+      "graph": 336,
+      "output_tok_s": {
+        "mean": 2815.2337700187077,
+        "sd": 18.833492365053093
+      },
+      "ttft_s": {
+        "mean": 10.271812469790131,
+        "sd": 0.148722781645469
+      },
+      "tpot_ms": {
+        "mean": 26.66840266402218,
+        "sd": 0.30573538221778207
+      },
+      "goodput_req_s": {
+        "mean": 2.1068622728468456,
+        "sd": 0.029079331217385335
+      },
+      "joint_slo": {
+        "mean": 0.7663690476190477,
+        "sd": 0.012293684257335019
+      }
+    },
+    {
+      "C": 128,
+      "N": 512,
+      "D": 128,
+      "graph": 384,
+      "output_tok_s": {
+        "mean": 3067.2512004297487,
+        "sd": 9.79970063857942
+      },
+      "ttft_s": {
+        "mean": 11.72246810656452,
+        "sd": 0.08848530059965783
+      },
+      "tpot_ms": {
+        "mean": 27.371063748244683,
+        "sd": 0.11795012658134506
+      },
+      "goodput_req_s": {
+        "mean": 2.1059724977624388,
+        "sd": 0.12474176301440298
+      },
+      "joint_slo": {
+        "mean": 0.703125,
+        "sd": 0.04283537538957287
+      }
+    },
+    {
+      "C": 144,
+      "N": 576,
+      "D": 144,
+      "graph": 432,
+      "output_tok_s": {
+        "mean": 3183.154045837892,
+        "sd": 2.8026715822596286
+      },
+      "ttft_s": {
+        "mean": 14.161390689031341,
+        "sd": 0.22857605697282296
+      },
+      "tpot_ms": {
+        "mean": 28.057058050335133,
+        "sd": 0.15008286214772557
+      },
+      "goodput_req_s": {
+        "mean": 1.010916593651579,
+        "sd": 0.15573246989035985
+      },
+      "joint_slo": {
+        "mean": 0.32523148148148145,
+        "sd": 0.05032726296584928
+      }
+    }
+  ],
+  "c112": {
+    "rounds": [
+      {
+        "round": "measurement-01",
+        "requests": 448,
+        "throughput": 2827.246925517642,
+        "ttft_s": 10.253568924223146,
+        "tpot_ms": 26.63742406685728,
+        "goodput": 2.132366586367153,
+        "slo": 0.7723214285714286,
+        "ttft_fail": 102,
+        "tpot_fail": 0,
+        "events": 0,
+        "D_computed": 0.0,
+        "D_hits": 7340032.0,
+        "bytes": 77228605440.0
+      },
+      {
+        "round": "measurement-02",
+        "requests": 448,
+        "throughput": 2793.528036053592,
+        "ttft_s": 10.133053055250068,
+        "tpot_ms": 26.988447981799993,
+        "goodput": 2.1130245285265166,
+        "slo": 0.7745535714285714,
+        "ttft_fail": 101,
+        "tpot_fail": 0,
+        "events": 0,
+        "D_computed": 0.0,
+        "D_hits": 7340032.0,
+        "bytes": 77228605440.0
+      },
+      {
+        "round": "measurement-03",
+        "requests": 448,
+        "throughput": 2824.926348484889,
+        "ttft_s": 10.428815429897181,
+        "tpot_ms": 26.379335943409274,
+        "goodput": 2.075195703646867,
+        "slo": 0.7522321428571429,
+        "ttft_fail": 111,
+        "tpot_fail": 0,
+        "events": 0,
+        "D_computed": 0.0,
+        "D_hits": 7340032.0,
+        "bytes": 77228605440.0
+      }
+    ],
+    "summary": {
+      "throughput": {
+        "mean": 2815.2337700187077,
+        "sd": 18.833492365053093
+      },
+      "ttft_s": {
+        "mean": 10.271812469790131,
+        "sd": 0.148722781645469
+      },
+      "tpot_ms": {
+        "mean": 26.66840266402218,
+        "sd": 0.30573538221778207
+      },
+      "goodput": {
+        "mean": 2.1068622728468456,
+        "sd": 0.029079331217385335
+      },
+      "slo": {
+        "mean": 0.7663690476190477,
+        "sd": 0.012293684257335019
+      }
+    }
+  },
+  "startup": {
+    "p0": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bounds": [
+          192,
+          192,
+          192,
+          192
+        ]
+      }
+    },
+    "p1": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bounds": [
+          192,
+          192,
+          192,
+          192
+        ]
+      }
+    },
+    "p2": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bounds": [
+          192,
+          192,
+          192,
+          192
+        ]
+      }
+    },
+    "d0": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_deltas": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "bounds": [
+          336,
+          336,
+          336,
+          336
+        ]
+      }
+    }
+  },
+  "cleanup": {
+    "gpu-6000d-46": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-47": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-48": {
+      "gpus": "",
+      "owned": ""
+    },
+    "local_owned": ""
+  }
+}
