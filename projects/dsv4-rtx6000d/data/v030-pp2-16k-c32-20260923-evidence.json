@@ -1,0 +1,119 @@
+{
+  "rows": [
+    {
+      "phase": "warmup-01",
+      "completed": 64,
+      "failed": 0,
+      "duration": 137.8573873010464,
+      "output_throughput": 475.3898306289934,
+      "total_input_tokens": 1048576,
+      "total_output_tokens": 65536,
+      "mean_ttft_ms": 11694.520788303635,
+      "mean_tpot_ms": 54.795392045020854,
+      "p95_ttft_ms": 29853.334023454223,
+      "p95_tpot_ms": 91.81235883397913,
+      "spec_decode_acceptance_rate": 48.52113043932508,
+      "spec_decode_acceptance_length": 3.4260565219662538,
+      "spec_decode_num_drafts": 19143,
+      "spec_decode_draft_tokens": 95715,
+      "spec_decode_accepted_tokens": 46442,
+      "events": 19,
+      "kernels": {
+        "_resample_kernel": 1,
+        "_prepare_dflash_inputs_kernel": 2,
+        "ComputeGlobalTopkIndicesAndLensKernel.kernel": 16
+      }
+    },
+    {
+      "phase": "measurement-01",
+      "completed": 128,
+      "failed": 0,
+      "duration": 215.77077860501595,
+      "output_throughput": 607.4594569635251,
+      "total_input_tokens": 2097152,
+      "total_output_tokens": 131072,
+      "mean_ttft_ms": 5035.19095442789,
+      "mean_tpot_ms": 46.86069486344026,
+      "p95_ttft_ms": 21276.544859108973,
+      "p95_tpot_ms": 71.47609955772988,
+      "spec_decode_acceptance_rate": 48.64869109947644,
+      "spec_decode_acceptance_length": 3.4324345549738218,
+      "spec_decode_num_drafts": 38200,
+      "spec_decode_draft_tokens": 191000,
+      "spec_decode_accepted_tokens": 92919,
+      "events": 0,
+      "kernels": {}
+    },
+    {
+      "phase": "measurement-02",
+      "completed": 128,
+      "failed": 0,
+      "duration": 211.94332559313625,
+      "output_throughput": 618.4294769990377,
+      "total_input_tokens": 2097152,
+      "total_output_tokens": 131072,
+      "mean_ttft_ms": 4848.4802760140155,
+      "mean_tpot_ms": 45.662438080023534,
+      "p95_ttft_ms": 21268.751741026055,
+      "p95_tpot_ms": 63.56293610689746,
+      "spec_decode_acceptance_rate": 48.181038292562455,
+      "spec_decode_acceptance_length": 3.409051914628123,
+      "spec_decode_num_drafts": 38467,
+      "spec_decode_draft_tokens": 192335,
+      "spec_decode_accepted_tokens": 92669,
+      "events": 0,
+      "kernels": {}
+    },
+    {
+      "phase": "measurement-03",
+      "completed": 128,
+      "failed": 0,
+      "duration": 204.41470568999648,
+      "output_throughput": 641.2063141816041,
+      "total_input_tokens": 2097152,
+      "total_output_tokens": 131072,
+      "mean_ttft_ms": 4819.88195496524,
+      "mean_tpot_ms": 44.03148686146748,
+      "p95_ttft_ms": 21274.49198679532,
+      "p95_tpot_ms": 59.75315158140689,
+      "spec_decode_acceptance_rate": 48.81227863046045,
+      "spec_decode_acceptance_length": 3.4406139315230226,
+      "spec_decode_num_drafts": 38115,
+      "spec_decode_draft_tokens": 190575,
+      "spec_decode_accepted_tokens": 93024,
+      "events": 0,
+      "kernels": {}
+    }
+  ],
+  "formal_stats": {
+    "output_throughput": {
+      "mean": 622.3650827147222,
+      "sample_sd": 17.214219043754177,
+      "cv_pct": 2.7659358665602993,
+      "relative_range_pct": 5.422357094790251
+    },
+    "mean_ttft_ms": {
+      "mean": 4901.184395135715,
+      "sample_sd": 116.93068220829618,
+      "cv_pct": 2.3857637824103604,
+      "relative_range_pct": 4.392999367180264
+    },
+    "mean_tpot_ms": {
+      "mean": 45.518206601643755,
+      "sample_sd": 1.4201079251674555,
+      "cv_pct": 3.119867919216687,
+      "relative_range_pct": 6.215552441977386
+    }
+  },
+  "formal_requests": 384,
+  "formal_failed": 0,
+  "weighted_draft_acceptance_pct": 48.546287745465314,
+  "weighted_acceptance_length": 3.427314387273266,
+  "accepted_draft_tokens": 278612,
+  "drafted_tokens": 573910,
+  "draft_rounds": 114782,
+  "server_running_max_logged": 32,
+  "kv_usage_peak_pct_logged": 29.4,
+  "preemption_log_matches": 0,
+  "scale_warning_present": false
+}

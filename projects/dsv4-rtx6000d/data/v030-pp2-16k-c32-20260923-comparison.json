@@ -1,0 +1,125 @@
+{
+  "historical_sources_sha256": {
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-01/proxy-events.json": "23b06b6d5062f553be3d31209c10cdafcc3c8dcba9a9be922752551836227552",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-01/requests.jsonl": "52f41f5f3a6ddf5751a657ef1aaaa4efa6a02f0b5b863100e7a348d11bed660d",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-01/raw.json": "fccef27e81d2a237e12a10feffa4c9a0df239e664a1aed244a74a6ef7b5c23d1",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-02/proxy-events.json": "919e610aa279364e6954b98331922f8f9566f4c9000b0332ddbb92fa4f13d396",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-02/requests.jsonl": "bd3a7a4bb786f26c93f54f858c70162a32282b57a445f2feb04b93eccb4806a0",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-02/raw.json": "954ec61bfd829a1975ac2012146b4fc71a9333e47badab37bc71cffd0741918a",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-03/proxy-events.json": "55b17678df8b670aa0c181d01d5d68fcec6664dba28131d122b2d93a78e788fd",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-03/requests.jsonl": "885a977585e3db91a435b8f64886854fed1683824707fbb37b7bd9d8f1063d3e",
+    "experiments/dsv4-pd-dspark16k-c32c64/results/OR-01/benchmark/c64/measurement-03/raw.json": "a9b106fe46e2e06cac5562565f6c795615e4e5b1137eec8ddd8b54d277fc7c28"
+  },
+  "historical_rows": [
+    {
+      "round": "measurement-01",
+      "node": "http://10.90.1.46:31249",
+      "requests": 128,
+      "max_inflight": 32,
+      "shared_duration_s": 218.00556037400384,
+      "output_tokens": 131072,
+      "shared_window_output_tps": 601.2323712071233,
+      "mean_ttft_s": 6.34491957591672,
+      "mean_tpot_ms": 45.81895884685824
+    },
+    {
+      "round": "measurement-01",
+      "node": "http://10.90.1.48:31249",
+      "requests": 128,
+      "max_inflight": 32,
+      "shared_duration_s": 218.00556037400384,
+      "output_tokens": 131072,
+      "shared_window_output_tps": 601.2323712071233,
+      "mean_ttft_s": 6.3302686263668875,
+      "mean_tpot_ms": 45.602027806197114
+    },
+    {
+      "round": "measurement-02",
+      "node": "http://10.90.1.46:31249",
+      "requests": 128,
+      "max_inflight": 32,
+      "shared_duration_s": 221.28320981690194,
+      "output_tokens": 131072,
+      "shared_window_output_tps": 592.3269104260278,
+      "mean_ttft_s": 6.322358689192697,
+      "mean_tpot_ms": 45.76948054836833
+    },
+    {
+      "round": "measurement-02",
+      "node": "http://10.90.1.48:31249",
+      "requests": 128,
+      "max_inflight": 32,
+      "shared_duration_s": 221.28320981690194,
+      "output_tokens": 131072,
+      "shared_window_output_tps": 592.3269104260278,
+      "mean_ttft_s": 6.035006535584216,
+      "mean_tpot_ms": 46.93548868958835
+    },
+    {
+      "round": "measurement-03",
+      "node": "http://10.90.1.46:31249",
+      "requests": 130,
+      "max_inflight": 32,
+      "shared_duration_s": 220.89366671198513,
+      "output_tokens": 133120,
+      "shared_window_output_tps": 602.6429004574862,
+      "mean_ttft_s": 6.20704434974334,
+      "mean_tpot_ms": 44.99622285606172
+    },
+    {
+      "round": "measurement-03",
+      "node": "http://10.90.1.48:31249",
+      "requests": 126,
+      "max_inflight": 32,
+      "shared_duration_s": 220.89366671198513,
+      "output_tokens": 129024,
+      "shared_window_output_tps": 584.1000419818713,
+      "mean_ttft_s": 6.146480569622428,
+      "mean_tpot_ms": 47.3907062382947
+    }
+  ],
+  "historical_whole_system_means": {
+    "output_throughput": 1191.2871685685532,
+    "mean_ttft_ms": 6231.170775915113,
+    "mean_tpot_ms": 46.07924519708684
+  },
+  "historical_mean_four_gpu_contribution_tps": 595.6435842842766,
+  "current_formal_stats": {
+    "output_throughput": {
+      "mean": 622.3650827147222,
+      "sample_sd": 17.214219043754177,
+      "cv_pct": 2.7659358665602993,
+      "relative_range_pct": 5.422357094790251
+    },
+    "mean_ttft_ms": {
+      "mean": 4901.184395135715,
+      "sample_sd": 116.93068220829618,
+      "cv_pct": 2.3857637824103604,
+      "relative_range_pct": 4.392999367180264
+    },
+    "mean_tpot_ms": {
+      "mean": 45.518206601643755,
+      "sample_sd": 1.4201079251674555,
+      "cv_pct": 3.119867919216687,
+      "relative_range_pct": 6.215552441977386
+    }
+  },
+  "relative_change_pct": {
+    "output_throughput": 4.486155670182224,
+    "mean_ttft_ms": -21.344084901670435,
+    "mean_tpot_ms": -1.2175516179647738
+  },
+  "patch_sha256": {
+    "sitecustomize.py": "b482b3abbf39552de69c97bf5519e2ac1598eab50ededf4d87115122620f9275",
+    "dspark_native_mxfp4.py": "3dcedc6fb22ce72ff26035d5b9d8fb72692ba4b383f4e5addeb93fd928fdf256",
+    "test_loaded_evidence.py": "b9109c0ed6a897a206f158c26e655d7135030e619369b819a8286cabdb28f5b7",
+    "manifest.json": "6d1a8444bdcb1866d5e75a9f9485e932f82c76a90f1bc6bddabd7626620035c9",
+    "test_dispatch.py": "c0906405a2058b24b4de21e5663f13be7fd9c9b05889a7157059a90369e2ff64",
+    "test_loader_config.py": "6085cf2de85f062c3d97aa3c16a6ab10a2b1d59f890f8a9d00ebce12cbe97190"
+  },
+  "limitations": [
+    "Historical per-service contribution uses the shared eight-GPU client window, not an independent four-GPU benchmark.",
+    "Different node, version, topology, prefill budget, warmup length and request allocation; directional comparison only.",
+    "Current quick throughput has CV 2.76594%; not stable validation."
+  ]
+}

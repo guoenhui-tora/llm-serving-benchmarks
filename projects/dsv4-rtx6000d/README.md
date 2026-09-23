@@ -4,7 +4,13 @@
 
 精确输入数据与制备脚本见 [GovReport 8K／16K／24K 数据集](datasets/README.md)。
 
+## 2026-09-23：vLLM 0.30 四卡 TP2 PP2＋DSpark K5
+
+**真实 16K/1024、C32 quick 为 622.37±17.21 output tok/s，三轮正式均 0 已知 JIT、384/384 请求成功。** 只加载 MXFP4 草稿分派修复及加载核验，使用 vLLM 自动启动准备＋一轮 64 请求 warmup，没有移植旧 DP、mHC worker 或定向输入 kernel 预热；保留已有 JIT 缓存。mHC 入口已修复，草稿分派仍需补丁；本次 DP1 不代表 DP2 全面验证。吞吐 CV 2.77%，未达 stable，历史四卡贡献对比仅供方向参考。启动命令、补丁和逐轮结果见 [v0.30 启动与版本问题归档](data/v030-pp2-16k-c32-20260923.md)。
+
 ## 性能测试先看：JIT预热与Graph覆盖
+
+本节以下补丁准备流程针对既有 **v0.29** 实验；v0.30 本次 PP2 按上方新记录处理，不直接搬用旧 worker。Graph 容量核对和正式结果验收仍适用。
 
 **扩容要同时核对启动内核覆盖和CUDA Graph；0 JIT不代表Graph覆盖充分。** K5每条请求的目标验证需6个tokens、anchor草稿需5个queries，Graph尺寸按**每个DP引擎**计算。例如四卡TP2×DP2服务D192是每rank96条，目标上限576、草稿480，不是1152。此前D96沿用Graph192时大batch变慢，不能把它解释成GPU在64条之后必然失速。
 
