@@ -1,0 +1,2784 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "server_image": "sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90",
+  "client_image": "sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1",
+  "model": "/data/models/DeepSeek-V4-Flash-0731-NVFP4",
+  "datasets": {
+    "16k": "025246b18d8ba7e1bc4d98c1a20b32b570860bb06a0baf0cea4ae97403d982e7",
+    "24k": "615edb29e5a171e8f4dc7679739437202cddf8d93887f7b9a7260bc9e6d68170"
+  },
+  "formal_requests": 9984,
+  "warmup_requests": 1664,
+  "successful_units": 11,
+  "protocol": "quick: 1 x 2C warmup + 3 x 4C formal",
+  "failures": [
+    {
+      "id": "G2-01",
+      "cause": "Functional output_tokens=16 disagreed with JSONL output_tokens=1024; client rejected before HTTP",
+      "fix": "Separate first-8 prompt dataset with output_tokens=16 and independent hash; formal dataset unchanged",
+      "status": "G2-02 functional passed",
+      "evidence": "deployments/G2/results/G2-01/functional-c8/client.log"
+    },
+    {
+      "id": "stdlib-queue-shadow",
+      "cause": "scripts/queue.py shadowed Python stdlib queue and executed orchestration on import",
+      "impact": "Secondary invocation rejected existing G2-01 root before launching models; driver.log was overwritten, run-root evidence preserved",
+      "fix": "Renamed run_campaign.py and protected entry point; new driver logs keyed by attempt"
+    },
+    {
+      "id": "PP-NIXL",
+      "cause": "Pinned image NIXL shared worker rejects PP2 with hybrid KV and consumer PP2",
+      "status": "NIXL source restriction persists; native Mooncake G1M/G3M/G4PPM completed all 6 cells without model forward backport."
+    },
+    {
+      "id": "mooncake-observation",
+      "cause": "Image has no Mooncake Prom exporter; successful transfer counter counts batches, not requests",
+      "fix": "Source-pinned observer records batch bytes and each successful request per TP/PP worker; zero intervals separately observed; failure counters retained",
+      "status": "Offline positive/negative checks and all 6 Mooncake GPU cells passed request/rank/byte/failure gates."
+    },
+    {
+      "id": "G4DP-01",
+      "cause": "C48 workload id absent from case dataset_paths inherited from C32; no C48 HTTP requests issued",
+      "fix": "Install immutable dataset path for each switched workload and verify declared SHA before measurement",
+      "impact": "C32 completed but failed deployment retained diagnostically; complete G4DP protocol will restart once in new root",
+      "status": "Fixed and offline checked; G4DP-02 completed all four cells. G4DP-01 C32 diagnostic only."
+    }
+  ],
+  "deployments": [
+    {
+      "group": "G1M",
+      "attempt": "G1M-01",
+      "status": "COMPLETE",
+      "started": 1790182688.1465724,
+      "ended": 1790183819.480126,
+      "run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G1M/results/G1M-01",
+      "cleanup_errors": [],
+      "changed_files": [],
+      "units": [
+        {
+          "concurrency": 128,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G1M",
+              "attempt": "G1M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2629.7213735718788,
+              "request_throughput": 2.568087278878788,
+              "duration": 199.37017102609389,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8764.438236002206,
+              "median_ttft_ms": 5027.351447031833,
+              "p95_ttft_ms": 32090.216186130412,
+              "p99_ttft_ms": 37630.78221893869,
+              "mean_tpot_ms": 36.47559036497075,
+              "p95_tpot_ms": 43.47096343199519,
+              "mean_itl_ms": 123.91386081003155,
+              "p95_itl_ms": 187.4554567155428,
+              "mean_e2el_ms": 46078.96717936728,
+              "p95_e2el_ms": 71574.2122561438,
+              "good_requests": 397,
+              "joint_pass_rate": 0.775390625,
+              "request_goodput": 1.9912708002243726,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 773460.0,
+              "accepted_tokens": 370463.0,
+              "acceptance_rate": 0.47896853101647147,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            },
+            {
+              "group": "G1M",
+              "attempt": "G1M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2665.9156858353217,
+              "request_throughput": 2.6034332869485564,
+              "duration": 196.66338391182944,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8924.098629703622,
+              "median_ttft_ms": 5178.21313906461,
+              "p95_ttft_ms": 32073.69489236734,
+              "p99_ttft_ms": 37578.52698962437,
+              "mean_tpot_ms": 36.09726821558422,
+              "p95_tpot_ms": 42.90652893088077,
+              "mean_itl_ms": 123.58974662134048,
+              "p95_itl_ms": 192.20995204523206,
+              "mean_e2el_ms": 45851.60401424627,
+              "p95_e2el_ms": 70524.53628015937,
+              "good_requests": 401,
+              "joint_pass_rate": 0.783203125,
+              "request_goodput": 2.039017086067131,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 767465.0,
+              "accepted_tokens": 371626.0,
+              "acceptance_rate": 0.48422533926628575,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            },
+            {
+              "group": "G1M",
+              "attempt": "G1M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2634.239780112903,
+              "request_throughput": 2.572499785266507,
+              "duration": 199.0281993150711,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8715.516221925554,
+              "median_ttft_ms": 4951.606492977589,
+              "p95_ttft_ms": 32014.16393781546,
+              "p99_ttft_ms": 37627.8399340203,
+              "mean_tpot_ms": 36.73087027624394,
+              "p95_tpot_ms": 43.94528854394582,
+              "mean_itl_ms": 124.8223796642772,
+              "p95_itl_ms": 193.77219141460955,
+              "mean_e2el_ms": 46291.19651452311,
+              "p95_e2el_ms": 71846.43295082496,
+              "good_requests": 401,
+              "joint_pass_rate": 0.783203125,
+              "request_goodput": 2.014789870882557,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 773205.0,
+              "accepted_tokens": 370456.0,
+              "acceptance_rate": 0.47911743974754434,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 198.35391808433147,
+              "sd": 1.473996439643875
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 46073.92256937889,
+              "sd": 219.83966348764486
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 124.1086623652164,
+              "sd": 0.6389888802332039
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 36.43457628559964,
+              "sd": 0.31878599223939463
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 8801.35102921046,
+              "sd": 109.08057084307217
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 5052.390359691344,
+              "sd": 115.35966961239106
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 2643.2922798400346,
+              "sd": 19.722268468363097
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 71315.06049570937,
+              "sd": 698.013200578176
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 191.14586672512814,
+              "sd": 3.2900596485389135
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 43.440926968940595,
+              "sd": 0.5200307926155792
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 32059.35833877107,
+              "sd": 40.0017336524776
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 37612.38304752779,
+              "sd": 29.357090331042492
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 2.5813401170312837,
+              "sd": 0.019260027801135837
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 8388608.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 524288.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T17:01:17.976105+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T17:03:51.276366+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 256,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2323.308589972569,
+                  "request_throughput": 2.2688560448950867,
+                  "duration": 112.83219161303714,
+                  "total_input_tokens": 4194304,
+                  "total_output_tokens": 262144,
+                  "mean_ttft_ms": 13854.183758723593,
+                  "median_ttft_ms": 7287.4439710285515,
+                  "p95_ttft_ms": 35854.83745922102,
+                  "p99_ttft_ms": 37419.962291792035,
+                  "mean_tpot_ms": 36.001671320227544,
+                  "p95_tpot_ms": 41.9686207552222,
+                  "mean_itl_ms": 121.34526608585628,
+                  "p95_itl_ms": 188.33701976109296,
+                  "mean_e2el_ms": 50683.89351931637,
+                  "p95_e2el_ms": 73382.29149224935
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 2.0150259190580204,
+              "sd": 0.02387401813688791
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.7805989583333334,
+              "sd": 0.004510548978043951
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.48077043667676717,
+              "sd": 0.0029929596355186606
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "G2",
+      "attempt": "G2-02",
+      "status": "COMPLETE",
+      "started": 1790180592.6780677,
+      "ended": 1790181614.0682662,
+      "run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G2/results/G2-02",
+      "cleanup_errors": [],
+      "changed_files": [],
+      "units": [
+        {
+          "concurrency": 128,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G2",
+              "attempt": "G2-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3102.3011991772387,
+              "request_throughput": 3.029591014821522,
+              "duration": 168.99970903503709,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 10501.197649354253,
+              "median_ttft_ms": 7423.38039947208,
+              "p95_ttft_ms": 31203.770803543735,
+              "p99_ttft_ms": 36627.62760043843,
+              "mean_tpot_ms": 28.079037125445954,
+              "p95_tpot_ms": 34.31493223556941,
+              "mean_itl_ms": 94.9986819808422,
+              "p95_itl_ms": 228.06711592711508,
+              "mean_e2el_ms": 39226.052628685466,
+              "p95_e2el_ms": 60873.04387715412,
+              "good_requests": 391,
+              "joint_pass_rate": 0.763671875,
+              "request_goodput": 2.313613450771905,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 776630.0,
+              "accepted_tokens": 369856.0,
+              "acceptance_rate": 0.47623192511234436,
+              "nixl_bytes": 88261263360.0
+            },
+            {
+              "group": "G2",
+              "attempt": "G2-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3070.2847653031477,
+              "request_throughput": 2.998324966116355,
+              "duration": 170.76201071799733,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 10222.387552847977,
+              "median_ttft_ms": 7115.988002624363,
+              "p95_ttft_ms": 31288.25986542506,
+              "p99_ttft_ms": 36813.00601122667,
+              "mean_tpot_ms": 28.524652159849694,
+              "p95_tpot_ms": 34.97766324679457,
+              "mean_itl_ms": 96.82716519798501,
+              "p95_itl_ms": 231.29609879106283,
+              "mean_e2el_ms": 39403.10671237421,
+              "p95_e2el_ms": 62888.769053190474,
+              "good_requests": 400,
+              "joint_pass_rate": 0.78125,
+              "request_goodput": 2.3424413797784025,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 774065.0,
+              "accepted_tokens": 370299.0,
+              "acceptance_rate": 0.47838230639545776,
+              "nixl_bytes": 88261263360.0
+            },
+            {
+              "group": "G2",
+              "attempt": "G2-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3102.9963514992296,
+              "request_throughput": 3.0302698745109664,
+              "duration": 168.96184868109412,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 10038.055819137753,
+              "median_ttft_ms": 6981.042560073547,
+              "p95_ttft_ms": 31237.760587991215,
+              "p99_ttft_ms": 36773.865072866894,
+              "mean_tpot_ms": 28.568708571156815,
+              "p95_tpot_ms": 34.117697629684315,
+              "mean_itl_ms": 96.74723181500096,
+              "p95_itl_ms": 228.93833240959702,
+              "mean_e2el_ms": 39263.84468743118,
+              "p95_e2el_ms": 62718.26954557327,
+              "good_requests": 410,
+              "joint_pass_rate": 0.80078125,
+              "request_goodput": 2.426583297948235,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 775895.0,
+              "accepted_tokens": 369910.0,
+              "acceptance_rate": 0.47675265338737843,
+              "nixl_bytes": 88261263360.0
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 169.57452281137617,
+              "sd": 1.0285689076959206
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 39297.668009496956,
+              "sd": 93.2472518329042
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 96.19102633127606,
+              "sd": 1.0333736613333346
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 28.390799285484153,
+              "sd": 0.270891076206063
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 10253.880340446662,
+              "sd": 233.17147226263396
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 7173.47032072333,
+              "sd": 226.70212551157027
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 3091.8607719932056,
+              "sd": 18.688602347547345
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 62160.02749197263,
+              "sd": 1117.8160130955785
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 229.43384904259165,
+              "sd": 1.670549350991403
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 34.4700977040161,
+              "sd": 0.4504913513061777
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 31243.263752320006,
+              "sd": 42.51251589377974
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 36738.16622817733,
+              "sd": 97.70923411183328
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 3.019395285149615,
+              "sd": 0.018250588230026704
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 8388608.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 524288.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T16:26:19.277281+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T16:28:34.923860+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 256,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2740.6698900846022,
+                  "request_throughput": 2.6764354395357444,
+                  "duration": 95.64960776502267,
+                  "total_input_tokens": 4194304,
+                  "total_output_tokens": 262144,
+                  "mean_ttft_ms": 13499.731678314674,
+                  "median_ttft_ms": 7761.7361675947905,
+                  "p95_ttft_ms": 34747.106805443764,
+                  "p99_ttft_ms": 37829.14887449005,
+                  "mean_tpot_ms": 28.304504033433272,
+                  "p95_tpot_ms": 34.20743229258433,
+                  "mean_itl_ms": 95.58491360988205,
+                  "p95_itl_ms": 227.33914298005402,
+                  "mean_e2el_ms": 42455.23930451691,
+                  "p95_e2el_ms": 65592.09518833086
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 2.360879376166181,
+              "sd": 0.05869852107044636
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.7819010416666666,
+              "sd": 0.01856325186117611
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.4771222949650602,
+              "sd": 0.0011218338057191887
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "G3M",
+      "attempt": "G3M-01",
+      "status": "COMPLETE",
+      "started": 1790183833.8112009,
+      "ended": 1790184878.5138934,
+      "run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G3M/results/G3M-01",
+      "cleanup_errors": [],
+      "changed_files": [],
+      "units": [
+        {
+          "concurrency": 128,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G3M",
+              "attempt": "G3M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3054.334311345469,
+              "request_throughput": 2.9827483509233095,
+              "duration": 171.65377020207234,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 9788.580351444125,
+              "median_ttft_ms": 6287.110010045581,
+              "p95_ttft_ms": 32148.901715257663,
+              "p99_ttft_ms": 37894.89763521356,
+              "mean_tpot_ms": 29.833822254740372,
+              "p95_tpot_ms": 35.49970909963359,
+              "mean_itl_ms": 101.3960086126577,
+              "p95_itl_ms": 190.92767592519522,
+              "mean_e2el_ms": 40308.58051804353,
+              "p95_e2el_ms": 63788.027673447505,
+              "good_requests": 402,
+              "joint_pass_rate": 0.78515625,
+              "request_goodput": 2.3419235099046296,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 773115.0,
+              "accepted_tokens": 370511.0,
+              "acceptance_rate": 0.47924435562626516,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            },
+            {
+              "group": "G3M",
+              "attempt": "G3M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3073.1490382010443,
+              "request_throughput": 3.0011221076182073,
+              "duration": 170.60285507887602,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 10124.646263953764,
+              "median_ttft_ms": 6525.320464512333,
+              "p95_ttft_ms": 32037.993995938443,
+              "p99_ttft_ms": 37551.15755567793,
+              "mean_tpot_ms": 28.92741307479849,
+              "p95_tpot_ms": 35.06371517225741,
+              "mean_itl_ms": 98.71574544564584,
+              "p95_itl_ms": 183.92809247598052,
+              "mean_e2el_ms": 39717.38983947261,
+              "p95_e2el_ms": 61393.671320867725,
+              "good_requests": 399,
+              "joint_pass_rate": 0.779296875,
+              "request_goodput": 2.338765079960283,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 769990.0,
+              "accepted_tokens": 371129.0,
+              "acceptance_rate": 0.48199197392173926,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            },
+            {
+              "group": "G3M",
+              "attempt": "G3M-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 128,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 512,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 3063.6892866659387,
+              "request_throughput": 2.9918840690097057,
+              "duration": 171.12962541007437,
+              "total_input_tokens": 8388608,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 9990.688612601389,
+              "median_ttft_ms": 6370.311306440271,
+              "p95_ttft_ms": 32078.955379931715,
+              "p99_ttft_ms": 37646.492945272475,
+              "mean_tpot_ms": 29.368498208170294,
+              "p95_tpot_ms": 35.43985769685671,
+              "mean_itl_ms": 100.33143563254743,
+              "p95_itl_ms": 195.29253905639052,
+              "mean_e2el_ms": 40034.6622795596,
+              "p95_e2el_ms": 63541.94102274487,
+              "good_requests": 397,
+              "joint_pass_rate": 0.775390625,
+              "request_goodput": 2.319878858196979,
+              "remote_hits": 8388608.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 769145.0,
+              "accepted_tokens": 371280.0,
+              "acceptance_rate": 0.4827178230372687,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 81751965696
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 171.1287502303409,
+              "sd": 0.5254581082211577
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 40020.210879025246,
+              "sd": 295.86016433500765
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 100.14772989695031,
+              "sd": 1.349541962696442
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 29.376577845903054,
+              "sd": 0.45325860254400924
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 9967.971742666427,
+              "sd": 169.18072148582888
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 6394.247260332729,
+              "sd": 120.89562676486932
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 3063.7242120708174,
+              "sd": 9.407412051165121
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 62907.8800056867,
+              "sd": 1317.1031150974538
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 190.04943581918874,
+              "sd": 5.7328998580645765
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 35.33442732291591,
+              "sd": 0.23634582498787787
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 32088.61703037594,
+              "sd": 56.081558182058046
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 37697.51604538799,
+              "sd": 177.4593703607629
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 2.9919181758504076,
+              "sd": 0.009186925831215938
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 8388608.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 524288.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T17:20:32.317207+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T17:22:55.963252+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 256,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2535.05283703129,
+                  "request_throughput": 2.475637536163369,
+                  "duration": 103.40770660503767,
+                  "total_input_tokens": 4194304,
+                  "total_output_tokens": 262144,
+                  "mean_ttft_ms": 15962.551874071323,
+                  "median_ttft_ms": 11225.608312524855,
+                  "p95_ttft_ms": 35973.42813370051,
+                  "p99_ttft_ms": 37782.424489490215,
+                  "mean_tpot_ms": 29.277448371253282,
+                  "p95_tpot_ms": 35.93019031645741,
+                  "mean_itl_ms": 99.50829326640579,
+                  "p95_itl_ms": 187.1870925184338,
+                  "mean_e2el_ms": 45913.38155786343,
+                  "p95_e2el_ms": 66793.16744179232
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 2.333522482687297,
+              "sd": 0.011920792207439255
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.7799479166666666,
+              "sd": 0.004915256793796061
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.48131805086175766,
+              "sd": 0.0018321771699011669
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "G4PPM",
+      "attempt": "G4PPM-01",
+      "status": "COMPLETE",
+      "started": 1790184888.988378,
+      "ended": 1790189371.8674955,
+      "run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G4PPM/results/G4PPM-01",
+      "cleanup_errors": [],
+      "changed_files": [],
+      "units": [
+        {
+          "concurrency": 32,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1276.7331374399357,
+              "request_throughput": 0.6234048522655936,
+              "duration": 205.32403547200374,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 5438.738333143192,
+              "median_ttft_ms": 3353.052309481427,
+              "p95_ttft_ms": 15455.409899225924,
+              "p99_ttft_ms": 16550.00366745517,
+              "mean_tpot_ms": 20.889825410617203,
+              "p95_tpot_ms": 25.52765743140086,
+              "mean_itl_ms": 72.82519165727194,
+              "p95_itl_ms": 77.26098261773586,
+              "mean_e2el_ms": 48200.21094867661,
+              "p95_e2el_ms": 61517.243103531655,
+              "good_requests": 105,
+              "joint_pass_rate": 0.8203125,
+              "request_goodput": 0.5113867928741198,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 376435.0,
+              "accepted_tokens": 187177.0,
+              "acceptance_rate": 0.4972359105821722,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 28648341504
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1302.0925583616897,
+              "request_throughput": 0.6357873820125438,
+              "duration": 201.32516564708203,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 5598.21806765467,
+              "median_ttft_ms": 3087.7868024399504,
+              "p95_ttft_ms": 15398.549038311465,
+              "p99_ttft_ms": 16478.08271152899,
+              "mean_tpot_ms": 20.314119476459073,
+              "p95_tpot_ms": 24.226134635895235,
+              "mean_itl_ms": 72.46792850869446,
+              "p95_itl_ms": 76.99897084385155,
+              "mean_e2el_ms": 47181.22063596638,
+              "p95_e2el_ms": 57467.29511293815,
+              "good_requests": 105,
+              "joint_pass_rate": 0.8203125,
+              "request_goodput": 0.5215443368071648,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 367880.0,
+              "accepted_tokens": 188843.0,
+              "acceptance_rate": 0.5133277155594216,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 28648341504
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1265.4155313190681,
+              "request_throughput": 0.6178786774018887,
+              "duration": 207.16040977207012,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 5950.0882623615325,
+              "median_ttft_ms": 4206.265576416627,
+              "p95_ttft_ms": 15434.800214832649,
+              "p99_ttft_ms": 16586.586742815565,
+              "mean_tpot_ms": 21.01488495895898,
+              "p95_tpot_ms": 25.273726948301032,
+              "mean_itl_ms": 72.53064150918982,
+              "p95_itl_ms": 77.35526969190687,
+              "mean_e2el_ms": 48967.55777335056,
+              "p95_e2el_ms": 61455.316455010325,
+              "good_requests": 105,
+              "joint_pass_rate": 0.8203125,
+              "request_goodput": 0.5068536025562369,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 380220.0,
+              "accepted_tokens": 186353.0,
+              "acceptance_rate": 0.4901188785440008,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 28648341504
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 204.6032036303853,
+              "sd": 2.983658393226392
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 48116.329785997856,
+              "sd": 896.1178098825691
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 72.6079205583854,
+              "sd": 0.19075711760326383
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 20.739609948678417,
+              "sd": 0.37375336670048026
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 5662.348221053132,
+              "sd": 261.63752590001894
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 3549.034896112668,
+              "sd": 584.4275598019793
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 1281.4137423735644,
+              "sd": 18.781164103426384
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 60146.618223826714,
+              "sd": 2320.568459851043
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 77.2050743844981,
+              "sd": 0.18461179591026414
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 25.009173005199045,
+              "sd": 0.689914479057588
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 15429.586384123346,
+              "sd": 28.78675735442125
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 16538.224373933244,
+              "sd": 55.20276277747621
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 0.625690303893342,
+              "sd": 0.009170490284876164
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 3145728.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 262144.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T17:37:42.697843+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T17:40:00.826678+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 64,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 1199.7368365808782,
+                  "request_throughput": 0.5858090022367569,
+                  "duration": 109.25062564015388,
+                  "total_input_tokens": 1572864,
+                  "total_output_tokens": 131072,
+                  "mean_ttft_ms": 9111.592169774667,
+                  "median_ttft_ms": 8003.0629261163995,
+                  "p95_ttft_ms": 17083.96827664692,
+                  "p99_ttft_ms": 17962.04655686626,
+                  "mean_tpot_ms": 20.291697733695774,
+                  "p95_tpot_ms": 25.14649437102123,
+                  "mean_itl_ms": 70.36088030996153,
+                  "p95_itl_ms": 73.49564800970255,
+                  "mean_e2el_ms": 50648.69743064992,
+                  "p95_e2el_ms": 65982.08726489682
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.5132615774125072,
+              "sd": 0.007522667811812442
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.8203125,
+              "sd": 0.0
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.5002275015618648,
+              "sd": 0.011890111073679046
+            }
+          }
+        },
+        {
+          "concurrency": 48,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1628.6487738384237,
+              "request_throughput": 0.7952386591007928,
+              "duration": 241.43695455789566,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 7038.034952027374,
+              "median_ttft_ms": 3836.7351515917107,
+              "p95_ttft_ms": 21999.09199969843,
+              "p99_ttft_ms": 23338.485579031985,
+              "mean_tpot_ms": 23.944809638390133,
+              "p95_tpot_ms": 29.124795517725634,
+              "mean_itl_ms": 83.5016369175521,
+              "p95_itl_ms": 149.82909874524918,
+              "mean_e2el_ms": 56053.06028181197,
+              "p95_e2el_ms": 70856.1712974566,
+              "good_requests": 152,
+              "joint_pass_rate": 0.7916666666666666,
+              "request_goodput": 0.6295639384547943,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 564475.0,
+              "accepted_tokens": 280744.0,
+              "acceptance_rate": 0.4973541786615882,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 42972512256
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1665.2699400330023,
+              "request_throughput": 0.8131200879067394,
+              "duration": 236.12748332694173,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 6789.192268603074,
+              "median_ttft_ms": 3996.839330648072,
+              "p95_ttft_ms": 21957.920094404835,
+              "p99_ttft_ms": 23272.834381901193,
+              "mean_tpot_ms": 23.944298559495437,
+              "p95_tpot_ms": 29.333289517167067,
+              "mean_itl_ms": 84.19084364213126,
+              "p95_itl_ms": 148.2328342273829,
+              "mean_e2el_ms": 55803.17141989023,
+              "p95_e2el_ms": 72633.74648534226,
+              "good_requests": 153,
+              "joint_pass_rate": 0.796875,
+              "request_goodput": 0.647955070050683,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 559850.0,
+              "accepted_tokens": 281680.0,
+              "acceptance_rate": 0.5031347682414933,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 42972512256
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1614.193581263257,
+              "request_throughput": 0.7881804596011998,
+              "duration": 243.59903580602258,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 6887.026618575571,
+              "median_ttft_ms": 4263.915952527896,
+              "p95_ttft_ms": 21986.397422652226,
+              "p99_ttft_ms": 23298.523757632356,
+              "mean_tpot_ms": 24.177416038808147,
+              "p95_tpot_ms": 29.722231470575508,
+              "mean_itl_ms": 84.29260077709031,
+              "p95_itl_ms": 134.127274318598,
+              "mean_e2el_ms": 56378.19725001585,
+              "p95_e2el_ms": 73576.61142708967,
+              "good_requests": 153,
+              "joint_pass_rate": 0.796875,
+              "request_goodput": 0.628081303744706,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 564610.0,
+              "accepted_tokens": 280680.0,
+              "acceptance_rate": 0.4971219071571527,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 42972512256
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 240.38782456362,
+              "sd": 3.844675463622576
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 56078.14298390602,
+              "sd": 288.33233045596893
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 83.99502711225789,
+              "sd": 0.43030691582012665
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 24.02217474556457,
+              "sd": 0.13444314652061048
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 6904.75127973534,
+              "sd": 125.36464008392902
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 4032.496811589226,
+              "sd": 215.81114691419825
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 1636.037431711561,
+              "sd": 26.327605382347954
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 72355.50973662951,
+              "sd": 1381.3979842826498
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 144.0630690970767,
+              "sd": 8.641587152414944
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 29.393438835156072,
+              "sd": 0.3032257983422848
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 21981.136505585164,
+              "sd": 21.084102605187372
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 23303.281239521846,
+              "sd": 33.08315502824864
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 0.7988464022029107,
+              "sd": 0.012855276065599587
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 4718592.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 393216.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T17:52:03.549281+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T17:54:45.418517+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 96,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 1532.466000511967,
+                  "request_throughput": 0.7482744143124839,
+                  "duration": 128.29517909977585,
+                  "total_input_tokens": 2359296,
+                  "total_output_tokens": 196608,
+                  "mean_ttft_ms": 9928.519018722,
+                  "median_ttft_ms": 7366.5928420377895,
+                  "p95_ttft_ms": 22207.040563458577,
+                  "p99_ttft_ms": 23436.817447422072,
+                  "mean_tpot_ms": 23.20730993159815,
+                  "p95_tpot_ms": 28.757140701525206,
+                  "mean_itl_ms": 81.01245155291633,
+                  "p95_itl_ms": 87.71222677314654,
+                  "mean_e2el_ms": 57433.88244870342,
+                  "p95_e2el_ms": 76430.86850416148
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.6352001040833944,
+              "sd": 0.011070971910401822
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.7951388888888888,
+              "sd": 0.0030070326520293222
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.49920361802007807,
+              "sd": 0.0034064562319869674
+            }
+          }
+        },
+        {
+          "concurrency": 64,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1930.5755835436898,
+              "request_throughput": 0.9426638591521923,
+              "duration": 271.5708229551092,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8094.400400501399,
+              "median_ttft_ms": 4516.305713914335,
+              "p95_ttft_ms": 27571.408950025216,
+              "p99_ttft_ms": 29933.700918836985,
+              "mean_tpot_ms": 27.002165665250413,
+              "p95_tpot_ms": 32.97928811734999,
+              "mean_itl_ms": 93.66890213087386,
+              "p95_itl_ms": 157.88920127088207,
+              "mean_e2el_ms": 63367.83351726899,
+              "p95_e2el_ms": 82633.83164943662,
+              "good_requests": 201,
+              "joint_pass_rate": 0.78515625,
+              "request_goodput": 0.7401384206624635,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 756600.0,
+              "accepted_tokens": 373452.0,
+              "acceptance_rate": 0.49359238699444885,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 57296683008
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1926.9481532177908,
+              "request_throughput": 0.9408926529383744,
+              "duration": 272.0820480429102,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8078.222175624433,
+              "median_ttft_ms": 4425.099114421755,
+              "p95_ttft_ms": 27642.248229822144,
+              "p99_ttft_ms": 30092.573068744965,
+              "mean_tpot_ms": 26.944081022415695,
+              "p95_tpot_ms": 32.919739966450685,
+              "mean_itl_ms": 93.95627317234542,
+              "p95_itl_ms": 160.15691336942834,
+              "mean_e2el_ms": 63232.75602850936,
+              "p95_e2el_ms": 84008.06738674873,
+              "good_requests": 201,
+              "joint_pass_rate": 0.78515625,
+              "request_goodput": 0.7387477470336455,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 752670.0,
+              "accepted_tokens": 374280.0,
+              "acceptance_rate": 0.4972697197975208,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 57296683008
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1944.1520543810798,
+              "request_throughput": 0.9492929953032616,
+              "duration": 269.6743800560944,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 8039.629903893001,
+              "median_ttft_ms": 4348.305161460303,
+              "p95_ttft_ms": 27560.472807090264,
+              "p99_ttft_ms": 29924.74471762543,
+              "mean_tpot_ms": 26.55090753418447,
+              "p95_tpot_ms": 32.098233325415556,
+              "mean_itl_ms": 92.9352712474048,
+              "p95_itl_ms": 154.18488687137125,
+              "mean_e2el_ms": 62389.337626368615,
+              "p95_e2el_ms": 82557.50878126128,
+              "good_requests": 201,
+              "joint_pass_rate": 0.78515625,
+              "request_goodput": 0.7453433283435765,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 749840.0,
+              "accepted_tokens": 374882.0,
+              "acceptance_rate": 0.49994932252213803,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 57296683008
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 271.10908368470456,
+              "sd": 1.2685104055780294
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 62996.64239071566,
+              "sd": 530.2601150297485
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 93.52014885020803,
+              "sd": 0.5265044031769812
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 26.83238474061686,
+              "sd": 0.24549036587826656
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 8070.750826672945,
+              "sd": 28.139254006615438
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 4429.903329932131,
+              "sd": 84.10325065785264
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 1933.8919303808534,
+              "sd": 9.068746940307005
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 83066.46927248221,
+              "sd": 816.3403405714652
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 157.41033383722723,
+              "sd": 3.0146742174960455
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 32.66575380307208,
+              "sd": 0.4923881751103442
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 27591.37666231254,
+              "sd": 44.394110997253655
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 29983.672901735797,
+              "sd": 94.4165672220955
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 0.9442831691312761,
+              "sd": 0.00442809909194678
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 6291456.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 524288.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T18:08:56.068297+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T18:11:57.281335+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 128,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 1802.7358070849405,
+                  "request_throughput": 0.8802420933031936,
+                  "duration": 145.41454103798606,
+                  "total_input_tokens": 3145728,
+                  "total_output_tokens": 262144,
+                  "mean_ttft_ms": 12169.069357083572,
+                  "median_ttft_ms": 8452.395281638019,
+                  "p95_ttft_ms": 28867.061022517733,
+                  "p99_ttft_ms": 30089.78673908161,
+                  "mean_tpot_ms": 25.478890125364938,
+                  "p95_tpot_ms": 31.661115149406843,
+                  "mean_itl_ms": 88.64764642367088,
+                  "p95_itl_ms": 120.38454911671563,
+                  "mean_e2el_ms": 64324.357443705594,
+                  "p95_e2el_ms": 87225.78564422436
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.7414098320132285,
+              "sd": 0.0034767496776613575
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.78515625,
+              "sd": 0.0
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.49693714310470255,
+              "sd": 0.003191490681210533
+            }
+          }
+        },
+        {
+          "concurrency": 80,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2173.589676330441,
+              "request_throughput": 1.061323084145723,
+              "duration": 301.51044934405945,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 9415.242265217967,
+              "median_ttft_ms": 5872.488220455125,
+              "p95_ttft_ms": 33717.59847622598,
+              "p99_ttft_ms": 36662.36569888424,
+              "mean_tpot_ms": 29.854176018635567,
+              "p95_tpot_ms": 37.19340029947071,
+              "mean_itl_ms": 105.3907738318428,
+              "p95_itl_ms": 165.25579334702346,
+              "mean_e2el_ms": 70526.74057536497,
+              "p95_e2el_ms": 95982.48882177286,
+              "good_requests": 248,
+              "joint_pass_rate": 0.775,
+              "request_goodput": 0.8225253902129355,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 929370.0,
+              "accepted_tokens": 470141.0,
+              "acceptance_rate": 0.5058706435542356,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 71620853760
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2140.122582396465,
+              "request_throughput": 1.044981729685774,
+              "duration": 306.22544960305095,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 9332.74393301108,
+              "median_ttft_ms": 4922.621552017517,
+              "p95_ttft_ms": 33603.04906920064,
+              "p99_ttft_ms": 36651.66696384783,
+              "mean_tpot_ms": 29.978086571007665,
+              "p95_tpot_ms": 37.03858937685863,
+              "mean_itl_ms": 105.68410252369382,
+              "p95_itl_ms": 171.23442895244807,
+              "mean_e2el_ms": 70697.88714386377,
+              "p95_e2el_ms": 95290.76796744484,
+              "good_requests": 249,
+              "joint_pass_rate": 0.778125,
+              "request_goodput": 0.8131264084117429,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 930635.0,
+              "accepted_tokens": 469915.0,
+              "acceptance_rate": 0.5049401752566796,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 71620853760
+            },
+            {
+              "group": "G4PPM",
+              "attempt": "G4PPM-01",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2140.8645211901317,
+              "request_throughput": 1.045344004487369,
+              "duration": 306.1193239989225,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 9429.875458191964,
+              "median_ttft_ms": 5297.947049490176,
+              "p95_ttft_ms": 33608.540620910935,
+              "p99_ttft_ms": 36583.36603980744,
+              "mean_tpot_ms": 30.030744629160168,
+              "p95_tpot_ms": 37.996713030397714,
+              "mean_itl_ms": 105.0516365134384,
+              "p95_itl_ms": 164.01491670403632,
+              "mean_e2el_ms": 70902.80971408283,
+              "p95_e2el_ms": 94945.43659072371,
+              "good_requests": 245,
+              "joint_pass_rate": 0.765625,
+              "request_goodput": 0.8003415034356419,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 937870.0,
+              "accepted_tokens": 468488.0,
+              "acceptance_rate": 0.49952338810282876,
+              "nixl_bytes": 0,
+              "mooncake_bytes": 71620853760
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 304.61840764867765,
+              "sd": 2.6920938465062316
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 70709.14581110385,
+              "sd": 188.28719410787537
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 105.37550428965834,
+              "sd": 0.3165093722482745
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 29.954335739601134,
+              "sd": 0.09064874544097787
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 9392.620552140337,
+              "sd": 52.368308383183155
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 5364.352273987606,
+              "sd": 478.40245853528546
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 2151.525593305679,
+              "sd": 19.111657125588785
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 95406.23112664714,
+              "sd": 528.0796704387849
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 166.8350463345026,
+              "sd": 3.860164410370133
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 37.40956756890902,
+              "sd": 0.5143407918394971
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 33643.06272211252,
+              "sd": 64.60822908882166
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 36632.46623417983,
+              "sd": 42.857176159892184
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 1.0505496061062887,
+              "sd": 0.009331863830853899
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 7864320.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 655360.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T18:28:00.103380+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T18:31:16.795580+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 160,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2079.6759026234754,
+                  "request_throughput": 1.0154667493278688,
+                  "duration": 157.56301238411106,
+                  "total_input_tokens": 3932160,
+                  "total_output_tokens": 327680,
+                  "mean_ttft_ms": 14266.546377612394,
+                  "median_ttft_ms": 9072.19975697808,
+                  "p95_ttft_ms": 36292.541013343725,
+                  "p99_ttft_ms": 37055.71463666856,
+                  "mean_tpot_ms": 27.81575765762019,
+                  "p95_tpot_ms": 33.438475174705616,
+                  "mean_itl_ms": 98.41754664775509,
+                  "p95_itl_ms": 155.1939536584541,
+                  "mean_e2el_ms": 71205.40230276092,
+                  "p95_e2el_ms": 94904.33854889122
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.8119977673534401,
+              "sd": 0.01113492618367136
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.7729166666666667,
+              "sd": 0.006505206248331651
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.5034447356379147,
+              "sd": 0.003427705891902384
+            }
+          }
+        }
+      ]
+    },
+    {
+      "group": "G4DP",
+      "attempt": "G4DP-02",
+      "status": "COMPLETE",
+      "started": 1790189400.1519299,
+      "ended": 1790193155.1294918,
+      "run_root": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G4DP/results/G4DP-02",
+      "cleanup_errors": [],
+      "changed_files": [],
+      "units": [
+        {
+          "concurrency": 32,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1591.3265736281855,
+              "request_throughput": 0.7770149285293875,
+              "duration": 164.73299971502274,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 4993.188347600153,
+              "median_ttft_ms": 3319.808882428333,
+              "p95_ttft_ms": 14030.738642427603,
+              "p99_ttft_ms": 16828.221527808353,
+              "mean_tpot_ms": 15.949338927136,
+              "p95_tpot_ms": 20.049368025596024,
+              "mean_itl_ms": 56.13893160594551,
+              "p95_itl_ms": 56.51179809356109,
+              "mean_e2el_ms": 37641.48513144755,
+              "p95_e2el_ms": 48216.80987456347,
+              "good_requests": 111,
+              "joint_pass_rate": 0.8671875,
+              "request_goodput": 0.6738176333340782,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 372840.0,
+              "accepted_tokens": 187873.0,
+              "acceptance_rate": 0.5038971140435575,
+              "nixl_bytes": 30275665920.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1619.840235991393,
+              "request_throughput": 0.7909376152301724,
+              "duration": 161.8332439060323,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 5262.814084431739,
+              "median_ttft_ms": 3759.4599325675517,
+              "p95_ttft_ms": 13863.775901542975,
+              "p99_ttft_ms": 15992.656629150733,
+              "mean_tpot_ms": 16.009437534476284,
+              "p95_tpot_ms": 19.295664139580605,
+              "mean_itl_ms": 55.688401794554395,
+              "p95_itl_ms": 55.72723629884422,
+              "mean_e2el_ms": 38034.13271750469,
+              "p95_e2el_ms": 46667.54679059377,
+              "good_requests": 111,
+              "joint_pass_rate": 0.8671875,
+              "request_goodput": 0.6858912132074151,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 377265.0,
+              "accepted_tokens": 186968.0,
+              "acceptance_rate": 0.4955879819225213,
+              "nixl_bytes": 30275665920.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 32,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 128,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 1611.0689319802443,
+              "request_throughput": 0.7866547519434787,
+              "duration": 162.71432885108516,
+              "total_input_tokens": 3145728,
+              "total_output_tokens": 262144,
+              "mean_ttft_ms": 5245.50955248742,
+              "median_ttft_ms": 3728.113040444441,
+              "p95_ttft_ms": 13666.847617959138,
+              "p99_ttft_ms": 15959.397485048976,
+              "mean_tpot_ms": 15.989891992941596,
+              "p95_tpot_ms": 19.966899128816156,
+              "mean_itl_ms": 55.703237749974804,
+              "p95_itl_ms": 55.91012458316981,
+              "mean_e2el_ms": 37976.818462038864,
+              "p95_e2el_ms": 47249.16119425325,
+              "good_requests": 111,
+              "joint_pass_rate": 0.8671875,
+              "request_goodput": 0.6821771677009854,
+              "remote_hits": 3145728.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 376705.0,
+              "accepted_tokens": 187072.0,
+              "acceptance_rate": 0.4966007884153383,
+              "nixl_bytes": 30275665920.0
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 163.09352415738007,
+              "sd": 1.4866027539933222
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 37884.14543699704,
+              "sd": 212.09490537711355
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 55.843523716824905,
+              "sd": 0.25593825839316864
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 15.982889484851293,
+              "sd": 0.030655129925127356
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 5167.170661506437,
+              "sd": 150.9213234456667
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 3602.4606184801087,
+              "sd": 245.2848544677319
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 1607.4119138666076,
+              "sd": 14.604368231914332
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 47377.83928647017,
+              "sd": 782.6062639669236
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 56.04971965852504,
+              "sd": 0.4104867735139755
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 19.77064376466426,
+              "sd": 0.41340599042282916
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 13853.787387309907,
+              "sd": 182.15102864001452
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 16260.091880669353,
+              "sd": 492.29565774573723
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 0.7848690985676795,
+              "sd": 0.00713103917573942
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 3145728.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 262144.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T18:53:02.517708+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T18:54:57.151860+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 64,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 1529.7102384612517,
+                  "request_throughput": 0.7469288273736581,
+                  "duration": 85.68420129804872,
+                  "total_input_tokens": 1572864,
+                  "total_output_tokens": 131072,
+                  "mean_ttft_ms": 6890.092469730007,
+                  "median_ttft_ms": 5030.6222279323265,
+                  "p95_ttft_ms": 15793.414815003049,
+                  "p99_ttft_ms": 16211.401250211055,
+                  "mean_tpot_ms": 15.681923153034138,
+                  "p95_tpot_ms": 19.698394669710535,
+                  "mean_itl_ms": 54.424155068208364,
+                  "p95_itl_ms": 55.05104404874145,
+                  "mean_e2el_ms": 38990.98916399089,
+                  "p95_e2el_ms": 51266.60872967912
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.6806286714141595,
+              "sd": 0.006183948035211526
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.8671875,
+              "sd": 0.0
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.4986952947938057,
+              "sd": 0.004533281027940972
+            }
+          }
+        },
+        {
+          "concurrency": 48,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2039.825611597862,
+              "request_throughput": 0.9960085994130186,
+              "duration": 192.76941997604445,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 6634.549281592626,
+              "median_ttft_ms": 4579.942725598812,
+              "p95_ttft_ms": 18946.218623418827,
+              "p99_ttft_ms": 23095.275878049433,
+              "mean_tpot_ms": 18.57308802741309,
+              "p95_tpot_ms": 22.75740567580094,
+              "mean_itl_ms": 64.48186446849363,
+              "p95_itl_ms": 184.043123666197,
+              "mean_e2el_ms": 44653.66047370723,
+              "p95_e2el_ms": 58681.23952375025,
+              "good_requests": 159,
+              "joint_pass_rate": 0.828125,
+              "request_goodput": 0.8248196213889061,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 566985.0,
+              "accepted_tokens": 280207.0,
+              "acceptance_rate": 0.49420531407356455,
+              "nixl_bytes": 45413498880.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2080.986404740397,
+              "request_throughput": 1.016106642939647,
+              "duration": 188.95654440810904,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 6047.333088414841,
+              "median_ttft_ms": 3655.295472824946,
+              "p95_ttft_ms": 19268.18642448634,
+              "p99_ttft_ms": 23106.479958170094,
+              "mean_tpot_ms": 18.433844152979802,
+              "p95_tpot_ms": 22.319012965381862,
+              "mean_itl_ms": 65.27211141527252,
+              "p95_itl_ms": 184.10222575766966,
+              "mean_e2el_ms": 43781.41206956449,
+              "p95_e2el_ms": 59977.13414779864,
+              "good_requests": 159,
+              "joint_pass_rate": 0.828125,
+              "request_goodput": 0.8414633136843952,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 555940.0,
+              "accepted_tokens": 282431.0,
+              "acceptance_rate": 0.5080242472209231,
+              "nixl_bytes": 45413498880.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 48,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 192,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2048.6900741175887,
+              "request_throughput": 1.0003369502527288,
+              "duration": 191.93532734294422,
+              "total_input_tokens": 4718592,
+              "total_output_tokens": 393216,
+              "mean_ttft_ms": 6264.333625465952,
+              "median_ttft_ms": 4159.808506025001,
+              "p95_ttft_ms": 19264.13100940408,
+              "p99_ttft_ms": 23119.170437648427,
+              "mean_tpot_ms": 18.63468419566286,
+              "p95_tpot_ms": 22.709182205988284,
+              "mean_itl_ms": 64.95909600122907,
+              "p95_itl_ms": 182.7989654848352,
+              "mean_e2el_ms": 44409.53217398783,
+              "p95_e2el_ms": 60012.8180400934,
+              "good_requests": 159,
+              "joint_pass_rate": 0.828125,
+              "request_goodput": 0.828404036928041,
+              "remote_hits": 4718592.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 564690.0,
+              "accepted_tokens": 280661.0,
+              "acceptance_rate": 0.497017832793214,
+              "nixl_bytes": 45413498880.0
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 191.22043057569923,
+              "sd": 2.0044483193643794
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 44281.53490575318,
+              "sd": 449.99088339547194
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 64.9043572949984,
+              "sd": 0.39795703749675804
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 18.54720545868525,
+              "sd": 0.10289125914865967
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 6315.405331824473,
+              "sd": 296.9207870381103
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 4131.682234816253,
+              "sd": 462.9648484114593
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 2056.500696818616,
+              "sd": 21.66349679216154
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 59557.063903880764,
+              "sd": 758.6959823707884
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 183.6481049695673,
+              "sd": 0.7359698789369102
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 22.595200282390362,
+              "sd": 0.24039748608805814
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 19159.512019103084,
+              "sd": 184.72862820841382
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 23106.97542462265,
+              "sd": 11.95498263744748
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 1.0041507308684647,
+              "sd": 0.010577879293047626
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 4718592.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 393216.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T19:04:56.381811+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T19:07:11.374454+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 96,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 1946.716000412346,
+                  "request_throughput": 0.9505449220763408,
+                  "duration": 100.9947007978335,
+                  "total_input_tokens": 2359296,
+                  "total_output_tokens": 196608,
+                  "mean_ttft_ms": 9210.702087989679,
+                  "median_ttft_ms": 6835.001530009322,
+                  "p95_ttft_ms": 21585.307946486864,
+                  "p99_ttft_ms": 23317.336838238407,
+                  "mean_tpot_ms": 17.92767443917891,
+                  "p95_tpot_ms": 22.55330852586157,
+                  "mean_itl_ms": 62.68242860923162,
+                  "p95_itl_ms": 65.23235243512316,
+                  "mean_e2el_ms": 45908.651664988916,
+                  "p95_e2el_ms": 60932.0177914924
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.8315623240004474,
+              "sd": 0.008759806289555049
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.828125,
+              "sd": 0.0
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.4997491313625672,
+              "sd": 0.007303130988761219
+            }
+          }
+        },
+        {
+          "concurrency": 64,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2440.1809902610507,
+              "request_throughput": 1.1914946241509037,
+              "duration": 214.8561939022038,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 7499.113964270691,
+              "median_ttft_ms": 4509.284870466217,
+              "p95_ttft_ms": 24887.453610775992,
+              "p99_ttft_ms": 29634.404187905588,
+              "mean_tpot_ms": 20.821334116594148,
+              "p95_tpot_ms": 25.025735205675428,
+              "mean_itl_ms": 72.7830027307836,
+              "p95_itl_ms": 182.70053571322921,
+              "mean_e2el_ms": 50120.384900938916,
+              "p95_e2el_ms": 67404.72261601826,
+              "good_requests": 207,
+              "joint_pass_rate": 0.80859375,
+              "request_goodput": 0.9634351062470197,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 750840.0,
+              "accepted_tokens": 374657.0,
+              "acceptance_rate": 0.49898380480528476,
+              "nixl_bytes": 60551331840.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2416.6493598427724,
+              "request_throughput": 1.1800045702357287,
+              "duration": 216.94831228395924,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 7604.153598805169,
+              "median_ttft_ms": 4538.97237253841,
+              "p95_ttft_ms": 25075.485345965717,
+              "p99_ttft_ms": 29172.26907138247,
+              "mean_tpot_ms": 20.924243959436073,
+              "p95_tpot_ms": 25.830047227526205,
+              "mean_itl_ms": 73.26785134002199,
+              "p95_itl_ms": 182.51422262983397,
+              "mean_e2el_ms": 50436.08098377081,
+              "p95_e2el_ms": 69118.3283283026,
+              "good_requests": 206,
+              "joint_pass_rate": 0.8046875,
+              "request_goodput": 0.949534927611563,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 749560.0,
+              "accepted_tokens": 374919.0,
+              "acceptance_rate": 0.5001854421260473,
+              "nixl_bytes": 60551331840.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 64,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 256,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2433.273361740187,
+              "request_throughput": 1.1881217586622006,
+              "duration": 215.4661322659813,
+              "total_input_tokens": 6291456,
+              "total_output_tokens": 524288,
+              "mean_ttft_ms": 7205.572957806908,
+              "median_ttft_ms": 4261.202634079382,
+              "p95_ttft_ms": 24361.385197436903,
+              "p99_ttft_ms": 29121.427423937712,
+              "mean_tpot_ms": 20.86933001889498,
+              "p95_tpot_ms": 25.771904947351285,
+              "mean_itl_ms": 72.62426050686885,
+              "p95_itl_ms": 181.57281744061038,
+              "mean_e2el_ms": 49925.09150648493,
+              "p95_e2el_ms": 69528.29111379106,
+              "good_requests": 208,
+              "joint_pass_rate": 0.8125,
+              "request_goodput": 0.9653489289130379,
+              "remote_hits": 6291456.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 754210.0,
+              "accepted_tokens": 373964.0,
+              "acceptance_rate": 0.4958353774147784,
+              "nixl_bytes": 60551331840.0
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 215.7568794840481,
+              "sd": 1.0759369356193398
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 50160.51913039822,
+              "sd": 257.84807300994504
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 72.89170485922482,
+              "sd": 0.33528257436888487
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 20.87163603164173,
+              "sd": 0.05149366183841022
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 7436.28017362759,
+              "sd": 206.58580730433087
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 4436.48662569467,
+              "sd": 152.52440864419987
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 2430.03457061467,
+              "sd": 12.095525350378798
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 68683.78068603731,
+              "sd": 1126.5032317894136
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 182.2625252612245,
+              "sd": 0.6045252679775199
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 25.542562460184303,
+              "sd": 0.4485286383703643
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 24774.774718059536,
+              "sd": 370.14477597296093
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 29309.36689440859,
+              "sd": 282.6360732490004
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 1.1865403176829443,
+              "sd": 0.005906018237489648
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 6291456.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 524288.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T19:18:54.543715+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T19:21:26.567833+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 128,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2260.070469031969,
+                  "request_throughput": 1.103550033707016,
+                  "duration": 115.98930369294249,
+                  "total_input_tokens": 3145728,
+                  "total_output_tokens": 262144,
+                  "mean_ttft_ms": 11294.909100673976,
+                  "median_ttft_ms": 8044.656912446953,
+                  "p95_ttft_ms": 27332.420399284456,
+                  "p99_ttft_ms": 29525.43385839323,
+                  "mean_tpot_ms": 19.420555698880367,
+                  "p95_tpot_ms": 23.90168141052727,
+                  "mean_itl_ms": 68.58921113307305,
+                  "p95_itl_ms": 179.45247692987317,
+                  "mean_e2el_ms": 51048.78661628209,
+                  "p95_e2el_ms": 69373.66784033366
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 0.9594396542572069,
+              "sd": 0.008630955146618303
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.80859375,
+              "sd": 0.00390625
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.49833487478203686,
+              "sd": 0.002246463527271522
+            }
+          }
+        },
+        {
+          "concurrency": 80,
+          "status": "PASS",
+          "rounds": [
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 1,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2763.8647674955278,
+              "request_throughput": 1.3495433435036757,
+              "duration": 237.11724528181367,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 9194.073165236478,
+              "median_ttft_ms": 6158.903604489751,
+              "p95_ttft_ms": 31555.887166480534,
+              "p99_ttft_ms": 36613.80649861182,
+              "mean_tpot_ms": 22.382346492810687,
+              "p95_tpot_ms": 27.52386717987713,
+              "mean_itl_ms": 78.60672019696285,
+              "p95_itl_ms": 187.93491174001244,
+              "mean_e2el_ms": 55010.73643601994,
+              "p95_e2el_ms": 75987.32789021451,
+              "good_requests": 250,
+              "joint_pass_rate": 0.78125,
+              "request_goodput": 1.0543307371122468,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 934175.0,
+              "accepted_tokens": 469229.0,
+              "acceptance_rate": 0.5022923970348168,
+              "nixl_bytes": 75689164800.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 2,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2761.5402793741173,
+              "request_throughput": 1.3484083395381432,
+              "duration": 237.31683542509563,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 8955.142683993472,
+              "median_ttft_ms": 5434.055845020339,
+              "p95_ttft_ms": 31497.143681894526,
+              "p99_ttft_ms": 36270.11698707938,
+              "mean_tpot_ms": 22.53765377790042,
+              "p95_tpot_ms": 27.251011444643346,
+              "mean_itl_ms": 78.86294747568114,
+              "p95_itl_ms": 185.67797688301656,
+              "mean_e2el_ms": 55089.71996735563,
+              "p95_e2el_ms": 76323.24062838452,
+              "good_requests": 246,
+              "joint_pass_rate": 0.76875,
+              "request_goodput": 1.0365889110199475,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 937595.0,
+              "accepted_tokens": 468545.0,
+              "acceptance_rate": 0.4997306939563458,
+              "nixl_bytes": 75689164800.0
+            },
+            {
+              "group": "G4DP",
+              "attempt": "G4DP-02",
+              "deployment_status": "COMPLETE",
+              "eligible": true,
+              "concurrency": 80,
+              "round": 3,
+              "status": "COMPLETE",
+              "completed": 320,
+              "failed": 0,
+              "events": 0,
+              "output_throughput": 2753.7831998310185,
+              "request_throughput": 1.3446207030424895,
+              "duration": 237.98532870714553,
+              "total_input_tokens": 7864320,
+              "total_output_tokens": 655360,
+              "mean_ttft_ms": 9172.628713889571,
+              "median_ttft_ms": 6089.339530444704,
+              "p95_ttft_ms": 31466.69391843025,
+              "p99_ttft_ms": 36681.0400386923,
+              "mean_tpot_ms": 22.31661054577413,
+              "p95_tpot_ms": 27.593761031596884,
+              "mean_itl_ms": 78.5877940398726,
+              "p95_itl_ms": 187.08375031128523,
+              "mean_e2el_ms": 54854.730501089216,
+              "p95_e2el_ms": 78325.44127382572,
+              "good_requests": 254,
+              "joint_pass_rate": 0.79375,
+              "request_goodput": 1.067292683039976,
+              "remote_hits": 7864320.0,
+              "d_prefill_computed": 0.0,
+              "draft_tokens": 935190.0,
+              "accepted_tokens": 468994.0,
+              "acceptance_rate": 0.501495952694105,
+              "nixl_bytes": 75689164800.0
+            }
+          ],
+          "summary": {
+            "duration": {
+              "n": 3,
+              "mean": 237.4731364713516,
+              "sd": 0.45465890635674194
+            },
+            "mean_e2el_ms": {
+              "n": 3,
+              "mean": 54985.062301488266,
+              "sd": 119.5800284412359
+            },
+            "mean_itl_ms": {
+              "n": 3,
+              "mean": 78.68582057083887,
+              "sd": 0.15368801244665728
+            },
+            "mean_tpot_ms": {
+              "n": 3,
+              "mean": 22.41220360549508,
+              "sd": 0.11350600424909577
+            },
+            "mean_ttft_ms": {
+              "n": 3,
+              "mean": 9107.28152103984,
+              "sd": 132.1916617141887
+            },
+            "median_ttft_ms": {
+              "n": 3,
+              "mean": 5894.099659984931,
+              "sd": 399.925022804048
+            },
+            "output_throughput": {
+              "n": 3,
+              "mean": 2759.729415566888,
+              "sd": 5.279102427474769
+            },
+            "p95_e2el_ms": {
+              "n": 3,
+              "mean": 76878.66993080825,
+              "sd": 1264.1478675964509
+            },
+            "p95_itl_ms": {
+              "n": 3,
+              "mean": 186.89887964477143,
+              "sd": 1.1397682263002884
+            },
+            "p95_tpot_ms": {
+              "n": 3,
+              "mean": 27.456213218705784,
+              "sd": 0.18111353810755107
+            },
+            "p95_ttft_ms": {
+              "n": 3,
+              "mean": 31506.574922268435,
+              "sd": 45.338395380546096
+            },
+            "p99_ttft_ms": {
+              "n": 3,
+              "mean": 36521.65450812783,
+              "sd": 220.41649348299345
+            },
+            "request_throughput": {
+              "n": 3,
+              "mean": 1.3475241286947695,
+              "sd": 0.0025776867321654147
+            },
+            "total_input_tokens": {
+              "n": 3,
+              "mean": 7864320.0,
+              "sd": 0.0
+            },
+            "total_output_tokens": {
+              "n": 3,
+              "mean": 655360.0,
+              "sd": 0.0
+            }
+          },
+          "warmups": [
+            {
+              "path": "warmup-01",
+              "started_at": "2026-09-23T19:34:43.716361+00:00",
+              "status": "COMPLETE",
+              "finished_at": "2026-09-23T19:37:32.781855+00:00",
+              "metrics": {
+                "schema_version": 1,
+                "completed": 160,
+                "failed": 0,
+                "failure_count_inferred": false,
+                "metrics": {
+                  "output_throughput": 2534.5818356864256,
+                  "request_throughput": 1.2375887869562625,
+                  "duration": 129.28365357406437,
+                  "total_input_tokens": 3932160,
+                  "total_output_tokens": 327680,
+                  "mean_ttft_ms": 13300.471104556345,
+                  "median_ttft_ms": 8028.332191519439,
+                  "p95_ttft_ms": 34358.49711293122,
+                  "p99_ttft_ms": 36996.20639555855,
+                  "mean_tpot_ms": 21.27291654776621,
+                  "p95_tpot_ms": 25.880692436102308,
+                  "mean_itl_ms": 74.85046377255945,
+                  "p95_itl_ms": 183.1393768079579,
+                  "mean_e2el_ms": 56846.131277833774,
+                  "p95_e2el_ms": 81086.17135551757
+                }
+              },
+              "events": 0
+            }
+          ],
+          "diagnostic_summary": {
+            "request_goodput": {
+              "n": 3,
+              "mean": 1.0527374437240569,
+              "sd": 0.015413771178076721
+            },
+            "joint_pass_rate": {
+              "n": 3,
+              "mean": 0.78125,
+              "sd": 0.012499999999999956
+            },
+            "acceptance_rate": {
+              "n": 3,
+              "mean": 0.5011730145617558,
+              "sd": 0.0013110291543500388
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "actual_all_attempt_requests": {
+    "formal": 10368,
+    "warmup": 1728,
+    "functional": 48
+  },
+  "excluded_diagnostic_requests": {
+    "formal": 384,
+    "warmup": 64
+  },
+  "known_jit_events_formal": 0,
+  "source_git_commit": "0a7a00862a1a18fff8721e0051ff89d105276a91",
+  "nic_scope": "另外，实际NIC配置也有差异：NIXL各服务沿用`UCX_NET_DEVICES=mlx5_4:1,mlx5_5:1,mlx5_6:1,mlx5_7:1`，包括46前四卡的P2；Mooncake显式使用单个NIC，P2为`mlx5_0`、其余为`mlx5_4`。没有做同connector/同NIC的控制实验，不能从本批分离这些因素的贡献。",
+  "model_metadata_sha256": {
+    "config.json": "bb0d2286d6761439e41d3cef31d16489411b816ed8688922f59730bbd5567cdb",
+    "model.safetensors.index.json": "5d2ad3076e04081d6c0728cb4b004dc832850ec5ae732f3adb06cf87c4b437a5"
+  }
+}

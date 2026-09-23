@@ -1,8 +1,38 @@
 # DeepSeek V4 Flash NVFP4 在 RTX6000D 上的推理优化
 
-本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，已完成单机拓扑、DSpark及跨节点PD对照；当前重点是16K输入下PD能否在同GPU资源下取得吞吐与延迟收益。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
+本项目使用 NVIDIA 发布的 [nvidia/DeepSeek-V4-Flash-0731-NVFP4](https://huggingface.co/nvidia/DeepSeek-V4-Flash-0731-NVFP4)，目标是在 RTX6000D 上优化推理吞吐与延迟，已完成单机拓扑、DSpark及跨节点PD对照；当前重点是16K/24K输入下PD能否在同GPU资源下取得吞吐与延迟收益。权重为 NVFP4 routed experts 与高精度其他部分的混合格式；实验保持同一权重与 tokenizer。
 
 精确输入数据与制备脚本见 [GovReport 8K／16K／24K 数据集](datasets/README.md)。
+
+## 2026-09-24：vLLM 0.30，3P1D 的 PP2／DP2 拓扑与长输入对照
+
+**11个quick单元全部完成，共9984条正式请求。** 本批模型正确性补丁仅MXFP4草稿分派修复，未加载旧DP/mHC/定向kernel预热；保留JIT缓存，原生启动准备后1轮2C warmup＋3轮各4C正式。PP的PD路径仍受原生NIXL限制，改用镜像已有Mooncake并核对真实传输；这不是纯拓扑消融，P每引擎容量32也对应PP/DP不同的服务总容量；实际NIC配置差异见报告。
+
+16K/1024，3P1D/C128/D128，共16卡；吞吐均值±样本SD，TTFT/TPOT为三轮均值：
+
+| P／D拓扑 | KV connector | output tok/s | Mean TTFT，s | Mean TPOT，ms |
+| --- | --- | ---: | ---: | ---: |
+| TP2 PP2／PP2 | Mooncake | 2643.29±19.72 | 8.801 | 36.435 |
+| TP2 DP2／DP2 | NIXL | 3091.86±18.69 | 10.254 | 28.391 |
+| TP2 PP2／DP2 | Mooncake | 3063.72±9.41 | 9.968 | 29.377 |
+
+全PP2降低TTFT但损失吞吐；混合拓扑已跑通，整体与全DP2接近，未显示明确优势。历史v0.29全DP2约3067.25 tok/s、TTFT11.722s；预算/预热策略也有变化，不能将历史差异单独归因于升级。
+
+24K/2048，3P1D，固定D80；PP2使用Mooncake、DP2使用NIXL：
+
+| C | PP2 output tok/s | DP2 output tok/s | PP2／DP2 TTFT，s | PP2／DP2 TPOT，ms |
+| ---: | ---: | ---: | --- | --- |
+| 32 | 1281.41±18.78 | 1607.41±14.60 | 5.662／5.167 | 20.740／15.983 |
+| 48 | 1636.04±26.33 | 2056.50±21.66 | 6.905／6.315 | 24.022／18.547 |
+| 64 | 1933.89±9.07 | 2430.03±12.10 | 8.071／7.436 | 26.832／20.872 |
+| 80 | 2151.53±19.11 | 2759.73±5.28 | 9.393／9.107 | 29.954／22.412 |
+
+正式33轮合计0条已知JIT事件；quick不等于stable。失败尝试另行保留，不拼接或挑最快：首次16K客户端元数据错误，以及首次24K DP2在C48发请求前的数据路径映射错误均已修复。首次24K DP2的C32记录只作诊断，完整重跑四档纳入上表。
+
+- [G1：16K 全PP2](reports/v030-pd-16k-pp2-20260924.md)：原生Mooncake启动、PP KV验收及首token/吞吐取舍。
+- [G2：16K 全DP2](reports/v030-pd-16k-dp2-20260924.md)：同版本NIXL基线，以及与历史v0.29比较。
+- [G3：16K 混合拓扑](reports/v030-pd-16k-mixed-20260924.md)：PP2→DP2 KV对齐和端到端结果。
+- [G4：24K/2K 四档并发](reports/v030-pd-24k-20260924.md)：两拓扑C32/48/64/80配对、全部轮次和失败记录。
 
 ## 2026-09-23：vLLM 0.30 四卡 TP2 PP2＋DSpark K5
 
@@ -10,7 +40,7 @@
 
 ## 性能测试先看：JIT预热与Graph覆盖
 
-本节以下补丁准备流程针对既有 **v0.29** 实验；v0.30 本次 PP2 按上方新记录处理，不直接搬用旧 worker。Graph 容量核对和正式结果验收仍适用。
+本节以下补丁准备流程针对既有 **v0.29** 实验；v0.30 的 PP2/DP2 按上方新记录处理，不直接搬用旧 worker。Graph 容量核对和正式结果验收仍适用。
 
 **扩容要同时核对启动内核覆盖和CUDA Graph；0 JIT不代表Graph覆盖充分。** K5每条请求的目标验证需6个tokens、anchor草稿需5个queries，Graph尺寸按**每个DP引擎**计算。例如四卡TP2×DP2服务D192是每rank96条，目标上限576、草稿480，不是1152。此前D96沿用Graph192时大batch变慢，不能把它解释成GPU在64条之后必然失速。
 
