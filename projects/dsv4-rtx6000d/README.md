@@ -53,6 +53,17 @@ C144下，3P→4P把TTFT从14.16降到9.18s，goodput从1.011增到2.574 req/s�
 
 同批全部普通/PD正式轮验收真实工作量，PD另验收KV传输路径，保留逐轮结果和CPU背景；所有模型均已按owner清理，磁盘JIT缓存保留。详见[本轮报告](reports/pd-16k-graph-capacity-20260923.md)、[逐轮CSV](data/pd-16k-graph-capacity-20260923.csv)与[实际命令](reports/pd-16k-graph-capacity-20260923-commands.md)。
 
+## P预算快速补测：3P1D C128，16K→32K
+
+**提高P budget没有显示明确收益，继续保留16K。** 固定16卡、TP2×DP2 EP on、DSpark K5、真实16K/1024和C128/D128，只把三个P的每引擎budget改为32768；D仍为16384。256条完整预热后仅测一轮512条，与此前同协议三轮作方向对照。
+
+| P budget | 输出tok/s | Mean TTFT／TPOT | goodput，req/s | 联合SLO |
+| --- | ---: | --- | ---: | ---: |
+| 16K，历史三轮 | 3067.25±9.80 | 11.722s／27.371ms | 2.106 | 70.31% |
+| 32K，本次单轮 | 3082.20 | 11.623s／27.267ms | 2.087 | 69.34% |
+
+吞吐仅+0.49%，TTFT仍超过10秒；P平均排队约4.94→5.98秒，完整P阶段10.96→10.88秒，未形成端到端改善。P中段GPU利用率仍100%，可用KV显存23.36→17.63GiB/GPU。正式0失败、0已知JIT、D整段输入重算0；单轮不证明稳定或最优。32K先扩展了mHC与DSpark输入预热边界，5项固定镜像测试和全部worker启动验收通过，候选补丁与命令保存在[补测报告](reports/pd-pbudget32k-20260923.md)。
+
 ## 16K decode参照：固定D192，C32至C192的完整扫描
 
 单个四卡TP2×DP2 EP on、DSpark K5服务，固定每DP引擎S96（合计D192）、Graph576，只改变客户端C。每档2C完整生成预热＋三轮各4C正式请求；每轮前独立reset＋prime，准备KV不计入测量。**这张表是本地prefix-cache HTTP参照，不是完整PD吞吐。**
