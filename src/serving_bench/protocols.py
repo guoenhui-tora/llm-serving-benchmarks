@@ -95,8 +95,8 @@ def collect(workload, concurrency, directory: Path, measure, log, check_stop):
     save()
     try:
         if mode == "quick":
-            warmup_count = (workload["traffic"]["requests"]
-                            if m.get("warmup_load", "2c") == "full" else 2 * concurrency)
+            warmup_count = m.get("warmup_count", workload["traffic"]["requests"]
+                                 if m.get("warmup_load", "2c") == "full" else 2 * concurrency)
             for i in range(m["warmup_rounds"]):
                 record = execute(warmup_count, f"warmup-{i+1:02d}", state["warmups"])
                 log(f"{workload['id']} C{concurrency}: quick warmup={i+1}, "

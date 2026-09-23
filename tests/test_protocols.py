@@ -62,6 +62,31 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(trials[0]['compilation_check'], 'KNOWN_EVENTS')
         self.assertEqual(state['status'], 'PASS')
 
+    def test_explicit_single_quick_round_and_fixed_warmup(self):
+        self.workload['traffic']['requests'] = 256
+        self.workload['measurement'].update(protocol='quick', warmup_rounds=1,
+                                            warmup_count=64, repetitions=1, max_rounds=1)
+        self.events = iter([0, 1])
+        trials, state = collect(self.workload, 8, self.path, self.measure, lambda _: None, lambda _: None)
+        self.assertEqual([c[0] for c in self.calls], [64, 256])
+        self.assertEqual(len(trials), 1)
+        self.assertEqual(trials[0]['event_count'], 1)
+        self.assertEqual(state['status'], 'PASS')
+        self.assertIsNone(state['selected_statistics']['output_throughput']['sd'])
+
+    def test_single_quick_config_keeps_default_and_rejects_ambiguous_warmup(self):
+        import yaml
+        source = yaml.safe_load((ROOT/'tests/fixtures/configs/workloads/smoke-128-32.yaml').read_text())
+        source['purpose'] = 'performance'
+        source['measurement'] = {'protocol':'quick','budget_s':1200,'repetitions':1,'warmup_count':64}
+        dest = Path(self.temp.name)/'quick.yaml'
+        dest.write_text(yaml.safe_dump(source))
+        self.assertEqual(load_document(dest,'workload')['measurement']['repetitions'],1)
+        for changes in ({'warmup_load':'full'}, {'warmup_count':0}, {'warmup_count':True}, {'protocol':'jit_clean'}, {'repetitions':0}):
+            bad = dict(source['measurement']); bad.update(changes)
+            dest.write_text(yaml.safe_dump(dict(source,measurement=bad)))
+            with self.assertRaises(BenchError): load_document(dest,'workload')
+
     def test_stable_slides_window_and_checks_latency_too(self):
         self.workload['measurement'].update(protocol='stable', stability_threshold=.02)
         self.values = iter([{'mean_ttft_ms': 30}, {}, {}, {}, {}])

@@ -97,10 +97,12 @@ def model_info(case: dict) -> dict:
             "weight_content_hashed": False}
 
 
-def inspect_cli(image: str, entrypoint: str, arguments: list[str], environment: dict, help_flag: str = "--help", gpus: list[int] | None = None) -> str:
+def inspect_cli(image: str, entrypoint: str, arguments: list[str], environment: dict, help_flag: str = "--help", gpus: list[int] | None = None, cache: Path | None = None) -> str:
     owner = uuid.uuid4().hex[:16]
     name = f"sb-help-{owner}"
     argv = ["docker", "run", "--rm", "--pull", "never", "--network", "none", "--name", name, "--label", f"{OWNER_LABEL}={owner}"]
+    if cache is not None:
+        argv += ["-v", f"{cache}:/root/.cache:ro"]
     if gpus:
         argv += ["--gpus", '"device=' + ",".join(map(str, gpus)) + '"']
     for key, value in environment.items():
@@ -131,7 +133,8 @@ def preflight(case: dict) -> dict:
     engine = get_engine(case["runtime"]["engine"])
     server_help = inspect_cli(server_image["Id"], engine.ENTRYPOINT, engine.PREFIX,
                               {**target.get("environment", {}), **case["runtime"].get("environment", {}), **case["recipe"].get("environment", {})},
-                              help_flag=engine.HELP_FLAG, gpus=[target["gpus"][0]])
+                              help_flag=engine.HELP_FLAG, gpus=[target["gpus"][0]],
+                              cache=cache_directory(case, server_image["Id"]) if cache_directory(case, server_image["Id"]).is_dir() else None)
     required = set(case["recipe"]["flags"]) | case["recipe"]["options"].keys() | {"host", "port", "served-model-name"}
     missing = required - option_names(server_help)
     if missing:

@@ -118,5 +118,9 @@ def normalize(path: Path, expected: int, workload: dict | None = None,
             requested_tokens = expected * d["output_tokens"]
             if metrics["total_output_tokens"] != requested_tokens:
                 raise BenchError(f"Fixed-length output mismatch: got {metrics['total_output_tokens']}, expected {requested_tokens}; verify ignore_eos compatibility")
+    if workload and workload["dataset"]["output_tokens"] == 1:
+        # There is no interval after the first token in a one-token response.
+        for key in ("mean_tpot_ms", "p95_tpot_ms", "mean_itl_ms", "p95_itl_ms"):
+            metrics[key] = None
     return {"schema_version": 1, "completed": completed, "failed": failed,
             "failure_count_inferred": failed is None, "metrics": metrics}

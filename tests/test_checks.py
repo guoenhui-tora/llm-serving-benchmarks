@@ -85,6 +85,25 @@ class CheckTests(unittest.TestCase):
             with self.subTest(changes=changes), self.assertRaises(BenchError):
                 normalize(path, 2)
 
+    def test_cli_preflight_mounts_prepared_cache_readonly(self):
+        with patch.object(docker, 'capture', return_value=subprocess.CompletedProcess([],0,'help','')) as call, patch.object(docker,'remove_owned'):
+            docker.inspect_cli('image','vllm',['serve'],{'PYTHONPATH':'/root/.cache/patch'},cache=self.root)
+        argv=call.call_args.args[0]
+        self.assertIn(str(self.root)+':/root/.cache:ro',argv)
+        self.assertIn('PYTHONPATH=/root/.cache/patch',argv)
+
+    def test_single_token_latency_has_no_tpot_or_itl(self):
+        path = self.root / 'single.json'
+        path.write_text(json.dumps({'completed':2, 'output_throughput':1,
+            'mean_ttft_ms':2000, 'mean_tpot_ms':0, 'p95_tpot_ms':0,
+            'mean_itl_ms':0, 'p95_itl_ms':0, 'total_input_tokens':256, 'total_output_tokens':2}))
+        workload = {'dataset':{'name':'random','input_tokens':128,'output_tokens':1,'range_ratio':0},
+                    'sampling':{'ignore_eos':True}}
+        m = normalize(path, 2, workload)['metrics']
+        self.assertEqual(m['mean_ttft_ms'],2000)
+        for key in ('mean_tpot_ms','p95_tpot_ms','mean_itl_ms','p95_itl_ms'):
+            self.assertIsNone(m[key])
+
     def test_missing_shard_and_architecture_rejected(self):
         self.case["model_path"] = str(self.root)
         (self.root / "config.json").write_text(json.dumps({"architectures": [self.case["model"]["architecture"]]}))

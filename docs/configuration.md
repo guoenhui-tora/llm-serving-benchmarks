@@ -54,6 +54,8 @@ Runtime 必填：`engine: vllm|sglang`、`image`、字符串 `version`。
 
 Client 必填：`tool: vllm-bench`、`image`、字符串 `version`。
 可选：`image_id`、`environment`、`trust_remote_code`（默认 false）。
+单token输出没有首token之后的间隔，标准化结果的TPOT/ITL为null（不适用），保留原始客户端字段。
+
 客户端目前固定使用 OpenAI completions 流式传输和 `ttft,tpot,itl,e2el` 指标，50/90/95/99 分位数。
 工具参数 `--backend vllm` 是这个客户端的协议适配器名称，不限制服务端引擎。
 实际入口是 `python3` 调用 `vllm.benchmarks.serve` 的官方 `add_cli_args` / `main`，
@@ -157,11 +159,12 @@ dataset:
 | --- | --- |
 | `protocol` | 显式选择 `quick`、`jit_clean`、`stable`；新实验默认推荐quick；不省略此字段 |
 | `budget_s` | 必填正整数；每workload/并发的总秒数，不含服务启动与最终清理 |
-| `repetitions` | 性能/校准默认3且≥3；smoke的quick/jit_clean默认1且≥1；stable至少3。分别表示固定轮数、累计目标或窗口长度 |
+| `repetitions` | 性能/校准默认3；quick可显式设≥1，单轮仅作初筛；jit_clean性能/校准及stable至少3；smoke的quick/jit_clean默认1且≥1。分别表示固定轮数、累计目标或窗口长度 |
 | `timeout_s` | 默认1800；单客户端阶段超时，实际还受剩余budget_s限制 |
 | `max_rounds` | jit_clean/stable默认12，必须≥repetitions；quick固定等于repetitions |
 | `warmup_rounds` | 仅quick接受，默认1，只允许1或2 |
 | `warmup_load` | 仅quick接受，省略为 `2c`（每轮2×并发）；`full` 使用 `traffic.requests`，预热与正式请求集一致。只改变请求量，不改变接纳规则 |
+| `warmup_count` | 仅quick接受；显式固定预热请求数，须≥最大C，与`warmup_load`互斥。正式请求数和轮数不变 |
 | `stability_threshold` | 仅stable接受，默认0.02；有限数，0<值≤1，0.01表示1% |
 
 quick保留全部正式样本及事件标记；jit_clean累计最先无已知事件的样本；stable检查连续窗口内output_throughput、mean_ttft_ms、mean_tpot_ms的相对极差均≤阈值。旧预热/重试字段已移除，必须完整替换measurement块；缺少protocol也会报错。不允许把稳定性参数填到其他模式而静默忽略。
