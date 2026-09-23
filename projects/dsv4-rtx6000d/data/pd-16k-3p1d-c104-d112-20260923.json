@@ -1,0 +1,334 @@
+{
+  "rounds": [
+    {
+      "case": "P104D112",
+      "C": 104,
+      "D": 112,
+      "GPUs": 16,
+      "requests": 416,
+      "round": "measurement-01",
+      "throughput": 2699.228528974153,
+      "ttft_s": 9.51580075138946,
+      "tpot_ms": 26.130014148085372,
+      "goodput": 2.078357303334215,
+      "slo": 0.7884615384615384,
+      "good_requests": 328,
+      "ttft_fail": 88,
+      "tpot_fail": 0,
+      "events": 0,
+      "initial_C_ttft": 18.925807089511252,
+      "remaining_3C_ttft": 6.379131972015528,
+      "duration": 157.81694488902576,
+      "D_transfer": {
+        "vllm:nixl_num_failed_transfers_total": 0.0,
+        "vllm:nixl_num_failed_notifications_total": 0.0,
+        "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+        "vllm:nixl_bytes_transferred_count": 832.0,
+        "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+        "vllm:nixl_xfer_time_seconds_count": 832.0,
+        "vllm:nixl_xfer_time_seconds_sum": 71.80439100000002,
+        "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+        "vllm:num_preemptions_total": 0.0,
+        "vllm:external_prefix_cache_hits_total": 6815744.0,
+        "vllm:request_success_total": 416.0,
+        "vllm:spec_decode_num_drafts_total": 127222.0,
+        "vllm:spec_decode_num_draft_tokens_total": 636110.0,
+        "vllm:spec_decode_num_accepted_tokens_total": 299441.0
+      }
+    },
+    {
+      "case": "P104D112",
+      "C": 104,
+      "D": 112,
+      "GPUs": 16,
+      "requests": 416,
+      "round": "measurement-02",
+      "throughput": 2756.681971482815,
+      "ttft_s": 9.27508126777684,
+      "tpot_ms": 26.245132207694958,
+      "goodput": 2.1225954182466085,
+      "slo": 0.7884615384615384,
+      "good_requests": 328,
+      "ttft_fail": 88,
+      "tpot_fail": 0,
+      "events": 0,
+      "initial_C_ttft": 18.915940766165686,
+      "remaining_3C_ttft": 6.061461434980559,
+      "duration": 154.527799871983,
+      "D_transfer": {
+        "vllm:nixl_num_failed_transfers_total": 0.0,
+        "vllm:nixl_num_failed_notifications_total": 0.0,
+        "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+        "vllm:nixl_bytes_transferred_count": 832.0,
+        "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+        "vllm:nixl_xfer_time_seconds_count": 832.0,
+        "vllm:nixl_xfer_time_seconds_sum": 69.57826199999997,
+        "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+        "vllm:num_preemptions_total": 0.0,
+        "vllm:external_prefix_cache_hits_total": 6815744.0,
+        "vllm:request_success_total": 416.0,
+        "vllm:spec_decode_num_drafts_total": 126725.0,
+        "vllm:spec_decode_num_draft_tokens_total": 633625.0,
+        "vllm:spec_decode_num_accepted_tokens_total": 299926.0
+      }
+    },
+    {
+      "case": "P104D112",
+      "C": 104,
+      "D": 112,
+      "GPUs": 16,
+      "requests": 416,
+      "round": "measurement-03",
+      "throughput": 2708.8322587827743,
+      "ttft_s": 9.605680169213043,
+      "tpot_ms": 26.51907936436502,
+      "goodput": 2.0730340021296207,
+      "slo": 0.7836538461538461,
+      "good_requests": 326,
+      "ttft_fail": 90,
+      "tpot_fail": 0,
+      "events": 0,
+      "initial_C_ttft": 18.934986550171743,
+      "remaining_3C_ttft": 6.495911375560144,
+      "duration": 157.257430252037,
+      "D_transfer": {
+        "vllm:nixl_num_failed_transfers_total": 0.0,
+        "vllm:nixl_num_failed_notifications_total": 0.0,
+        "vllm:nixl_num_kv_expired_reqs_total": 0.0,
+        "vllm:nixl_bytes_transferred_count": 832.0,
+        "vllm:nixl_bytes_transferred_sum": 71712276480.0,
+        "vllm:nixl_xfer_time_seconds_count": 832.0,
+        "vllm:nixl_xfer_time_seconds_sum": 74.55078300000005,
+        "vllm:request_prefill_kv_computed_tokens_sum": 0.0,
+        "vllm:num_preemptions_total": 0.0,
+        "vllm:external_prefix_cache_hits_total": 6815744.0,
+        "vllm:request_success_total": 416.0,
+        "vllm:spec_decode_num_drafts_total": 126272.0,
+        "vllm:spec_decode_num_draft_tokens_total": 631360.0,
+        "vllm:spec_decode_num_accepted_tokens_total": 300374.0
+      }
+    }
+  ],
+  "summary": {
+    "throughput": {
+      "mean": 2721.5809197465805,
+      "sd": 30.77532747675622
+    },
+    "ttft_s": {
+      "mean": 9.465520729459781,
+      "sd": 0.17093849438216852
+    },
+    "tpot_ms": {
+      "mean": 26.29807524004845,
+      "sd": 0.1998628508146757
+    },
+    "goodput": {
+      "mean": 2.0913289079034816,
+      "sd": 0.027208094121168452
+    },
+    "slo": {
+      "mean": 0.7868589743589743,
+      "sd": 0.002775722448027037
+    }
+  },
+  "comparison": [
+    {
+      "C": 96,
+      "D": 96,
+      "N": 384,
+      "throughput": {
+        "mean": 2582.567693918244,
+        "sd": 22.282659299549774
+      },
+      "ttft_s": {
+        "mean": 8.790325744089285,
+        "sd": 0.17459196005817978
+      },
+      "tpot_ms": {
+        "mean": 26.131651701591316,
+        "sd": 0.35195625761766636
+      },
+      "goodput": {
+        "mean": 2.0010019915916595,
+        "sd": 0.019220072586658206
+      },
+      "slo": {
+        "mean": 0.7934027777777778,
+        "sd": 0.0015035163260146932
+      }
+    },
+    {
+      "C": 104,
+      "D": 112,
+      "N": 416,
+      "throughput": {
+        "mean": 2721.5809197465805,
+        "sd": 30.77532747675622
+      },
+      "ttft_s": {
+        "mean": 9.465520729459781,
+        "sd": 0.17093849438216852
+      },
+      "tpot_ms": {
+        "mean": 26.29807524004845,
+        "sd": 0.1998628508146757
+      },
+      "goodput": {
+        "mean": 2.0913289079034816,
+        "sd": 0.027208094121168452
+      },
+      "slo": {
+        "mean": 0.7868589743589743,
+        "sd": 0.002775722448027037
+      }
+    },
+    {
+      "C": 112,
+      "D": 112,
+      "N": 448,
+      "throughput": {
+        "mean": 2815.2337700187077,
+        "sd": 18.833492365053093
+      },
+      "ttft_s": {
+        "mean": 10.271812469790131,
+        "sd": 0.148722781645469
+      },
+      "tpot_ms": {
+        "mean": 26.66840266402218,
+        "sd": 0.30573538221778207
+      },
+      "goodput": {
+        "mean": 2.1068622728468456,
+        "sd": 0.029079331217385335
+      },
+      "slo": {
+        "mean": 0.7663690476190477,
+        "sd": 0.012293684257335019
+      }
+    },
+    {
+      "C": 128,
+      "D": 128,
+      "N": 512,
+      "throughput": {
+        "mean": 3067.2512004297487,
+        "sd": 9.79970063857942
+      },
+      "ttft_s": {
+        "mean": 11.72246810656452,
+        "sd": 0.08848530059965783
+      },
+      "tpot_ms": {
+        "mean": 27.371063748244683,
+        "sd": 0.11795012658134506
+      },
+      "goodput": {
+        "mean": 2.1059724977624388,
+        "sd": 0.12474176301440298
+      },
+      "slo": {
+        "mean": 0.703125,
+        "sd": 0.04283537538957287
+      }
+    },
+    {
+      "C": 144,
+      "D": 144,
+      "N": 576,
+      "throughput": {
+        "mean": 3183.154045837892,
+        "sd": 2.8026715822596286
+      },
+      "ttft_s": {
+        "mean": 14.161390689031341,
+        "sd": 0.22857605697282296
+      },
+      "tpot_ms": {
+        "mean": 28.057058050335133,
+        "sd": 0.15008286214772557
+      },
+      "goodput": {
+        "mean": 1.010916593651579,
+        "sd": 0.15573246989035985
+      },
+      "slo": {
+        "mean": 0.32523148148148145,
+        "sd": 0.05032726296584928
+      }
+    }
+  ],
+  "startup": {
+    "p0": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "p1": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "p2": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    },
+    "d0": {
+      "worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "input-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      },
+      "draft-worker-warmup.json": {
+        "workers": 4,
+        "memory_allocated_delta": 0
+      }
+    }
+  },
+  "cleanup": {
+    "gpu-6000d-46": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-47": {
+      "gpus": "",
+      "owned": ""
+    },
+    "gpu-6000d-48": {
+      "gpus": "",
+      "owned": ""
+    },
+    "local_owned": ""
+  }
+}
