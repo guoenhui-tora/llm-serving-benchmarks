@@ -32,3 +32,10 @@ def draft_query_bound(max_num_seqs, speculative_tokens, captures):
     if not 1 <= bound <= 576:
         raise RuntimeError('Draft query coverage exceeds bounded scope (576)')
     return bound
+
+
+def validate_topology(tp, dp, ep, pp, sequence_parallel):
+    if pp != 1 or (tp, dp, ep) not in ((4, 1, False), (2, 2, True), (2, 2, False)):
+        raise RuntimeError('Warmup scope requires TP4 DP1 EPoff or TP2 DP2 EPon/off, PP1')
+    if sequence_parallel != ep:
+        raise RuntimeError('Actual sequence parallel path differs from pinned topology')

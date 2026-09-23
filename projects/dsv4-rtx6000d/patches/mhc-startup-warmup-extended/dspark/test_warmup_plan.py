@@ -3,7 +3,7 @@ from functools import cache
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
-from warmup_plan import coverage, split_for, draft_query_bound
+from warmup_plan import coverage, split_for, draft_query_bound, validate_topology
 
 class CoverageTests(unittest.TestCase):
     def test_matches_pinned_split_dispatch_for_every_token_count(self):
@@ -25,6 +25,12 @@ class CoverageTests(unittest.TestCase):
                     self.assertEqual(split_for(n,hidden,sms),env['compute_num_split'](64,hidden,(n+63)//64))
             self.assertIn(1,sizes); self.assertIn(8,sizes); self.assertIn(16,sizes); self.assertIn(17,sizes)
             self.assertIn(16384,sizes)
+
+    def test_sequence_parallel_matches_pinned_topology(self):
+        for values in ((2,2,False,1,False),(2,2,True,1,True),(4,1,False,1,False)):
+            validate_topology(*values)
+        for values in ((2,2,False,1,True),(2,2,True,1,False),(2,2,False,2,False),(8,1,False,1,False)):
+            with self.assertRaises(RuntimeError): validate_topology(*values)
 
     def test_draft_capacity_and_graph_bound(self):
         self.assertEqual(draft_query_bound(96, 5, [480, 576]), 576)

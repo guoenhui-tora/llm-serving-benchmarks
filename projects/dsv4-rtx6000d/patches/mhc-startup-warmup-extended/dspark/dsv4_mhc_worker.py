@@ -8,7 +8,7 @@ import os
 import time
 from pathlib import Path
 
-from warmup_plan import coverage, draft_query_bound
+from warmup_plan import coverage, draft_query_bound, validate_topology
 
 
 def verify_source():
@@ -46,12 +46,13 @@ class Worker(BaseWorker):
         topology = (self.parallel_config.tensor_parallel_size,
                     self.parallel_config.data_parallel_size,
                     self.parallel_config.enable_expert_parallel)
-        if (self.parallel_config.pipeline_parallel_size != 1
-                or topology not in ((4, 1, False), (2, 2, True))
-                or self.vllm_config.speculative_config is None
+        for actual_layer in layers:
+            validate_topology(*topology, self.parallel_config.pipeline_parallel_size,
+                              actual_layer.use_sequence_parallel)
+        if (self.vllm_config.speculative_config is None
                 or self.vllm_config.speculative_config.method != "dspark"
                 or self.vllm_config.speculative_config.num_speculative_tokens not in (3, 5)):
-            raise RuntimeError('Warmup scope requires TP4 DP1 EPoff or TP2 DP2 EPon, PP1, DSpark K3/K5')
+            raise RuntimeError('Warmup scope requires TP4 DP1 EPoff or TP2 DP2 EPon/off, PP1, DSpark K3/K5')
         layer = layers[0]
         configs = {(m.hidden_size, m.hc_mult, m.rms_norm_eps, m.hc_eps,
                     m.hc_post_alpha, m.hc_sinkhorn_iters,
@@ -71,7 +72,7 @@ class Worker(BaseWorker):
             return {n: set(f._kernel_cache) for n, f in monitored.items()}
         started = time.monotonic()
         budget = 480
-        record = dict(rank=self.rank, dp_rank=self.parallel_config.data_parallel_index, topology=topology, pid=os.getpid(), sms=sms, token_sizes=sizes,
+        record = dict(rank=self.rank, dp_rank=self.parallel_config.data_parallel_index, topology=topology, pid=os.getpid(), sequence_parallel=layer.use_sequence_parallel, sms=sms, token_sizes=sizes,
                       dispatch_groups=groups, source_verified=True, phase='STARTED')
         print('DSV4_TARGETED_WARMUP ' + json.dumps(record), flush=True)
         before = keys()

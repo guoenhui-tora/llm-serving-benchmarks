@@ -23,3 +23,5 @@ PYTHONPATH=/patch VLLM_USE_V2_MODEL_RUNNER=1 python3 -m unittest -v test_input_w
 ```
 
 这是复测入口示例；完整服务本轮实际命令见[命令快照](../../reports/input-kernel-warmup-commands-20260921.md)。测试不加载模型，GPU测试检查真实固定内核的输出及cache回放，builder回归检查不会把indexer误当成attention builder。首次GPU测试约29秒（含导入）；完整模型仍需独立验收。
+
+2026-09-23组合mHC拓扑扩展后，新增TP2×DP2 EP off、K5/S32的四worker完整启动与16K/1 HTTP验收；输入几何仍从实际builder/speculator读取，本模块未修改。on/off扫描结果与警告见[单机prefill报告](../../reports/prefill-ep-16k-20260923.md)。

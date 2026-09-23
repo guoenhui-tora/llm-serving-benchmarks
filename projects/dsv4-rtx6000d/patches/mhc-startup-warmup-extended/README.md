@@ -19,3 +19,5 @@ target覆盖使用实际SM数、prefill预算、Graph capture sizes，逐worker�
 **不能承诺quick必然无JIT。** TP4扩展在16K六副本普通中完整HTTP预热88条top-k事件，正式仍4/4/0，来自`_compute_global_topk_indices_and_lens_kernel`；每进程实际分派可能覆盖不足，未修改规则或追加轮次。8K 2P2D三轮0事件但吞吐/TTFT漂移，不能据此称性能已稳定。 C3H正式事件4/2/0，C4为4/0/2，均来自`_prepare_dflash_inputs_kernel`；mHC覆盖通过未覆盖这一不同内核。普通DP off预热无事件但吞吐明显更低的反例也说明，0事件不能替代完整预热或稳定性验收。详见[DP报告](../../reports/pd-dp-off-20260921.md)、[HTTP失败与有界修正](../../reports/pd-dspark-http-failure-20260921.md)及[持续结果总览](../../reports/pd-overnight-results-20260921.md)。
 
 离线测试：在固定镜像CPU容器将选定子目录挂载到`/patch:ro`、`PYTHONPATH=/patch`，执行`python3 -m unittest discover -s /patch -p 'test_*.py'`。这些测试核对固定kernel分派公式和预算边界，不替代真实GPU覆盖、NIXL传输或HTTP负载检查。
+
+2026-09-23新增TP2×DP2 EP off、K5、S32/budget16384/Graph192启动覆盖及实际sequence parallel路径校验。on/off各四worker均完成两遍覆盖与Graph捕获，并各完成真实16K/1的C8–64扫描；16正式单元0已知JIT。未修改forward或核函数，边界与保留warning见[单机prefill报告](../../reports/prefill-ep-16k-20260923.md)。
