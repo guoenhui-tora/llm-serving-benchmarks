@@ -1,0 +1,111 @@
+schema_version: 1
+kind: recipe
+id: prefill-16k-ep-off
+description: TP2 DP2 K5 16K/1 EP off
+provenance: Derived from archived C104/D112 P0 argv; standalone 16K/1 EP screening
+  candidate.
+compatible:
+  engine: vllm
+  models:
+  - dsv4-flash-nvfp4
+  compute_capabilities:
+  - '12.0'
+  runtime_versions:
+  - 0.29.0
+mode: performance
+flags:
+- trust-remote-code
+- enable-auto-tool-choice
+- no-enable-prefix-caching
+- enable-chunked-prefill
+- jit-monitor-verbose
+- async-scheduling
+options:
+  tensor-parallel-size: 2
+  pipeline-parallel-size: 1
+  data-parallel-size: 2
+  max-model-len: 32768
+  max-num-seqs: 32
+  max-num-batched-tokens: 16384
+  gpu-memory-utilization: 0.9
+  kv-cache-dtype: fp8_e4m3
+  block-size: 256
+  attention-config:
+    use_fp4_indexer_cache: false
+    backend: FLASHINFER_MLA_SPARSE_DSV4
+  moe-backend: auto
+  tokenizer-mode: deepseek_v4
+  tool-call-parser: deepseek_v4
+  reasoning-parser: deepseek_v4
+  reasoning-config:
+    reasoning_parser: deepseek_v4
+    reasoning_start_str: ''
+    reasoning_end_str: ''
+  kernel-config:
+    enable_flashinfer_autotune: false
+  compilation-config:
+    cudagraph_mode: FULL_DECODE_ONLY
+    cudagraph_capture_sizes:
+    - 5
+    - 6
+    - 10
+    - 12
+    - 20
+    - 24
+    - 40
+    - 48
+    - 60
+    - 72
+    - 80
+    - 96
+    - 120
+    - 144
+    - 160
+    - 192
+    max_cudagraph_capture_size: 192
+  seed: 0
+  distributed-executor-backend: mp
+  worker-cls: dsv4_input_worker.Worker
+  data-parallel-size-local: 2
+  speculative-config:
+    method: dspark
+    num_speculative_tokens: 5
+    draft_sample_method: greedy
+    rejection_sample_method: standard
+    enable_adaptive_verification: false
+  data-parallel-rpc-port: 31500
+checks:
+  required:
+  - DeepseekV4ForCausalLM
+  - FLASHINFER_MLA_SPARSE_DSV4
+  - FLASHINFER_CUTLASS
+  - DeepSeek V4 expert_dtype resolved to 'fp4'
+  - fp8_ds_mla
+  - Skipping FlashInfer autotune because it is disabled
+  - Using V2 Model Runner
+  - 'LOCAL_DSPARK_FORMAT_FIX: validated 768 native MXFP4 draft experts'
+  - Mxfp4 MoE backend
+  - 'UPSTREAM_DSPARK_DP_PROFILE_FIX: PR #54856 facd9a74a1'
+  - DSV4_TARGETED_WARMUP
+  - DSV4_DSPARK_WARMUP
+  - DSV4_INPUT_KERNEL_WARMUP
+  - Graph capturing finished
+  warnings:
+  - (?i)warning
+  - not supported
+  - not available
+  - disabled
+  - scaling factors
+  compilation:
+  - TileLang (?:begins|completes) to compile kernel
+  - (?:^|\s)(?:\S*/)?nvcc\s.*(?:\s-c\s|\s--compile\s)
+  forbidden:
+  - CUDA out of memory
+  - Traceback \(most recent call last\)
+  - EngineCore encountered a fatal error
+environment:
+  TILELANG_CACHE_DIR: /root/.cache/tilelang
+  VLLM_USE_V2_MODEL_RUNNER: '1'
+  PYTHONPATH: /root/.cache/dsv4-input-warmup:/root/.cache/dspark-native-mxfp4:/root/.cache/dsv4-mhc-warmup
+  SERVING_BENCH_DSPARK_DP_PROFILE_FIX: '1'
+  VLLM_LOGGING_CONFIG_PATH: /root/.cache/pd-logging.json

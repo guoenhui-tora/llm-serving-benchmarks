@@ -1,0 +1,34 @@
+schema_version: 1
+kind: workload
+id: prefill-16k-1
+purpose: performance
+dataset:
+  name: jsonl
+  path: data/govreport-16k-prefix-1-v1.jsonl
+  max_input_tokens: 16384
+  output_tokens: 1
+  sha256: 4effcb83c8d3203e53f3c81b61537e5d24da8c814263539f2aa29cc100266101
+traffic:
+  concurrency:
+  - 8
+  - 16
+  - 24
+  - 32
+  - 40
+  - 48
+  - 56
+  - 64
+  requests: 256
+  request_rate: inf
+sampling:
+  seed: 0
+  temperature: 0
+  ignore_eos: true
+measurement:
+  protocol: quick
+  repetitions: 1
+  warmup_rounds: 1
+  warmup_count: 64
+  budget_s: 1200
+  timeout_s: 1200
+cache: disabled

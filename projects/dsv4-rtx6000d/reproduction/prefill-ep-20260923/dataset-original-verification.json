@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "original_sha256": "025246b18d8ba7e1bc4d98c1a20b32b570860bb06a0baf0cea4ae97403d982e7",
+  "rows": 1024,
+  "actual_input_tokens_min": 16384,
+  "actual_input_tokens_max": 16384,
+  "tokenizer_class": "CachedTokenizersBackend",
+  "tokenization": "tokenizer(prompt) defaults, matching benchmark client",
+  "original_output_tokens": 1024,
+  "model_started": false
+}

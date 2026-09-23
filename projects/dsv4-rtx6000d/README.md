@@ -17,6 +17,10 @@
 
 启动补丁不改forward、权重、精度或事件识别规则。采样等内核仍可能在功能／HTTP预热中首次加载，不能省略HTTP预热。精选baseline recipe尚未自动加载全部模块，复现需按报告准备挂载与PYTHONPATH。依据见[定向预热](reports/pd-targeted-warmup-20260921.md)、[输入内核修复](reports/input-kernel-warmup-20260921.md)及[本轮D192验收](reports/decode-16k-d192-20260923.md)。
 
+## 2026-09-23：单机16K/1 prefill，EP on/off
+
+**四卡TP2×DP2 K5在C16附近已接近供给平台：on约1.18 req/s，off约0.96 req/s；继续加C主要增加排队。** C16的Mean TTFT为13.17／16.30秒，C8为7.21／8.87秒且保留约93%最大供给，分别适合供给优先和延迟优先候选。各C单轮quick，同并发on吞吐高约23%；EP与前后四卡、CPU背景绑定，且有DP统计乱序warning，不能作纯EP因果结论或乘3预测PD。见[完整曲线、验收与复现](reports/prefill-ep-16k-20260923.md)。
+
 ## 2026-09-23：16K K5，Graph修正后的PD与普通服务
 
 **同16卡下，已配对的C96／104／128／144四档3P1D吞吐均超过普通四服务，但不能只按最高吞吐选择并发。** 每服务4卡、TP2×DP2 EP on、DSpark K5、budget＝16K；C为全系统并发，D服务容量96／112／128／144分别对应Graph288／336／384／432，具体配对见表。C104沿用D112/Graph336并已补普通对照；C112/D112仅测PD，普通未测。输入为独立GovReport精确16384-token前缀，输出1024；双方每档2C完整生成预热＋三轮各4C请求。吞吐包含代理、P、传输与D，单位output tok/s，均值±样本SD。
