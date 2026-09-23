@@ -1,0 +1,10 @@
+{
+  "image_id": "sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90",
+  "module": "vllm.v1.worker.gpu.spec_decode.dspark.utils",
+  "original_sha256": "86af2bf30604a184312e8f076097b91ecfec704f409f9d68d634b03d6b318070",
+  "quant_source_sha256": "6fdd20b617640741a19643f893b9b8a31d390b0ccb04d322ece29f57ff8290c9",
+  "extra_source_sha256": {
+    "models/deepseek_v41/quant_config.py": "bfc500c4989607809577cbd10512b96e9162a7359ad407f772b7f695eaa34cd9",
+    "model_executor/layers/quantization/__init__.py": "55f1d9d309d9caee6b0d47a95004dfa380e504c6cca061a6766c92c2654e11e4"
+  }
+}
