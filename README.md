@@ -107,6 +107,30 @@ python3 scripts/prepare_logging.py experiments/my-study/configs/campaigns/functi
 
 每次运行显式指定新的 `--run-root`，不要提前创建具体运行目录，执行器会自动创建并拒绝覆盖已有目录。省略该参数仍会写入根 `results/`，不会自动跟随 campaign 位置。根目录已有的 `results/`、`reports/` 继续本地保留和忽略，后续实验使用工作区。
 
+### 已启动服务的 decode-only 测量
+
+`serving_bench.clients.decode_only` 是**单个已启动、本机独占 vLLM 服务**的共享前缀测量工具；它不启动/停止服务，也不是多服务 A/B/C 的部署器。先确认 GPU 空闲、镜像/权重/端口、服务的 prefix cache 已开启，服务参数和预算已固定。以下命令从仓库根目录执行；数据集只取第一条真实 16K 输入作为所有请求的共享前缀，不等于独立语义输入的 PD 负载：
+
+```bash
+args=(
+  --source projects/dsv4-rtx6000d/datasets/govreport-isl16384-exact-n1024.jsonl
+  --source-sha256 6166561f98e83a7591eaa5bc36dcb317f20edd42f187a10f4cc6793df839b9b2
+  --model-dir /data/models/DeepSeek-V4-Flash-0731-NVFP4
+  --served-name deepseek-v4-flash --port 31332 --prime-engines 2
+  --client-image vllm/vllm-openai:v0.30.0
+  --client-image-id sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
+  --concurrency 128 --input-tokens 16384 --output-tokens 1024
+  --warmup-requests 256 --requests 512 --repetitions 3
+  --budget-s 4200 --timeout-s 900
+  --run-root experiments/dsv4-rtx6000d/results/decode-local-01
+)
+PYTHONPATH=src python3 -m serving_bench.clients.decode_only "${args[@]}" --plan
+# 仅在该端口对应的独占服务已就绪、且可安全清空其前缀缓存时运行：
+PYTHONPATH=src python3 -m serving_bench.clients.decode_only "${args[@]}" --allow-cache-reset
+```
+
+`--plan` 仅离线检查参数、数据及本地模型目录，不访问 GPU/Docker/服务。实时测量每个窗口先要求服务空闲、重置 prefix cache，按 `--prime-engines` 逐引擎核验命中，再做一轮完整请求预热及固定三轮正式测量；不保证随机 DP 路由总能 prime 全部引擎，核验失败时应保留失败产物、检查路由，不可跳过。默认镜像、SHA、模型名和 16K/1K 长度针对本项目，换数据/服务需显式覆盖。`--run-root` 必须不存在，每次使用新目录；窗口保留客户端 argv、日志、计数与 `summary.json`。该工具仅管理自己创建的客户端容器，不清理服务；不要对别人的服务或运行中的实验执行缓存重置。八卡双四卡服务的**同步全局 C128** 对照使用另一个本地编排脚本，不能以两个独立进程各 C128 代替。
+
 ## 把精选成果归档到 projects
 
 **projects以报告和精选数据为主，configs不是实验历史仓库。**
