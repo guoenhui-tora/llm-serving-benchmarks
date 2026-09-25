@@ -129,7 +129,7 @@ PYTHONPATH=src python3 -m serving_bench.clients.decode_only "${args[@]}" --plan
 PYTHONPATH=src python3 -m serving_bench.clients.decode_only "${args[@]}" --allow-cache-reset
 ```
 
-`--plan` 仅离线检查参数、数据及本地模型目录，不访问 GPU/Docker/服务。实时测量每个窗口先要求服务空闲、重置 prefix cache，按 `--prime-engines` 逐引擎核验命中，再做一轮完整请求预热及固定三轮正式测量；不保证随机 DP 路由总能 prime 全部引擎，核验失败时应保留失败产物、检查路由，不可跳过。默认镜像、SHA、模型名和 16K/1K 长度针对本项目，换数据/服务需显式覆盖。`--run-root` 必须不存在，每次使用新目录；窗口保留客户端 argv、日志、计数与 `summary.json`。该工具仅管理自己创建的客户端容器，不清理服务；不要对别人的服务或运行中的实验执行缓存重置。八卡双四卡服务的**同步全局 C128** 对照使用另一个本地编排脚本，不能以两个独立进程各 C128 代替。
+`--plan` 仅离线检查参数、数据及本地模型目录，不访问 GPU/Docker/服务。实时测量每个窗口先要求服务空闲、重置 prefix cache，按 `--prime-engines` 逐引擎核验命中，再做一轮完整请求预热及固定三轮正式测量；不保证随机 DP 路由总能 prime 全部引擎，核验失败时应保留失败产物、检查路由，不可跳过。默认镜像、SHA、模型名和 16K/1K 长度针对本项目，换数据/服务需显式覆盖。`--run-root` 必须不存在，每次使用新目录；窗口保留客户端 argv、日志、计数与 `summary.json`。该工具仅管理自己创建的客户端容器，不清理服务；不要对别人的服务或运行中的实验执行缓存重置。八卡双四卡 TP2×DP2 与单八卡 TP2×DP4、TP4×DP2 的**同步全局 C128** 对照使用另一个本地编排脚本，不能以两个独立进程各 C128 代替。
 
 ## 把精选成果归档到 projects
 
