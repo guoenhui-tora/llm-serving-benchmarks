@@ -1,0 +1,104 @@
+{
+  "owner": "pd24-0925-c148-one",
+  "image": "sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90",
+  "data": "/home/enhui/llm-serving-benchmarks/projects/dsv4-rtx6000d/datasets/govreport-isl16384-exact-n1024.jsonl",
+  "data_sha256": "6166561f98e83a7591eaa5bc36dcb317f20edd42f187a10f4cc6793df839b9b2",
+  "source": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-v030-pd-20260924/deployments/G2/results/G2-02",
+  "members": {
+    "p0": {
+      "host": "gpu-6000d-46",
+      "address": "10.90.1.46",
+      "gpu": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "port": 31449,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/p0/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/50b5ea0fe812108ca671"
+    },
+    "p1": {
+      "host": "gpu-6000d-47",
+      "address": "10.90.1.47",
+      "gpu": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "port": 31449,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/p1/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/7861f750eabbf1dc474f"
+    },
+    "p2": {
+      "host": "gpu-6000d-46",
+      "address": "10.90.1.46",
+      "gpu": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "port": 31450,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/p2/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/0c7a141e901e9d952bcd"
+    },
+    "p3": {
+      "host": "gpu-6000d-47",
+      "address": "10.90.1.47",
+      "gpu": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "port": 31450,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/p3/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/5d1d5fb0742b80d6e755"
+    },
+    "d0": {
+      "host": "gpu-6000d-48",
+      "address": "10.90.1.48",
+      "gpu": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "port": 31449,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/d0/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/37297c2decdc4f35cb27"
+    },
+    "d1": {
+      "host": "gpu-6000d-48",
+      "address": "10.90.1.48",
+      "gpu": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "port": 31450,
+      "command": "/home/enhui/llm-serving-benchmarks/experiments/dsv4-pd-24gpu-c148-20260925/results/plan/d1/command.json",
+      "cache": "/home/enhui/.cache/serving-bench/vllm/9e99caf57ee5eb9332e1"
+    }
+  },
+  "anchor_order": [
+    148
+  ],
+  "base_scan": [],
+  "optional_extra": [],
+  "requested_stages_per_level": {
+    "warmup": "2C",
+    "formal": "3 x 4C"
+  },
+  "max_full_requests": 2072,
+  "functional_requests": 8,
+  "server_start_limit_s": 2700,
+  "window_limit_s": 900,
+  "per_level_limit_s": 4200,
+  "campaign_limit_s": 8400,
+  "performance_retries": 0,
+  "scope": "C148 supplement only; no higher concurrency or performance retries"
+}
