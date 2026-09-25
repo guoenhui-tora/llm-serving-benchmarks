@@ -4,6 +4,10 @@
 
 精确输入数据与制备脚本见 [GovReport 8K／16K／24K 数据集](datasets/README.md)。
 
+## 2026-09-25：vLLM 0.30，单节点八卡 decode-only 拓扑对照
+
+固定 gpu-6000d-45 八卡、全局 C128、共享真实 16K 前缀/1024 输出和同一镜像：**两个独立四卡 TP2×DP2、EP on、DSpark K5 服务获胜**，整机 4874.18±139.37 output tok/s；单八卡 TP2×DP4 为 4241.97±104.06，TP4×DP2 为 3919.88±24.64。三轮 quick 中 A/B 有 JIT 匹配，结论只支持本负载下双四卡 D 的优先候选，不代表真实 PD 端到端的跨拓扑结果。[逐轮性能、Graph/JIT、启动 argv 与复现边界](docs/decode-only-8gpu-20260925.md)。
+
 ## 2026-09-24：PP／DP 的 3P1D 结果分析与待验证方向
 
 [PP2／DP2 对照分析](docs/pp-dp-3p1d-analysis-20260924.md)：汇总 16K/1K、24K/2K 结果，按证据强度区分性能结论、流水线与 KV 传输源码事实，以及批次组织与 stage 分层的待验证假设。
