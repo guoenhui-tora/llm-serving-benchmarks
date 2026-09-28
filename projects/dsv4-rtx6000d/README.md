@@ -4,6 +4,10 @@
 
 精确输入数据与制备脚本见 [GovReport 8K／16K／24K 数据集](datasets/README.md)。
 
+## 2026-09-29：16卡PD，24K/2K选型与优化总结
+
+**当前优先工作点为3P1D、P budget8200＋仅P侧PHB、全局C112：3409.3±26.5 output tok/s，Mean TTFT 9.342秒。** C120吞吐更高但TTFT仅余88毫秒均值余量，C128越线。[统一研究报告](docs/pd-16gpu-24k-2k-study.md)整理四卡选型、初始C32～C80结果、P预算／P侧及D侧PHB对照，以及优化配置的并发扫描；均值SLO通过不等于逐请求达标。
+
 ## 2026-09-27：24卡PD，16K/1K选型与优化总结
 
 **当前优先工作点为4P2D、P budget8200＋P侧PHB、全局C160：约4500 output tok/s，Mean TTFT约8.1～8.2秒。**
