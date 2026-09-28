@@ -1,10 +1,13 @@
 import copy
+import json
+import subprocess
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from serving_bench.config import resolve, validate_document
 from serving_bench.common import BenchError
 from serving_bench.executors.docker import server_command, OWNER_LABEL
-from serving_bench.pd_pair import owned
+from serving_bench.pd_pair import cleanup, owned
 from serving_bench.pd_proxy import prefill_request, transfer_params
 
 class PDConfigTests(unittest.TestCase):
@@ -25,6 +28,25 @@ class PDConfigTests(unittest.TestCase):
         self.assertFalse(owned([], 'a'))
         self.assertFalse(owned([{'Config':{'Labels':{OWNER_LABEL:'b'}}}],'a'))
         self.assertTrue(owned([{'Config':{'Labels':{OWNER_LABEL:'a'}}}],'a'))
+
+    def test_remote_cleanup_accepts_missing_container_casing(self):
+        for message in ('Error: No such container: test', 'error: no such object: test'):
+            error = subprocess.CalledProcessError(1, ['docker', 'inspect', 'test'], stderr=message)
+            with self.subTest(message=message), patch('serving_bench.pd_pair.remote', side_effect=error) as remote:
+                cleanup({'host': 'host', 'name': 'test'}, 'owner')
+                remote.assert_called_once_with('host', ['docker', 'inspect', 'test'])
+
+    def test_remote_cleanup_does_not_hide_other_errors_or_remove_unowned(self):
+        for message in ('permission denied', 'no such file or directory', None):
+            error = subprocess.CalledProcessError(1, ['docker', 'inspect', 'test'], stderr=message)
+            with self.subTest(message=message), patch('serving_bench.pd_pair.remote', side_effect=error):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    cleanup({'host': 'host', 'name': 'test'}, 'owner')
+        info = json.dumps([{'Config': {'Labels': {OWNER_LABEL: 'someone-else'}}}])
+        with patch('serving_bench.pd_pair.remote', return_value=info) as remote:
+            with self.assertRaisesRegex(RuntimeError, 'unowned'):
+                cleanup({'host': 'host', 'name': 'test'}, 'owner')
+            remote.assert_called_once()
 
     def test_prefill_preserves_decode_body(self):
         original={'stream':True,'max_tokens':1024,'min_tokens':1024,'stream_options':{'include_usage':True},'prompt':'x'}

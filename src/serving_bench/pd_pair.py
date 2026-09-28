@@ -32,7 +32,8 @@ def cleanup(member, owner):
     try:
         info = json.loads(remote(member['host'], ['docker', 'inspect', member['name']]))
     except subprocess.CalledProcessError as e:
-        if 'No such' in e.stderr:
+        message = (e.stderr or '').lower()
+        if 'no such container:' in message or 'no such object:' in message:
             return
         raise
     if not owned(info, owner):
