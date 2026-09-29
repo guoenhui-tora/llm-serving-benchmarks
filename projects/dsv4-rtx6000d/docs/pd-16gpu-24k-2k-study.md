@@ -85,6 +85,8 @@ P继续使用PHB、P预算8200、全局C80，再在D加`NCCL_P2P_LEVEL=PHB`：
 | 120 | 9912 | 3542.6±20.3 | 26.71 | 93.87 | 240.92 | 通过，余量小 |
 | 128 | 10477 | 3674.2±37.6 | 27.21 | 95.67 | 238.52 | TTFT越线 |
 
+各档三轮正式测量的吞吐、延迟分位数和达标情况见[逐轮 CSV](../data/pd-16gpu-24k-2k-optimized-rounds.csv)。`num_prompts`、`completed`、`failed`分别是计划、成功、失败请求数；`slo_joint_pass_rate`是同一请求同时满足CSV中TTFT与TPOT限值的占比（0～1），`slo_goodput_req_s`是达标请求数除以完整客户端窗口秒数。总token吞吐包含输入和输出；生成吞吐看`output_throughput_tok_s`。
+
 “±”为三轮 output tok/s 的样本标准差；其余指标为三轮正式值的算术均值，P99 ITL是**各轮P99的均值**，不是合并所有token重算的P99。Mean ITL统计流式token事件间隔，与每请求均值TPOT口径不同。均值SLO要求三轮Mean TTFT均值≤10000ms且Mean TPOT均值≤50ms；不能用它代替逐请求联合达标率。C112的P95 TTFT为37.836秒、联合达标率79.02%；C120为40.362秒、78.75%。C120 TTFT三轮为9.971／9.886／9.880秒，其中一轮距线仅29毫秒；C128三轮均越线。
 
 <details>
