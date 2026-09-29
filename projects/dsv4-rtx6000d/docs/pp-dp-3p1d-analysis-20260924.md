@@ -29,11 +29,11 @@
 
 | Prefill 拓扑 | Decode 拓扑 | 除共同 MXFP4 修复外，本次使用的配置与代码 | 复现入口 |
 | --- | --- | --- | --- |
-| DP2 | DP2 | 原生 NIXL connector、PD 代理及 RDMA／UCX 网络配置；无需额外 PP 兼容或模型 forward 补丁。仍需按实例容量设置 Graph 等参数 | [全 DP2 实测配置与命令](../reports/v030-pd-16k-dp2-20260924.md) |
-| PP2 | PP2 | 本次原生 NIXL 路径不支持所需 PP／hybrid KV 组合，改用镜像已有 Mooncake；增加 bootstrap／NIC／GID 配置、独立代理和传输观测 hook，未改模型 forward 或 KV 传输算法 | [Mooncake 配置与代码](../patches/v030-pd-mooncake/README.md)、[全 PP2 实测命令](../reports/v030-pd-16k-pp2-20260924.md) |
-| PP2 | DP2 | 使用同一套 Mooncake 代理与观测代码；decode 从远端两个 PP stage 按层映射 KV，两个 DP 引擎均承接请求。没有额外权重转换或另一套模型补丁 | [Mooncake 配置与代码](../patches/v030-pd-mooncake/README.md)、[混合拓扑实测命令](../reports/v030-pd-16k-mixed-20260924.md) |
+| DP2 | DP2 | 原生 NIXL connector、PD 代理及 RDMA／UCX 网络配置；无需额外 PP 兼容或模型 forward 补丁。仍需按实例容量设置 Graph 等参数 | [当前 DP2 部署说明](pd-startup.md) |
+| PP2 | PP2 | 本次原生 NIXL 路径不支持所需 PP／hybrid KV 组合，改用镜像已有 Mooncake；增加 bootstrap／NIC／GID 配置、独立代理和传输观测 hook，未改模型 forward 或 KV 传输算法 | [Mooncake 配置与代码](../patches/v030-pd-mooncake/README.md) |
+| PP2 | DP2 | 使用同一套 Mooncake 代理与观测代码；decode 从远端两个 PP stage 按层映射 KV，两个 DP 引擎均承接请求。没有额外权重转换或另一套模型补丁 | [Mooncake 配置与代码](../patches/v030-pd-mooncake/README.md) |
 
-Mooncake 归档包含相同的 MXFP4 修复及扩展观测 hook，按其说明准备一套运行目录，不叠加加载两套 `sitecustomize.py`。其代理负责唯一 transfer ID、bootstrap／engine 元数据与请求路由；观测 hook 用于核对真实传输和失败计数，不是性能优化补丁。24K 的容量、budget 和 Graph 随负载调整，见 [24K 实测配置](../reports/v030-pd-24k-20260924.md)。
+Mooncake 归档包含相同的 MXFP4 修复及扩展观测 hook，按其说明准备一套运行目录，不叠加加载两套 `sitecustomize.py`。其代理负责唯一 transfer ID、bootstrap／engine 元数据与请求路由；观测 hook 用于核对真实传输和失败计数，不是性能优化补丁。24K 的容量、budget 和 Graph 随负载调整，不能照搬 16K 配置；后续选定的 24K 参数见[16卡PD研究](pd-16gpu-24k-2k-study.md)。
 
 ## 实验结果
 
@@ -161,11 +161,7 @@ Prefill 阶段耗时是 vLLM 请求阶段的墙钟时间，包含该阶段调度
 
 ## 证据与复现入口
 
-实际启动命令、节点放置、负载身份、失败尝试和逐轮记录沿用已归档产物；本文不另维护一套命令：
-
-- [16K 全 PP2](../reports/v030-pd-16k-pp2-20260924.md)、[16K 全 DP2](../reports/v030-pd-16k-dp2-20260924.md)、[16K 混合拓扑](../reports/v030-pd-16k-mixed-20260924.md)、[24K 两拓扑](../reports/v030-pd-24k-20260924.md)。
-- [逐轮 CSV](../data/v030-pd-20260924-rounds.csv)、[汇总 JSON](../data/v030-pd-20260924-summary.json)、[实测 argv 快照](../data/v030-pd-20260924-commands.json)。失败部署内诊断轮次未并入正式结果。
-- [共同 MXFP4 草稿修复](../patches/v030-dspark-mxfp4/README.md)、[Mooncake 代理与观测代码](../patches/v030-pd-mooncake/README.md)。
+本篇保留关键配置区别和[逐轮拓扑配对 CSV](results/v030-pd-20260924-rounds.csv)；只将标记为 eligible 的完成批次用于表中性能结论，失败尝试的诊断行不混入正式结果。复做 DP2 路径时参考[当前 PD 启动说明](pd-startup.md)，但其中是后续独立负载的参数，**不是本次历史 PP/DP 实验的逐字命令快照**。PP2 路径还需 [Mooncake 代理与观测代码](../patches/v030-pd-mooncake/README.md)，两组共有 [MXFP4 草稿修复](../patches/v030-dspark-mxfp4/README.md)。保留当时镜像版本、客户端 v0.29、connector、NIC 和容量差异，不能只修改 `--pipeline-parallel-size` 宣称复现同条件拓扑消融。
 
 阶段统计来自本机仓库工作区，未纳入 Git：`experiments/dsv4-v030-pd-20260924/reports/resources-analysis.json` 与 `scheduler-analysis.json`。前者按正式窗口 histogram sum/count 增量求请求均值，再按请求数合并；后者为调度状态采样，running 均值按采样数合并，不能替代逐 step 批次记录或 GPU trace。
 

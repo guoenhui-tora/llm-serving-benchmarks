@@ -4,7 +4,7 @@ id: dsv4-govreport-c32-jit-clean
 purpose: performance
 dataset:
   name: jsonl
-  path: data/govreport-near8k.jsonl
+  path: datasets/govreport-near8k.jsonl
   max_input_tokens: 9216
   output_tokens: 1024
   sha256: 33bdbd36a8b335300974e1b07aa66b2c24c88cc4c4b55a21350aa3564a945d53

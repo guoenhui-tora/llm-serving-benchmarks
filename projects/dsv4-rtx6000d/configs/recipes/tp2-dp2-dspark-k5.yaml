@@ -4,7 +4,7 @@ id: dsv4-tp2-dp2-epon-dspark-k5-dpfix-v1
 description: Single four-GPU TP2 DP2 EP on DSpark K5 with the DP profiling backport
 provenance: 'Same serving parameters as node48 2026-09-20 EP on/off K5 functional
   validation; 128/128 requests completed per configuration. Clean performance pending.
-  DP fix: d529c37, upstream PR 54856; see reports/dspark-compatibility.md.'
+  DP fix: d529c37, upstream PR 54856; v0.29 historical recipe only.'
 compatible:
   engine: vllm
   models:

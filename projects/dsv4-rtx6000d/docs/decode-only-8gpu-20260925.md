@@ -10,24 +10,53 @@
 
 仅用 45 节点的 GPU0–7：0–3 对应 NUMA0、4–7 对应 NUMA2。NVFP4 权重 `/data/models/DeepSeek-V4-Flash-0731-NVFP4`；服务及客户端镜像 `vllm/vllm-openai:v0.30.0`，固定 image ID `sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90`，`--pull never`。权重目录元数据身份已核对，**没有全量哈希权重内容**。三组均 EP on、DSpark K5、FP8 E4M3 KV、V2 async、每引擎 `max-num-batched-tokens=16384`，沿用已验收 MXFP4 修复和持久 JIT 缓存；不改宿主锁频/功耗。
 
-下表链接是从成功运行目录**逐字复制的完整 `docker run` argv JSON**，不以手写的省略 flags 命令替代。当次本机路径、缓存和容器名可能不能直接移植到别的主机；用 `python3 -c 'import json,shlex,sys; print(shlex.join(json.load(open(sys.argv[1]))))' <command.json>` 显示 shell 形式，再核对所有挂载及设备。不要直接重用当次 owner 名称清理非本次资源。
+启动命令的共同部分如下；每次在独占 GPU、准备好对应缓存目录及 [MXFP4 补丁](../patches/v030-dspark-mxfp4/README.md)后，按表格设置变量分别执行。`CACHE` 是**本次服务独占**的持久缓存挂载路径，须提前放好补丁；不要复用其他实验正在运行的缓存或容器名。原实验的容器 ID 和本机缓存哈希路径不适合复制到别人的环境。
 
-| 拓扑 / 原始目录标签 | GPU / CPU / NUMA / HTTP 端口 | 每引擎 S、整机名义容量 | K5 target/draft Graph 上限 | 实测 Docker 命令 |
-|---|---|---|---|---|
-| 双四卡 TP2×DP2 / A0 | 0–3 / 0–15 / 0 / 31332 | 64、两服务合计 256 | 384/320 | [前四卡 argv](../data/decode-only-20260925/dual-tp2dp2-front.json) |
-| 双四卡 TP2×DP2 / A1 | 4–7 / 32–47 / 2 / 31333 | 64、两服务合计 256 | 384/320 | [后四卡 argv](../data/decode-only-20260925/dual-tp2dp2-rear.json) |
-| 单八卡 TP2×DP4 / B | 0–7 / 0–15,32–47 / 0,2 / 31332 | 64、256 | 384/320 | [TP2×DP4 argv](../data/decode-only-20260925/single-tp2dp4.json) |
-| 单八卡 TP4×DP2 / C | 0–7 / 0–15,32–47 / 0,2 / 31332 | 128、256 | 768/640 | [TP4×DP2 argv](../data/decode-only-20260925/single-tp4dp2.json) |
+```bash
+IMAGE=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
+MODEL=/data/models/DeepSeek-V4-Flash-0731-NVFP4
+# 按下表设置 GPU_SET, CPUS, MEMS, PORT, DP, TP, S, GRAPH, RPC, CACHE
+docker run -d --pull never --network host --ipc host \
+  --gpus "\"device=$GPU_SET\"" -v "$MODEL:/model:ro" -v "$CACHE:/root/.cache:rw" \
+  --cpuset-cpus "$CPUS" --cpuset-mems "$MEMS" \
+  --ulimit memlock=-1:-1 --ulimit stack=67108864:67108864 --cap-add SYS_NICE \
+  -e HF_HUB_OFFLINE=1 -e TRANSFORMERS_OFFLINE=1 -e NCCL_DEBUG=WARN \
+  -e TRITON_CACHE_DIR=/root/.cache/triton -e TILELANG_CACHE_DIR=/root/.cache/tilelang \
+  -e VLLM_ENGINE_READY_TIMEOUT_S=1800 -e VLLM_USE_V2_MODEL_RUNNER=1 \
+  -e PYTHONPATH=/root/.cache/dsv4-v030-mxfp4 -e VLLM_SERVER_DEV_MODE=1 \
+  --entrypoint vllm "$IMAGE" serve /model --served-model-name deepseek-v4-flash \
+  --host 127.0.0.1 --port "$PORT" --trust-remote-code --enable-auto-tool-choice \
+  --enable-expert-parallel --enable-chunked-prefill --jit-monitor-verbose \
+  --async-scheduling --enable-prefix-caching --tensor-parallel-size "$TP" \
+  --pipeline-parallel-size 1 --data-parallel-size "$DP" \
+  --data-parallel-size-local "$DP" --data-parallel-rpc-port "$RPC" \
+  --max-model-len 32768 --max-num-seqs "$S" --max-num-batched-tokens 16384 \
+  --gpu-memory-utilization 0.9 --kv-cache-dtype fp8_e4m3 --block-size 256 \
+  --attention-config '{"backend":"FLASHINFER_MLA_SPARSE_DSV4","indexer_kv_dtype":"auto"}' \
+  --moe-backend auto --tokenizer-mode deepseek_v4 --tool-call-parser deepseek_v4 \
+  --reasoning-parser deepseek_v4 \
+  --reasoning-config '{"reasoning_parser":"deepseek_v4","reasoning_start_str":"","reasoning_end_str":""}' \
+  --kernel-config '{"enable_flashinfer_autotune":false}' \
+  --compilation-config "$GRAPH" --seed 0 --distributed-executor-backend mp \
+  --speculative-config '{"method":"dspark","num_speculative_tokens":5,"draft_sample_method":"greedy","rejection_sample_method":"standard","enable_adaptive_verification":false}'
+```
 
-表中 A0/A1/B/C **仅是不可改动的历史 run-root 标签**，归档命令快照已经按拓扑命名；下文按拓扑称呼。四种服务启动后各自实际完成 target/draft Graph 捕获：双四卡两个服务和单八卡 TP2×DP4 为 20/20、20/20；单八卡 TP4×DP2 为 35/35、34/34，未见启动 OOM。前两种拓扑每引擎 S64，TP4×DP2 每引擎 S128；**256 是整机名义请求容量，不是实际 running batch 或饱和点**。每引擎 KV 容量依次为 52,591、101,267、108,038 tokens，故即便名义请求数相同，KV 空间也不完全等同。
+| 拓扑与服务 | `GPU_SET` / `CPUS` / `MEMS` / `PORT` / `RPC` | `TP` / `DP` / 每引擎 `S` | Graph target/draft 上限 |
+|---|---|---|---|
+| 双四卡 TP2×DP2：前四卡 | `0,1,2,3` / `0-15` / `0` / `31332` / `29600` | 2 / 2 / 64 | 384/320 |
+| 双四卡 TP2×DP2：后四卡 | `4,5,6,7` / `32-47` / `2` / `31333` / `29601` | 2 / 2 / 64 | 384/320 |
+| 单八卡 TP2×DP4 | `0,1,2,3,4,5,6,7` / `0-15,32-47` / `0,2` / `31332` / `29600` | 2 / 4 / 64 | 384/320 |
+| 单八卡 TP4×DP2 | `0,1,2,3,4,5,6,7` / `0-15,32-47` / `0,2` / `31332` / `29600` | 4 / 2 / 128 | 768/640 |
+
+两种 S64 拓扑的 `GRAPH` 为 `'{"cudagraph_mode":"FULL_DECODE_ONLY","cudagraph_capture_sizes":[5,6,10,12,20,24,40,48,60,72,80,96,120,144,160,192,200,240,280,288,320,336,384],"max_cudagraph_capture_size":384}'`；S128 的为 `'{"cudagraph_mode":"FULL_DECODE_ONLY","cudagraph_capture_sizes":[5,6,10,12,20,24,40,48,60,72,80,96,120,144,160,192,200,240,280,288,320,336,360,384,400,432,440,480,520,528,560,576,600,624,640,672,720,768],"max_cudagraph_capture_size":768}'`。四种服务启动后各自实际完成 target/draft Graph 捕获：双四卡两个服务和单八卡 TP2×DP4 为 20/20、20/20；单八卡 TP4×DP2 为 35/35、34/34，未见启动 OOM。前两种拓扑每引擎 S64，TP4×DP2 每引擎 S128；**256 是整机名义请求容量，不是实际 running batch 或饱和点**。每引擎 KV 容量依次为 52,591、101,267、108,038 tokens，故即便名义请求数相同，KV 空间也不完全等同。
 
 ## 数据、客户端与复现入口
 
-原始输入来自本机历史[前缀 JSONL](../../../experiments/dsv4-v030-pd-20260924/deployments/G1M/data/input.jsonl)，SHA256 `025246b18d8ba7e1bc4d98c1a20b32b570860bb06a0baf0cea4ae97403d982e7`；单条输入经同一 tokenizer 核验为 16384 tokens。三组均复制**同一条**前缀，temperature=0、`ignore_eos`、无限到达率、每请求 1024 输出。该输入不等于 24 卡 PD 实验使用的 1024 条独立 GovReport 语义输入，**不能直接比较两批绝对 tok/s**。
+原始输入仅保存在 45 本机历史工作区（不随 Git 分发），SHA256 `025246b18d8ba7e1bc4d98c1a20b32b570860bb06a0baf0cea4ae97403d982e7`；单条输入经同一 tokenizer 核验为 16384 tokens。三组均复制**同一条**前缀，temperature=0、`ignore_eos`、无限到达率、每请求 1024 输出。该输入不等于 24 卡 PD 实验使用的 1024 条独立 GovReport 语义输入，**不能直接比较两批绝对 tok/s**；仅 Git 检出不能逐字节重建原请求集。
 
-一次全局 256 条完整请求预热，随后固定三轮各 **全局 512 条**正式请求。双四卡 TP2×DP2 由同步客户端同时驱动两个服务：每边 C64、每轮 256 条；两个单八卡服务各由单客户端 C128 驱动、每轮 512 条。全部使用固定镜像的官方 benchmark、相同同步入口与 `/v1/completions`，**并没有统一反向代理路径**；服务数量和客户端数有别。双四卡的整机吞吐采用两侧完成输出总 tokens 除以两个计时窗口的**并集时长**，没有直接把两边各自 tok/s 相加。客户端实测 argv 可在本机 [前四卡](../../../experiments/dsv4-decode-8gpu-20260925/results/run-03/A/round-1/replica-0/command.json)、[后四卡](../../../experiments/dsv4-decode-8gpu-20260925/results/run-03/A/round-1/replica-1/command.json)、[TP2×DP4](../../../experiments/dsv4-decode-8gpu-20260925/results/run-04/B/round-1/replica-0/command.json)、[TP4×DP2](../../../experiments/dsv4-decode-8gpu-20260925/results/run-03/C/round-1/replica-0/command.json) 中核对。
+一次全局 256 条完整请求预热，随后固定三轮各 **全局 512 条**正式请求。双四卡 TP2×DP2 由同步客户端同时驱动两个服务：每边 C64、每轮 256 条；两个单八卡服务各由单客户端 C128 驱动、每轮 512 条。全部使用固定镜像的官方 benchmark、相同同步入口与 `/v1/completions`，**并没有统一反向代理路径**；服务数量和客户端数有别。双四卡的整机吞吐采用两侧完成输出总 tokens 除以两个计时窗口的**并集时长**，没有直接把两边各自 tok/s 相加。客户端实测 argv 仅保存在 45 本机原始运行目录，不作为公开复现入口。
 
-每个预热/正式窗口均先确认 idle、reset prefix cache、用相同输入 prime，再逐 DP 引擎验证命中。单八卡 TP2×DP4 的原生 DP4 路由在早期 prime 没覆盖四引擎，最终只在 **prime** 时逐 rank 加 `X-data-parallel-rank`；预热/正式请求仍走原生动态路由。服务初启的少量单 token seed 用于初始化 v0.30 惰性发布的 gauges，随后 reset，不并入完整预热/正式窗口。每个服务启动上限 2100 s、阶段 900 s、单部署测量 4200 s、整个尝试 20000 s，零性能重试；失败尝试保留。完整本地编排的[原始脚本](../../../experiments/dsv4-decode-8gpu-20260925/scripts/run.py)和[固定预算](../../../experiments/dsv4-decode-8gpu-20260925/results/budget.json)属于忽略的 `experiments/`，**并非本仓库检出即可运行的通用多服务 campaign**；根 README 归档的是单个已启动服务的 decode-only 客户端使用方法。异机复现多服务时必须先移植冻结配置、前缀数据、补丁/缓存准备和同步编排，并重做 GPU/NUMA/镜像/端口预检，不能只执行这些 Docker argv 就声称复现了结果。
+每个预热/正式窗口均先确认 idle、reset prefix cache、用相同输入 prime，再逐 DP 引擎验证命中。单八卡 TP2×DP4 的原生 DP4 路由在早期 prime 没覆盖四引擎，最终只在 **prime** 时逐 rank 加 `X-data-parallel-rank`；预热/正式请求仍走原生动态路由。服务初启的少量单 token seed 用于初始化 v0.30 惰性发布的 gauges，随后 reset，不并入完整预热/正式窗口。每个服务启动上限 2100 s、阶段 900 s、单部署测量 4200 s、整个尝试 20000 s，零性能重试；失败尝试保留。完整本地编排脚本和预算仅在忽略的 `experiments/` 工作区，**并非本仓库检出即可运行的通用多服务 campaign**。异机复现多服务时必须先移植冻结配置、前缀数据、补丁/缓存准备和同步编排，并重做 GPU/NUMA/镜像/端口预检，不能只执行这些 Docker argv 就声称复现了结果。
 
 ## 正式结果与验收
 
@@ -52,4 +81,4 @@
 
 按窗口时间匹配到的 JIT 日志条数（不是去重编译次数）：双四卡前/后服务分别预热 24/24、正式 0/2/0 与 4/0/0；单八卡 TP2×DP4 预热 52、正式 2/2/0；单八卡 TP4×DP2 预热 56、正式 0/0/0。**双四卡轮1、轮2和 TP2×DP4 轮1、轮2 并非 JIT-clean**，不删去异常轮，也不把 quick 写成稳态。双四卡吞吐 4807→5034→4781、TP2×DP4 4128→4265→4332，无法确认跨启动复现性。早期 run-01/run-02 gauges 初始化与端口冲突均发生在正式测量前；run-03 的 TP2×DP4 prime 未覆盖四引擎，只对未完成的 TP2×DP4 在 run-04 重启并完成预定三轮，双四卡/TP4×DP2 不重跑。
 
-完整日志、逐请求明细、计数与原始状态仍仅保存在 45 本机的[双四卡/TP4×DP2 批次](../../../experiments/dsv4-decode-8gpu-20260925/results/run-03/status.json)和[TP2×DP4 完成批次](../../../experiments/dsv4-decode-8gpu-20260925/results/run-04/status.json)；这些工作区链接在没有对应 `experiments/` 的克隆中不可用。实验已按 owner 清理本次容器，保留模型、镜像、历史结果和 JIT 缓存。
+完整日志、逐请求明细、计数与原始状态仍仅保存在 45 本机的两个运行批次，不随 Git 分发。两个独立四卡 D 在随后[真实 24 卡 PD 的同资源 C144 对照](pd-24gpu-16k-1k-study.md#是不是21的pd配比不适合16k输入)中继续保持吞吐优势；那是独立语义输入与远端 KV 的端到端验证，不是把本表 tok/s 直接移植过去。实验已按 owner 清理本次容器，保留模型、镜像、历史结果和 JIT 缓存。

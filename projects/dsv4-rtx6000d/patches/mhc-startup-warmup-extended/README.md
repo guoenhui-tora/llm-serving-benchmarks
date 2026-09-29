@@ -8,16 +8,16 @@
 | dp-off | TP2×DP2 EP on、PP1、DSpark off；8K、C32 | C1 PD三轮0事件；C2普通0事件但CV5.73% |
 | dspark | TP2×DP2 EP on、PP1、K5对称P/D或普通；8K、C32 | C3H/C4完成quick，正式仍有草稿输入准备Triton事件；不是无JIT基线 |
 
-后续组合输入内核覆盖后，已完成16K、TP2×DP2 EP on K5、每DP引擎S96（服务容量192）的启动和HTTP验证：target上限576、anchor草稿480，七档21轮正式0已知JIT。详见[16K D192扫描](../../reports/decode-16k-d192-20260923.md)。表外拓扑、K值或更大容量仍须分别GPU验收，不能只凭代码接受参数认定支持。早期DSpark 1P1D与普通双服务各有八个worker，均完成target/draft覆盖；其中PD路径的三层draft SWA cache完成注册检查。真实KV和各DP引擎draft/accepted在客户端协议中另验收。该检查不是完整模型质量证明。
+后续组合输入内核覆盖后，已完成16K、TP2×DP2 EP on K5、每DP引擎S96（服务容量192）的启动和HTTP验证：target上限576、anchor草稿480，七档21轮正式0已知JIT。表外拓扑、K值或更大容量仍须分别GPU验收，不能只凭代码接受参数认定支持。早期DSpark 1P1D与普通双服务各有八个worker，均完成target/draft覆盖；其中PD路径的三层draft SWA cache完成注册检查。真实KV和各DP引擎draft/accepted在客户端协议中另验收。该检查不是完整模型质量证明。
 
-将选定子目录中的`dsv4_mhc_worker.py`、`warmup_plan.py`和`pinned-source.json`完整复制到该服务独立缓存的`dsv4-mhc-warmup/`，设置`PYTHONPATH=/root/.cache/dsv4-mhc-warmup`、`--worker-cls dsv4_mhc_worker.Worker`。DSpark还必须按[原兼容补丁](../../reports/dspark-compatibility.md)加载native MXFP4分派及DP profiling回移，PYTHONPATH同时包含两模块目录。固定镜像image ID仍为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；worker核对固定物理源码SHA，任何不匹配直接失败。
+将选定子目录中的`dsv4_mhc_worker.py`、`warmup_plan.py`和`pinned-source.json`完整复制到该服务独立缓存的`dsv4-mhc-warmup/`，设置`PYTHONPATH=/root/.cache/dsv4-mhc-warmup`、`--worker-cls dsv4_mhc_worker.Worker`。历史 v0.29 DSpark 还需[原兼容补丁代码](../dspark-native-mxfp4/)的 native MXFP4 分派及 DP profiling 回移，PYTHONPATH 同时包含两模块目录；**不可把这套组合用于当前 v0.30**。固定镜像image ID仍为`sha256:c2914767605584b6d8f45686b82de173ecc99e781897aa3d0a66dacd72c51ae1`；worker核对固定物理源码SHA，任何不匹配直接失败。
 
 每服务复制原缓存并核对原文件哈希，保留来源，不能从空缓存开始却称为热缓存。不将所有子目录同时加进PYTHONPATH，以免导入同名模块。实际命令由每次报告command.json导出；这些快照尚未自动应用到精选baseline recipe。
 
 target覆盖使用实际SM数、prefill预算、Graph capture sizes，逐worker两遍、有限值和cache key检查。DSpark另用真实三层draft及target auxiliary ids40/41/42，覆盖1..max(max-num-seqs×(K+1),maxcapture)（上限576，对应DP2服务容量192、每引擎96条、K5目标验证576 tokens）；两遍不新增cache key、临时allocated显存回到原值，再完整执行原worker预热、Graph捕获和RNG重置。
 
-**不能承诺quick必然无JIT。** TP4扩展在16K六副本普通中完整HTTP预热88条top-k事件，正式仍4/4/0，来自`_compute_global_topk_indices_and_lens_kernel`；每进程实际分派可能覆盖不足，未修改规则或追加轮次。8K 2P2D三轮0事件但吞吐/TTFT漂移，不能据此称性能已稳定。 C3H正式事件4/2/0，C4为4/0/2，均来自`_prepare_dflash_inputs_kernel`；mHC覆盖通过未覆盖这一不同内核。普通DP off预热无事件但吞吐明显更低的反例也说明，0事件不能替代完整预热或稳定性验收。详见[DP报告](../../reports/pd-dp-off-20260921.md)、[HTTP失败与有界修正](../../reports/pd-dspark-http-failure-20260921.md)及[持续结果总览](../../reports/pd-overnight-results-20260921.md)。
+**不能承诺quick必然无JIT。** TP4扩展在16K六副本普通中完整HTTP预热88条top-k事件，正式仍4/4/0，来自`_compute_global_topk_indices_and_lens_kernel`；每进程实际分派可能覆盖不足，未修改规则或追加轮次。8K 2P2D三轮0事件但吞吐/TTFT漂移，不能据此称性能已稳定。C3H正式事件4/2/0，C4为4/0/2，均来自`_prepare_dflash_inputs_kernel`；mHC覆盖通过未覆盖这一不同内核。普通DP off预热无事件但吞吐明显更低的反例也说明，0事件不能替代完整预热或稳定性验收。[历史JIT经验](../../docs/historical-jit.md)仅讨论这些旧镜像问题的研究方法。
 
 离线测试：在固定镜像CPU容器将选定子目录挂载到`/patch:ro`、`PYTHONPATH=/patch`，执行`python3 -m unittest discover -s /patch -p 'test_*.py'`。这些测试核对固定kernel分派公式和预算边界，不替代真实GPU覆盖、NIXL传输或HTTP负载检查。
 
-2026-09-23新增TP2×DP2 EP off、K5、S32/budget16384/Graph192启动覆盖及实际sequence parallel路径校验。on/off各四worker均完成两遍覆盖与Graph捕获，并各完成真实16K/1的C8–64扫描；16正式单元0已知JIT。未修改forward或核函数，边界与保留warning见[单机prefill报告](../../reports/prefill-ep-16k-20260923.md)。
+2026-09-23新增TP2×DP2 EP off、K5、S32/budget16384/Graph192启动覆盖及实际sequence parallel路径校验。on/off各四worker均完成两遍覆盖与Graph捕获，并各完成真实16K/1的C8–64扫描；16正式单元0已知JIT。未修改forward或核函数；单侧筛选不足以直接判定完整PD吞吐。

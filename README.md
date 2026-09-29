@@ -2,13 +2,13 @@
 
 用同一套脚本在不同模型、镜像和硬件上运行可追溯的 serving 实验。框架负责启动、检查、压测和保存证据；每个项目独立固定配置与结论。
 
-当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。常规runner面向本机；另有有界的实验性SSH多服务PD工具，已用于DSV4跨节点KV传输、有限功能检查及同资源quick对照，完整数值等价与稳态收益尚未确认，见[部署与协同流程](projects/dsv4-rtx6000d/reports/pd-cross-node-flow.md)。随机负载和本地 [JSONL 真实文本负载](docs/configuration.md#jsonl-真实文本数据集)共用压测流程，后者支持实际 tokenizer 长度校验和双实例固定分片。
+当前支持 Linux 本机、NVIDIA GPU、Docker、vLLM/SGLang，以及统一的 OpenAI `/v1/completions` 流式压测。可显式配置本机一或两套服务同步测量，保存各侧和整机指标，见[同步多副本部署](docs/configuration.md#同步多副本部署)。常规 runner 面向本机；实验性 SSH 多服务 PD 工具的参数边界见[配置说明](docs/configuration.md#外部pd实验所需的本机启动参数)，DSV4 当前部署另见[PD 启动说明](projects/dsv4-rtx6000d/docs/pd-startup.md)，不把历史功能验证称为普遍的跨节点性能保证。随机负载和本地 [JSONL 真实文本负载](docs/configuration.md#jsonl-真实文本数据集)共用压测流程，后者支持实际 tokenizer 长度校验和双实例固定分片。
 
 ## 从哪里开始
 
 | 入口 | 用途 |
 | --- | --- |
-| [DSV4 / RTX6000D](projects/dsv4-rtx6000d/README.md) | 镜像选择、四节点整机性能对照与复现入口 |
+| [DSV4 / RTX6000D](projects/dsv4-rtx6000d/README.md) | 聚合式推理扩容参照、24卡16K与16卡24K的PD结果及启动入口 |
 | [GLM-5.2 / RTX6000D](projects/glm52-rtx6000d/README.md) | 三套最终配置、C16/C32 重复结果与镜像选型 |
 | [项目模板](projects/_template/README.md) | 基于真实配置创建新项目 |
 | [实验方法](docs/benchmark-methodology.md) | 预热、JIT、稳定性诊断及结果验收 |
@@ -76,7 +76,7 @@ cp -a projects/_template/configs experiments/my-study/configs
 
 ### 续接项目：从该项目的精选配置开始
 
-例如继续优化 DSV4：
+例如建立 DSV4 的本地探索工作区：
 
 ```bash
 mkdir -p experiments/dsv4-rtx6000d/results experiments/dsv4-rtx6000d/reports
@@ -84,6 +84,8 @@ cp -a projects/dsv4-rtx6000d/configs experiments/dsv4-rtx6000d/configs
 ```
 
 使用 JSONL 时，将数据放入工作区 `datasets/`，workload 的 `dataset.path` 相对于工作区目录；归档时与 configs 一起复制。
+
+**注意：当前 DSV4 项目 `configs/` 归档的是旧 v0.29 本地实验入口，并非当前 v0.30 PD 的可直接运行基线。** 研究后者应先看[项目启动说明](projects/dsv4-rtx6000d/docs/pd-startup.md)和对应负载报告，再在工作区建立匹配配置；不能直接运行上述复制的历史 campaign 冒充当前研究。
 
 以上复制步骤只在工作区首次建立时执行；若 `configs/` 已存在，直接续用或另建工作区，不重复覆盖。先阅读该项目 README，再在工作区新增候选 recipe/campaign，保留已验证的基线。此时不必向 `projects/` 添加探索文件。
 

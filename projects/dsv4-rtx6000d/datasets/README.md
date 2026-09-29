@@ -8,6 +8,8 @@
 | [govreport-isl16384-exact-n1024.jsonl](govreport-isl16384-exact-n1024.jsonl) | 16384 | 1024 |
 | [govreport-isl24576-exact-n512.jsonl](govreport-isl24576-exact-n512.jsonl) | 24576 | 512 |
 
+另保留早期 v0.29 四卡筛选使用的[近 8K 历史输入](govreport-near8k.jsonl)：256 条真实报告、输入约 7168～9216 tokens，SHA256 `33bdbd36a8b335300974e1b07aa66b2c24c88cc4c4b55a21350aa3564a945d53`。它**不是**上表精确 8192-token 数据，不能混入当前 v0.30 的等长配对。
+
 每行 JSONL 包含 `id`、`prompt`、`input_tokens`，只固定输入长度（ISL），不包含输出长度（OSL）。`input_tokens` 是完整 `prompt` 经 DSV4 tokenizer 编码后的实际 token 数；同一份 16K 输入可以搭配 1024 或 2048 tokens 的输出，无需修改数据文件。
 
 使用 `vllm bench serve` 压测时，通过 `--custom-output-len` 设置输出长度，例如 `--custom-output-len 2048 --ignore-eos`。其中 `--ignore-eos` 用于避免模型提前结束；不加时，实际输出可能短于指定长度。
