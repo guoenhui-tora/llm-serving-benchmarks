@@ -1,9 +1,18 @@
-# 历史 JIT 排障经验（vLLM v0.29）
+# JIT 排障方法：从历史案例提炼
 
-**范围：这是 v0.29 的历史排障方法，不是当前 v0.30 PD 的安装步骤。** 当时镜像自带的 mHC 启动预热按 `hc_pre/hc_post` 属性寻找层，而所测 NVIDIA DSV4 实现没有这两个属性；模型实际 forward 使用 broadcast 和 fused post/pre TileLang 路径，受测配置因此出现重复 JIT。定向 worker 的验证只适用于当时的镜像、形状和拓扑。
+模型启动完成、预热日志安静，不代表正式请求不会触发新编译。先定位**哪一轮、哪个 worker、哪个 kernel 和分派形状**发生 JIT，再决定是否需要补预热；不要把不同 kernel 的事件都归为同一个原因。
 
-对实际触发的 mHC kernel 与分派形状进行定向启动预热后，限定的普通双 TP4 和 1P1D 经完整 HTTP 预热取得连续三轮 0 已知正式编译事件。随后 top-k、DSpark 输入准备等 kernel 仍各自可能触发 JIT；后续针对真实 builder/speculator 几何的定向预热也不能穷尽采样 kernel。不能把所有 JIT 都归因于 mHC，也不能省略真实请求预热。
+1. **保留事件并定位调用。** 固定镜像、权重、服务参数和请求负载，保存正式窗口起止时间及各 worker 的日志。用时间戳将编译事件对应到具体轮次，记录 kernel 名称、输入形状和调用路径。检查该形状是否由 prefill、decode、投机验证或采样触发；日志里没有事件只表示没有识别到已知 JIT。
+2. **先用真实请求覆盖。** 在测量前，以代表性的输入输出长度、并发和请求数完成有界预热，观察是否仍有新形状出现。如果镜像自带的启动预热未走到实际模型 forward 的分派路径，应沿真实调用链检查触发条件；不能仅凭启动时执行过某个同名 kernel，就认定正式负载的形状已覆盖。
+3. **必要时定向补齐。** 只有定位到反复出现、真实请求预热难以稳定覆盖的形状，才考虑在固定镜像中调用实际分派路径补预热。核对 builder、量化方式、设备和输入几何；不得为预热替换正式 forward、修改精度或放宽事件检查。定向预热只能解决已识别的形状，不保证其他 kernel 不再编译。
+4. **用相同协议复测。** 保留预定的所有轮次及事件标记，分别检查 JIT、CUDA Graph 的实际捕获与运行路径、吞吐和延迟波动、资源背景。零已知事件不等于 Graph 覆盖充分，也不等于性能稳定；若发现事件识别误判，保存反例并精确修正规则，而不是关闭 gate。
 
-0 条**已知日志匹配**并不证明 CUDA Graph 覆盖正确或吞吐稳定：缺少 K5 大 batch 捕获形状时，即使没有新 JIT 也可能落在非 Graph 路径；低 CV、无已知 JIT 和资源无干扰亦是不同验收条件。不要为 PASS 放宽日志 gate，保留其他 warning。
+## 当时具体怎么做
 
-旧实现与完整适用边界仍见 [`../patches/mhc-startup-warmup/`](../patches/mhc-startup-warmup/README.md)、[`../patches/mhc-startup-warmup-extended/`](../patches/mhc-startup-warmup-extended/README.md) 和 [`../patches/input-kernel-warmup/`](../patches/input-kernel-warmup/README.md)。[当前 v0.30 启动](pd-startup.md)依赖的是**不同的** [DSpark MXFP4 草稿加载修复](../patches/v030-dspark-mxfp4/README.md)，不加载这些 v0.29 worker。
+v0.29 的 mHC 启动预热没有走到所测模型实际使用的 forward 分派。先从正式窗口的编译事件定位到 mHC，后来又分别定位到 top-k 和 DSpark 输入准备；**没有把 kernel 从镜像里摘出来另写一份**。在固定镜像的每个 GPU worker 启动阶段，沿用镜像原有的函数，用私有临时张量触发所需分派，然后继续原有模型预热、CUDA Graph 捕获与随机状态重置，不改变正式推理路径。
+
+- **确定覆盖形状。** mHC 按实际模型层参数和 GPU SM 数枚举可达分派，每类取首尾 token 数并纳入 Graph 捕获尺寸；top-k 从实际 attention metadata builder 和 block table 读取索引宽度、stride、块大小，覆盖不同指针偏移；DSpark 从实际 speculator 读取 K、草稿表和输入预算，覆盖块大小区间边界及接近上下文上限的输入。不能仅凭“token 数相同”推断编译形状相同。
+- **验证预热本身。** 固定并校验镜像相关源码，形状超出支持范围则停止；对适用内核检查临时张量的输出和内存回收。相同覆盖执行两遍，确认第二遍不再增加当前 worker 进程中的 Triton 专用化缓存键。随后仍用完整 HTTP 请求预热，并按预定轮次检查正式日志。
+- **保留磁盘缓存。** 当时新配置改变缓存目录时，先把既有缓存复制到该服务的独立目录并校验文件哈希，保留原缓存；服务持续使用持久 Triton/TileLang 缓存。磁盘缓存复用与进程内键覆盖是两回事：缓存文件不会自动覆盖未触发的形状，也不能单凭复制缓存声称正式轮无 JIT。
+
+补齐 mHC 分派后，已识别的 mHC 正式事件消失；其他 kernel 后来仍出现过新事件。这是旧镜像下的排障案例，不是当前版本的启动依赖或可直接复用的补丁。

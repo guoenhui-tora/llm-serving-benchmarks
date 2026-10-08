@@ -4,7 +4,7 @@ id: dsv4-tp4-dspark-k5-native-draft-graph-c32
 description: TP4 DSpark with target and draft CUDA Graph token sizes covering the
   baseline request batch sizes through C32
 provenance: 'Local diagnostic adaptation of upstream #49133; image unchanged; see
-  patches/dspark-native-mxfp4/manifest.json'
+  patches/v029-dspark-mxfp4/manifest.json'
 compatible:
   engine: vllm
   models:
