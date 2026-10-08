@@ -250,7 +250,7 @@ RPC_PORT=29600
 NAME=pd24-p0
 REPO="$HOME/llm-serving-benchmarks"
 MODEL_DIR=/data/models/DeepSeek-V4-Flash-0731-NVFP4
-CACHE_DIR="$REPO/experiments/dsv4-pd-deploy/cache/$NAME"
+CACHE_DIR="$HOME/.cache/dsv4-pd/$NAME"
 PATCH_DIR="$CACHE_DIR/dsv4-v030-mxfp4"
 IMAGE_ID=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
 test -f "$PATCH_DIR/sitecustomize.py"
@@ -331,14 +331,14 @@ docker run -d --pull never --name sb-pd24-proxy --network host \
 
 压测数据每行是`{"id":"...","prompt":"...","input_tokens":16384}`。实测数据SHA256为`6166561f98e83a7591eaa5bc36dcb317f20edd42f187a10f4cc6793df839b9b2`；另一份同长度文本只能复现负载规格，不能当作相同请求集。
 
-正式压测须加载仓库的[JSONL适配](../../../src/serving_bench/clients/jsonl_dataset.py)，逐条用tokenizer核对16384输入tokens；原生`custom`不能直接代替这一适配。以下为C160一轮正式测量，完整预热将`N`改为`2*C`，正式三轮各用新的`RESULT_DIR`，服务保持运行：
+正式压测须加载仓库的[JSONL适配](../../../src/serving_bench/clients/jsonl_dataset.py)，逐条用tokenizer核对16384输入tokens；原生`custom`不能直接代替这一适配。以下为C160一轮正式测量；运行前为每轮设置不同的绝对路径`RESULT_DIR`，完整预热将`N`改为`2*C`，正式三轮期间服务保持运行：
 
 ```bash
 REPO="$HOME/llm-serving-benchmarks"
 MODEL_DIR=/data/models/DeepSeek-V4-Flash-0731-NVFP4
 IMAGE_ID=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
 C=160; N=$((4*C))
-RESULT_DIR="$REPO/experiments/dsv4-rtx6000d/results/pd24-16k-repro/c160/round-1"
+RESULT_DIR="${RESULT_DIR:?请先指定本轮独立的结果目录}"
 mkdir -p "$RESULT_DIR"
 docker run --rm --pull never --network host \
   --cpuset-cpus 20-23 --cpuset-mems 1 \

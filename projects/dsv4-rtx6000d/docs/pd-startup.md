@@ -57,7 +57,7 @@ test -f "$MODEL_DIR/config.json"
 ```bash
 set -e
 REPO="$HOME/llm-serving-benchmarks"
-CACHE_DIR="$REPO/experiments/dsv4-pd-deploy/cache/p0" # 依实例改成 p1/p2/p3/d0/d1
+CACHE_DIR="$HOME/.cache/dsv4-pd/p0" # 依实例改成 p1/p2/p3/d0/d1
 install -d "$CACHE_DIR/dsv4-v030-mxfp4"
 PATCH_DIR="$REPO/projects/dsv4-rtx6000d/patches/v030-dspark-mxfp4"
 for name in sitecustomize.py dspark_native_mxfp4.py manifest.json; do
@@ -121,7 +121,7 @@ set -e
 ROLE=P; NAME=sb-pd24-p0; HOST_IP=10.90.1.46
 GPUS=4,5,6,7; CPUS=32-47; NUMA=2
 HTTP_PORT=31449; NIXL_PORT=29300; RPC_PORT=29600
-CACHE_DIR="$HOME/llm-serving-benchmarks/experiments/dsv4-pd-deploy/cache/p0"
+CACHE_DIR="$HOME/.cache/dsv4-pd/p0"
 MODEL_DIR=/data/models/DeepSeek-V4-Flash-0731-NVFP4
 IMAGE_ID=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
 

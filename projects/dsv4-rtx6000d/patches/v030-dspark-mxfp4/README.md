@@ -6,7 +6,7 @@
 
 运行文件是 `sitecustomize.py`、`dspark_native_mxfp4.py`、`manifest.json`，必须放在同一目录。固定镜像 image ID 为 `sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90`。manifest 固定原 DSpark loader、V4/V4.1 量化实现及注册表哈希，Python 模块固定模型 config/index 哈希，并检查全部 2304 个草稿专家矩阵头。
 
-本次服务把宿主 `/home/enhui/.cache/serving-bench/vllm/674035353284ec2c293a` 挂载为 `/root/.cache`，上述三个文件放在该宿主缓存的 `dsv4-v030-mxfp4/` 子目录，通过 `PYTHONPATH=/root/.cache/dsv4-v030-mxfp4` 自动加载。新节点应准备自己的缓存目录并相应修改挂载，保留已有 JIT 缓存，不能假定 Git 会带走 45 的缓存。不要把旧 worker 目录加入本次 PYTHONPATH。
+每个服务将独立、持久的宿主缓存目录挂载为 `/root/.cache`，上述三个文件放在缓存的 `dsv4-v030-mxfp4/` 子目录，通过 `PYTHONPATH=/root/.cache/dsv4-v030-mxfp4` 自动加载。部署时应准备自己的缓存目录，保留已有 JIT 缓存；Git 不包含运行时缓存。不要把旧 worker 目录加入本次 PYTHONPATH。
 
 启动前先完成文件准备；本目录本身不会自动生效。原四卡验证使用 `PYTHONPATH=/root/.cache/dsv4-v030-mxfp4`、TP2×PP2、EP on、K5、FP8 KV、`--max-num-seqs 32 --max-num-batched-tokens 8192` 和 target Graph 上限 192。跨节点 PD 的实际服务、客户端和代理启动以[当前部署说明](../../docs/pd-startup.md)为准，不直接复制原验证容器名或路径。补丁使用断言进行部分校验，保持镜像默认 Python 执行方式，不启用 `python -O`／`PYTHONOPTIMIZE`。镜像或权重哈希不匹配时应重新审计，不绕过校验。
 

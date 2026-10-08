@@ -110,7 +110,7 @@ ROLE=P; SERVICE=p0; HOST_IP=10.90.1.46
 GPUS=4,5,6,7; CPUS=32-47; NUMA=2
 HTTP_PORT=31449; NIXL_PORT=29300; RPC_PORT=29600
 REPO="$HOME/llm-serving-benchmarks"
-CACHE_DIR="$REPO/experiments/dsv4-pd-deploy/cache/$SERVICE"
+CACHE_DIR="$HOME/.cache/dsv4-pd/$SERVICE"
 MODEL_DIR=/data/models/DeepSeek-V4-Flash-0731-NVFP4
 IMAGE_ID=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
 
@@ -180,14 +180,14 @@ docker run -d --pull never --name sb-pd16-proxy \
   --decode http://10.90.1.48:31449
 ```
 
-正式压测须加载仓库的[JSONL适配](../../../src/serving_bench/clients/jsonl_dataset.py)，否则原生`custom`不会逐行使用上述精确输入。下面以C112的一轮正式请求为例，完整预热将`N`设为`2*C`、正式每轮设为`4*C`，共三轮且每轮使用新的`RESULT_DIR`；服务不重启。此命令省去了实测的客户端CPU亲和性记录hook，其模型请求与数据适配参数来自实测argv；须另行核验亲和性、逐请求token和完整窗口。
+正式压测须加载仓库的[JSONL适配](../../../src/serving_bench/clients/jsonl_dataset.py)，否则原生`custom`不会逐行使用上述精确输入。下面以C112的一轮正式请求为例，运行前为每轮设置不同的绝对路径`RESULT_DIR`；完整预热将`N`设为`2*C`、正式每轮设为`4*C`，共三轮，服务不重启。此命令省去了实测的客户端CPU亲和性记录hook，其模型请求与数据适配参数来自实测argv；须另行核验亲和性、逐请求token和完整窗口。
 
 ```bash
 REPO="$HOME/llm-serving-benchmarks"
 MODEL_DIR=/data/models/DeepSeek-V4-Flash-0731-NVFP4
 IMAGE_ID=sha256:8a69ffad015f138d7170c4ddc429e230a3bc1c1719f67e14324749df200a4b90
 C=112; N=$((4*C))
-RESULT_DIR="$REPO/experiments/dsv4-rtx6000d/results/pd16-24k-repro/c112/round-1"
+RESULT_DIR="${RESULT_DIR:?请先指定本轮独立的结果目录}"
 mkdir -p "$RESULT_DIR"
 docker run --rm --pull never --network host \
   --cpuset-cpus 20-23 --cpuset-mems 1 \

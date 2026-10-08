@@ -14,6 +14,8 @@
 
 使用 `vllm bench serve` 压测时，通过 `--custom-output-len` 设置输出长度，例如 `--custom-output-len 2048 --ignore-eos`。其中 `--ignore-eos` 用于避免模型提前结束；不加时，实际输出可能短于指定长度。
 
+这些 JSONL 不能直接交给原生 `--dataset-name custom` 逐行读取。仓库的 [JSONL 客户端适配](../../../src/serving_bench/clients/jsonl_dataset.py)负责读取样本、校验文件哈希与 tokenizer 实际输入长度，并记录请求清单；具体调用见 [16 卡](../docs/pd-16gpu-24k-2k.md#5-启动与复现)和 [24 卡](../docs/pd-24gpu-16k-1k.md#代理与压测)压测命令。它是压测客户端代码，不是数据制备脚本；单独提取本项目目录时，需要一并带上该适配。
+
 ## 来源
 
 使用 [ccdv/govreport-summarization](https://huggingface.co/datasets/ccdv/govreport-summarization/tree/4e21184e01ae8017e2c036e180fe5e541fef60a0/document) 的两个 train 分片，revision 为 `4e21184e01ae8017e2c036e180fe5e541fef60a0`。取 `report` 的连续前缀，加摘要指令和 DSV4 对话格式，按模型自带 tokenizer 校验完整输入长度；不使用参考 `summary`。压测时使用 `--skip-chat-template`。
